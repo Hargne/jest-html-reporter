@@ -1,6 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const xmlbuilder = require('xmlbuilder');
+const mkdirp = require('mkdirp');
+
 const style = require('./style');
 
 // Fetch config from package.json
@@ -11,6 +13,15 @@ try {
 	if (cfg) { Object.assign(config, cfg); }
 } catch (e) {
 	// do nothing
+}
+
+function writeFile(filePath, content) {
+	mkdirp(path.dirname(filePath), (err) => {
+		if (err) {
+			return console.log(`Something went wrong when creating the file: ${err}`);
+		}
+		return fs.writeFile(filePath, content);
+	});
 }
 
 const createHtml = () => xmlbuilder.create({
@@ -62,9 +73,7 @@ module.exports = (result) => {
 	});
 
 	// Copy file to destination
-	fs.writeFile(config.output || path.join(process.cwd(), 'test-report.html'), htmlOutput, (err) => {
-		if (err) { console.log(`Something went wrong while generating the jest HTML report\n\t${err.message}`); }
-	});
+	writeFile(config.output || path.join(process.cwd(), 'test-report.html'), htmlOutput);
 
 	return result;
 };
