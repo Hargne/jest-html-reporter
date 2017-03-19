@@ -18,12 +18,30 @@ Then when you run jest from within the terminal, a file called test-report.html 
 
 ## Configuration
 The configurations are done directly within your package.json file
+
+### pageTitle (string)
+[Default: "Test Suite"]
+
+The title of the document. This string will also be outputted on the top of the page.
+
+### outputPath (string)
+[Default: "./test-report.html"]
+
+The path to where to output the HTMl report. The path must include the filename and end with .html
+
+### includeFailureMsg (boolean)
+[Default: false]
+
+If this setting is set to true, this will output the detailed failure message for each failed test.
+
+### Example configuration (package.json)
 ```JSON
 {
 	...
 	"jest-html-reporter": {
 		"pageTitle": "Your test suite",
-		"output": "test-report/index.html"
+		"outputPath": "test-report/index.html",
+		"includeFailureMsg": false,
 	}
 }
 ```

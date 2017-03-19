@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "index.js",
   "scripts": {
@@ -25,5 +25,8 @@
   "dependencies": {
     "mkdirp": "0.5.1",
     "xmlbuilder": "8.2.2"
+  },
+  "peerDependencies": {
+    "jest": "19.x"
   }
 }

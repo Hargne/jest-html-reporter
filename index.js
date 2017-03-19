@@ -14,16 +14,15 @@ try {
 } catch (e) {
 	// do nothing
 }
+// Write file to path
+const writeFile = (filePath, content) => mkdirp(path.dirname(filePath), (err) => {
+	if (err) {
+		return console.log(`Something went wrong when creating the file: ${err}`);
+	}
+	return fs.writeFile(filePath, content);
+});
 
-function writeFile(filePath, content) {
-	mkdirp(path.dirname(filePath), (err) => {
-		if (err) {
-			return console.log(`Something went wrong when creating the file: ${err}`);
-		}
-		return fs.writeFile(filePath, content);
-	});
-}
-
+// Setup a basic HTML page
 const createHtml = () => xmlbuilder.create({
 	html: {
 		head: {
@@ -40,40 +39,51 @@ const createHtml = () => xmlbuilder.create({
 module.exports = (result) => {
 	// Create HTML and Body tags
 	const htmlOutput = createHtml();
-
 	// Timestamp
-	htmlOutput.ele('div', { id: 'timestamp' }, `Timestamp: ${(new Date(result.startTime)).toLocaleString()}`);
-
-	// Summary Table
-	const summaryTable = htmlOutput.ele('table', { id: 'summary-table', cellspacing: '0', cellpadding: '0' });
-	summaryTable.ele('tr')
-		.ele('td', { class: 'tests' }, `${result.numTotalTests} tests`)
-		.ele('td', { class: 'passed' }, `${result.numPassedTests} passed`)
-		.ele('td', { class: 'failed' }, `${result.numFailedTests} failed`)
-		.ele('td', { class: 'skipped' }, `${result.numPendingTests} skipped`);
-
-	// Result Table
-	const resultTable = htmlOutput.ele('table', { id: 'result-table', cellspacing: '0', cellpadding: '0' });
-	resultTable.ele('tr')
-		.ele('th', {}, 'Suite')
-		.ele('th', {}, 'Test')
-		.ele('th', {}, 'Time');
-
+	htmlOutput.ele('div', { id: 'timestamp' }, `
+		Start: ${(new Date(result.startTime)).toLocaleString()}
+	`);
+	// Test Summary
+	htmlOutput.ele('div', { id: 'summary' }, `
+		${result.numTotalTests} tests /
+		${result.numPassedTests} passed /
+		${result.numFailedTests} failed /
+		${result.numPendingTests} skipped
+	`);
 	// Loop through each suite
 	result.testResults.forEach((suite) => {
 		if (suite.testResults.length <= 0) { return; }
-
+		// Suite File Path
+		htmlOutput.ele('div', { class: 'suite-info' }, `
+			${suite.testFilePath}
+			(${(suite.perfStats.end - suite.perfStats.start) / 1000}s)
+		`);
+		// Suite Test Table
+		const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
 		// Loop through each test case
 		suite.testResults.forEach((test) => {
-			resultTable.ele('tr', { class: test.status })
-				.ele('td', { class: 'suite' }, test.ancestorTitles.join(' > '))
-				.ele('td', { class: 'test' }, test.title)
-				.ele('td', { class: 'time' }, `${test.duration / 1000}s`);
+			const testTr = suiteTable.ele('tr', { class: test.status });
+			// Suite Name(s)
+			testTr.ele('td', { class: 'suite' }, test.ancestorTitles.join(' > '));
+			// Test name
+			const testTitleTd = testTr.ele('td', { class: 'test' }, test.title);
+			// Test Failure Messages
+			if (test.failureMessages && config.includeFailureMsg) {
+				failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
+				test.failureMessages.forEach((failureMsg) => {
+					failureMsgDiv.ele('p', { class: 'failureMsg' }, failureMsg);
+				});
+			}
+			// Test Result
+			testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? 
+				`${test.status} in ${test.duration / 1000}s`
+				: test.status
+			);
 		});
 	});
 
 	// Copy file to destination
-	writeFile(config.output || path.join(process.cwd(), 'test-report.html'), htmlOutput);
+	writeFile(config.outputPath || path.join(process.cwd(), 'test-report.html'), htmlOutput);
 
 	return result;
 };

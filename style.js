@@ -13,49 +13,54 @@ module.exports = () => `
 	#timestamp {
 		font-weight: bold;
 		color: #666;
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 	}
-	#summary-table {
-		width: 100%;
-		margin-bottom: 1rem;
-		font-size: 1rem;
+	#summary {
+		color: #999;
+		margin-bottom: 1em;
+	}
+	.suite-info {
+		padding: 1em;
 		background-color: #eee;
-		border-bottom: 3px solid #ccc;
+		border-bottom: 2px solid #999;
+		font-weight: bold;
+		color: #999;
 	}
-	#summary-table td {
-		text-align: center;
-		padding: 0.5rem;
-	}
-	#result-table {
+	.suite-table {
 		width: 100%;
 		font-size: 0.85rem;
-		border-bottom: 3px solid #666;
+		margin-bottom: 1em;
 	}
-	#result-table th, #result-table td {
+	.suite-table td {
 		padding: 0.5rem;
 	}
-	#result-table th {
-		background-color: #eee;
-		text-align: left;
-		border-bottom: 2px solid #ccc;
-	}
-	#result-table tr.passed {
+	.suite-table tr.passed {
 		background-color: #DFF2BF;
 		color: #4F8A10;
 	}
-	#result-table tr.pending {
+	.suite-table tr.pending {
 		background-color: #FEEFB3;
 		color: #9F6000;
 	}
-	#result-table tr.failed {
+	.suite-table tr.failed {
 		background-color: #FFBABA;
 		color: #D8000C;
 	}
-	#result-table td {
-		font-size: 0.8rem;
+	.suite-table td {
+		font-size: 0.85rem;
 		border-bottom: 1px solid #aaa;
+		vertical-align: top;
 	}
-	#result-table td.suite {
+	.suite-table td.suite {
 		font-weight: bold;
+		width: 20%;
+	}
+	.suite-table td.test {
+		font-style: italic;
+		width: 60%;
+	}
+	.suite-table td.result {
+		width: 20%;
+		text-align: right;
 	}
 `;
