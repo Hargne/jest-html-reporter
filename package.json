@@ -27,6 +27,6 @@
     "xmlbuilder": "8.2.2"
   },
   "peerDependencies": {
-    "jest": "19.x"
+    "jest": "19.x || 20.x"
   }
 }
