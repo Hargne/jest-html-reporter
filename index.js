@@ -2,10 +2,13 @@ const path = require('path');
 const fs = require('fs');
 const xmlbuilder = require('xmlbuilder');
 const mkdirp = require('mkdirp');
+const stripAnsi = require('strip-ansi');
 
 const style = require('./style');
 
-// Fetch config from package.json
+/**
+ * Fetches config from package.json
+ */
 const packageJson = require(path.join(process.cwd(), 'package.json'));
 const config = {};
 try {
@@ -14,7 +17,12 @@ try {
 } catch (e) {
 	// do nothing
 }
-// Write file to path
+
+/**
+ * Creates a file at the given destination
+ * @param  {String} filePath
+ * @param  {Any} 	content
+ */
 const writeFile = (filePath, content) => mkdirp(path.dirname(filePath), (err) => {
 	if (err) {
 		return console.log(`Something went wrong when creating the file: ${err}`);
@@ -22,7 +30,10 @@ const writeFile = (filePath, content) => mkdirp(path.dirname(filePath), (err) =>
 	return fs.writeFile(filePath, content);
 });
 
-// Setup a basic HTML page
+/**
+ * Sets up a basic HTML page to apply the content to
+ * @return {xmlbuilder}
+ */
 const createHtml = () => xmlbuilder.create({
 	html: {
 		head: {
@@ -36,6 +47,9 @@ const createHtml = () => xmlbuilder.create({
 	},
 });
 
+/**
+ * Main Export
+ */
 module.exports = (result) => {
 	// Create HTML and Body tags
 	const htmlOutput = createHtml();
@@ -71,11 +85,11 @@ module.exports = (result) => {
 			if (test.failureMessages && config.includeFailureMsg) {
 				failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
 				test.failureMessages.forEach((failureMsg) => {
-					failureMsgDiv.ele('p', { class: 'failureMsg' }, failureMsg);
+					failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
 				});
 			}
 			// Test Result
-			testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? 
+			testTr.ele('td', { class: 'result' }, (test.status === 'passed') ?
 				`${test.status} in ${test.duration / 1000}s`
 				: test.status
 			);

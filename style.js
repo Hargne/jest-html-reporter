@@ -59,6 +59,10 @@ module.exports = () => `
 		font-style: italic;
 		width: 60%;
 	}
+	.suite-table td.test .failureMsg {
+		font-weight: bold;
+		font-size: 0.7rem;
+	}
 	.suite-table td.result {
 		width: 20%;
 		text-align: right;
