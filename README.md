@@ -4,6 +4,7 @@ A [jest](https://github.com/facebook/jest) test results processor for generating
 ![screenshot](https://cloud.githubusercontent.com/assets/3501024/26726395/251055b0-47a3-11e7-9116-99a6a610eda0.png)
 
 This plugin was inspired by [karma-htmlfile-reporter](https://github.com/matthias-schuetz/karma-htmlfile-reporter)
+
 ## Installation
 ```shell
 npm install jest-html-reporter
@@ -29,7 +30,7 @@ The title of the document. This string will also be outputted on the top of the 
 ### outputPath (string)
 [Default: "./test-report.html"]
 
-The path to where to output the HTMl report. The path must include the filename and end with .html
+The path to where to output the HTML report. The path must include the filename and end with .html
 
 ### includeFailureMsg (boolean)
 [Default: false]
