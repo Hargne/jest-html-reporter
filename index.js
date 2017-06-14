@@ -4,7 +4,7 @@ const xmlbuilder = require('xmlbuilder');
 const mkdirp = require('mkdirp');
 const stripAnsi = require('strip-ansi');
 
-const style = require('./style');
+const defaultStylesheet = require('./style');
 
 /**
  * Fetches config from package.json
@@ -25,21 +25,41 @@ try {
  */
 const writeFile = (filePath, content) => mkdirp(path.dirname(filePath), (err) => {
 	if (err) {
-		return console.log(`Something went wrong when creating the file: ${err}`);
+		return console.log(`Jest-HTML-Reporter: Something went wrong when creating the file: ${err}`);
 	}
 	return fs.writeFile(filePath, content);
 });
 
 /**
+ * Fetches the stylesheet to be imported in the test report.
+ * If the styleOverridePath fil cannot be found, it will respond with the default stylesheet.
+ * @param  {String} filePath
+ * @return {Promise}
+ */
+const getStylesheet = () => {
+	return new Promise((resolve, reject) => {
+		// If the styleOverridePath has not been set, return the default stylesheet.
+		if (!config.styleOverridePath) { resolve(defaultStylesheet); }
+		// Attempt to read the given file
+		fs.readFile(config.styleOverridePath, 'utf8', (err, content) => {
+			// If there were no errors, return the content of the given file.
+			// Otherwise resolve the promise with the default stylesheet.
+			const response = !err ? content : defaultStylesheet;
+			resolve(response);
+		});
+	});
+};
+
+/**
  * Sets up a basic HTML page to apply the content to
  * @return {xmlbuilder}
  */
-const createHtml = () => xmlbuilder.create({
+const createHtml = (stylesheet) => xmlbuilder.create({
 	html: {
 		head: {
 			meta: { '@charset': 'utf-8' },
 			title: { '#text': config.pageTitle || 'Test suite' },
-			style: { '@type': 'text/css', '#text': style },
+			style: { '@type': 'text/css', '#text': stylesheet },
 		},
 		body: {
 			h1: { '#text': config.pageTitle || 'Test suite' },
@@ -48,24 +68,27 @@ const createHtml = () => xmlbuilder.create({
 });
 
 /**
- * Main Export
+ * Returns a HTML containing the test report.
+ * @param  {String} stylesheet
+ * @param  {Object} data		The test result data
+ * @return {xmlbuilder}
  */
-module.exports = (result) => {
+const renderHTMLReport = ({ stylesheet, data }) => {
 	// Create HTML and Body tags
-	const htmlOutput = createHtml();
+	const htmlOutput = createHtml(stylesheet);
 	// Timestamp
 	htmlOutput.ele('div', { id: 'timestamp' }, `
-		Start: ${(new Date(result.startTime)).toLocaleString()}
+		Start: ${(new Date(data.startTime)).toLocaleString()}
 	`);
 	// Test Summary
 	htmlOutput.ele('div', { id: 'summary' }, `
-		${result.numTotalTests} tests /
-		${result.numPassedTests} passed /
-		${result.numFailedTests} failed /
-		${result.numPendingTests} skipped
+		${data.numTotalTests} tests /
+		${data.numPassedTests} passed /
+		${data.numFailedTests} failed /
+		${data.numPendingTests} skipped
 	`);
 	// Loop through each suite
-	result.testResults.forEach((suite) => {
+	data.testResults.forEach((suite) => {
 		if (suite.testResults.length <= 0) { return; }
 		// Suite File Path
 		htmlOutput.ele('div', { class: 'suite-info' }, `
@@ -95,9 +118,21 @@ module.exports = (result) => {
 			);
 		});
 	});
+	// Send back the rendered HTML
+	return htmlOutput;
+};
 
-	// Copy file to destination
-	writeFile(config.outputPath || path.join(process.cwd(), 'test-report.html'), htmlOutput);
-
-	return result;
+/**
+ * Main Export
+ */
+module.exports = (testResult) => {
+	getStylesheet().then(stylesheet => {
+		// Render the HTML report
+		const htmlReport = renderHTMLReport({ stylesheet, data: testResult });
+		// Write the report to the destination file
+		writeFile(config.outputPath || path.join(process.cwd(), 'test-report.html'), htmlReport);
+		// Finish up
+		console.log('Jest HTML report generated.');
+		return testResult;
+	});
 };
