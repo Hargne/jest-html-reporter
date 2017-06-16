@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "jest",
     "html",
     "reporter",
+	"report",
     "plugin"
   ],
   "author": "Johan Hargne",
@@ -24,7 +25,7 @@
   "homepage": "https://github.com/Hargne/jest-html-reporter#readme",
   "dependencies": {
     "mkdirp": "0.5.1",
-    "strip-ansi": "^3.0.1",
+    "strip-ansi": "3.0.1",
     "xmlbuilder": "8.2.2"
   },
   "peerDependencies": {
