@@ -1,1 +1,4 @@
 node_modules/
+coverage/
+test-report.html
+npm-debug.log

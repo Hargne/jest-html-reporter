@@ -1,9 +1,11 @@
 # jest-html-reporter
-A [jest](https://github.com/facebook/jest) test results processor for generating a summary in HTML. This plugin will generate a test summary file in HTML.
+**A [jest](https://github.com/facebook/jest) test results processor for generating a summary in HTML.**
 
-This plugin was inspired by [karma-htmlfile-reporter](https://github.com/matthias-schuetz/karma-htmlfile-reporter)
+[![NPM](https://nodei.co/npm/jest-html-reporter.png?downloads=true&stars=true)](https://nodei.co/npm/jest-html-reporter/)
 
 ![screenshot](https://cloud.githubusercontent.com/assets/3501024/26726395/251055b0-47a3-11e7-9116-99a6a610eda0.png)
+
+This plugin was inspired by [karma-htmlfile-reporter](https://github.com/matthias-schuetz/karma-htmlfile-reporter)
 
 ## Installation
 ```shell

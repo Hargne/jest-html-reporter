@@ -1,10 +1,10 @@
 {
   "name": "jest-html-reporter",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --no-cache --config=jest.config.json"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,12 @@
     "jest": "19.x || 20.x"
   },
   "devDependencies": {
+    "jest": "^20.0.4",
     "jshint": "^2.9.5"
+  },
+  "jest-html-reporter": {
+    "pageTitle": "Test Suite",
+    "outputPath": "test-report.html",
+    "includeFailureMsg": true
   }
 }

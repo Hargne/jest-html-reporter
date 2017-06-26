@@ -1,0 +1,22 @@
+{
+	"roots": ["<rootDir>"],
+	"collectCoverage": true,
+	"collectCoverageFrom" : [
+		"**/*.{js,jsx}",
+		"!**/test/*.{js,jsx}",
+		"!**/node_modules/**",
+		"!**/coverage/**",
+		"!**/vendor/**"
+	],
+	"coverageDirectory": "./coverage",
+    "coverageReporters": ["json", "html", "text", "text-summary"],
+	"coverageThreshold": {
+		"global": {
+			"branches": 50,
+			"functions": 50,
+			"lines": 50,
+			"statements": 50
+	  	}
+	},
+	"testResultsProcessor": "./index.js"
+}
