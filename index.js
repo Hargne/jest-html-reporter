@@ -118,6 +118,6 @@ module.exports = (testResult) => {
 	.then(writeFile.bind(null, reportOutputLocation))
 	.then(() => console.log('\x1b[32m', `jest-html-reporter >> Report generated (${reportOutputLocation})`))
 	.catch(error => console.log('\x1b[31m', `jest-html-reporter [error] >> ${error}`));
-	
+	// Return the results as required by Jest
 	return testResult
 };

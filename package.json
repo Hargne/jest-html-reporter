@@ -14,7 +14,7 @@
     "jest",
     "html",
     "reporter",
-	"report",
+    "report",
     "plugin"
   ],
   "author": "Johan Hargne",
@@ -30,5 +30,8 @@
   },
   "peerDependencies": {
     "jest": "19.x || 20.x"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.5"
   }
 }
