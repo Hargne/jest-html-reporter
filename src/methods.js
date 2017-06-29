@@ -142,7 +142,7 @@ module.exports = {
 	createHtml,
 	getOutputFilepath,
 	getStylesheet,
-	logMessage
+	logMessage,
 	renderHTML,
 	writeFile,
 };
