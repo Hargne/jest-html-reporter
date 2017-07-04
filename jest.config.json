@@ -18,5 +18,5 @@
 			"statements": 50
 	  	}
 	},
-	"testResultsProcessor": "./index.js"
+	"testResultsProcessor": "./src/index.js"
 }

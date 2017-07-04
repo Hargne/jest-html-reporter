@@ -18,7 +18,7 @@ catch (e) { /** do nothing */ }
  * @param {String} msg
  * @return {Object}
  */
-const logMessage = ({ type, msg } = {}) => {
+const logMessage = (type, msg) => {
 	const types = { default: '\x1b[37m', success: '\x1b[32m', error: '\x1b[31m' };
 	const logColor = (!types[type]) ? types.default : types[type];
 	const logMsg = `jest-html-reporter >> ${msg}`;
@@ -75,8 +75,8 @@ const createHtml = (stylesheet) => xmlbuilder.create({
  * @return {xmlbuilder}
  */
 const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
-	// Make sure that an object was provided
-	if (!testData || typeof testData !== 'object') { return reject('Test data missing or malformed'); }
+	// Make sure that test data was provided
+	if (!testData) { return reject('Test data missing or malformed'); }
 	// Create an xmlbuilder object with HTML and Body tags
 	const htmlOutput = createHtml(stylesheet);
 	// Timestamp
@@ -106,7 +106,7 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 				const testTitleTd = testTr.ele('td', { class: 'test' }, test.title);
 				// Test Failure Messages
 				if (test.failureMessages && config.includeFailureMsg) {
-					failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
+					const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
 					test.failureMessages.forEach((failureMsg) => {
 						failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
 					});
@@ -123,15 +123,15 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 /**
  * Generates and writes HTML report to a given path
  * @param  {Object} data   Jest test information data
- * @param  {String} output The destination of the generated report
+ * @param  {String} destination The destination of the generated report
  * @return {Promise}
  */
-const createReport = ({ data, output } = {}) => {
+const createReport = (data, destination) => {
 	return getStylesheet()
 		.then(renderHTML.bind(null, data))
-		.then(writeFile.bind(null, output))
-		.then(() => logMessage({ type: 'success', msg: `Report generated (${output})` }))
-		.catch(error => logMessage({ type: 'error', msg: error }));
+		.then(writeFile.bind(null, destination))
+		.then(() => logMessage('success', `Report generated (${destination})`))
+		.catch(error => logMessage('error', error));
 };
 
 /**

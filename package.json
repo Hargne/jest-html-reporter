@@ -1,8 +1,8 @@
 {
   "name": "jest-html-reporter",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Jest test results processor for generating a summary in HTML",
-  "main": "index.js",
+  "main": "./src/index",
   "scripts": {
     "test": "jest --no-cache --config=jest.config.json"
   },

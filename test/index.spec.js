@@ -1,4 +1,4 @@
-const index = require('../index');
+const index = require('../src/index');
 const _mockdata = require('./_mockdata');
 
 describe('index', () => {
