@@ -21,6 +21,9 @@ You must configure jest to process the test results by adding the following entr
 ```
 Then when you run jest from within the terminal, a file called test-report.html will be created within your root folder containing general information about your tests.
 
+### Node Compatibility
+This plugin is compatible with Node version `^4.8.3`
+
 ## Configuration
 The configurations are done directly within your package.json file
 
