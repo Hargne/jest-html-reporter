@@ -1,6 +1,8 @@
 module.exports = () =>`
 	html,body {font-family:Arial,Helvetica,sans-serif;font-size:1rem;margin:0;padding:0;color:#333;}
 	body {padding:1rem;2rem;font-size:0.85rem;}
+	img {width: 300px; height: 200px}
+	.hide {display: none}
 	#timestamp {font-weight:bold;color:#666;margin-bottom:0.5rem;}
 	#summary {color:#999;margin-bottom:1em;}
 	.suite-info {padding:1em;background-color:#eee;border-bottom:2px solid #999;font-weight:bold;color:#999;}
