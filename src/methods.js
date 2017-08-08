@@ -3,7 +3,9 @@ const fs = require('fs');
 const xmlbuilder = require('xmlbuilder');
 const mkdirp = require('mkdirp');
 const stripAnsi = require('strip-ansi');
+const crypto = require('crypto');
 const defaultStylesheet = require('./style');
+const script = require('./script');
 
 /**
  * Fetches config from package.json
@@ -64,6 +66,7 @@ const createHtml = (stylesheet) => xmlbuilder.create({
 			style: { '@type': 'text/css', '#text': stylesheet },
 		},
 		body: {
+			script: {'#text': script},
 			h1: { '#text': config.pageTitle || 'Test suite' },
 		},
 	},
@@ -99,23 +102,31 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
 		// Loop through each test case
 		suite.testResults.forEach((test) => {
-			const testTr = suiteTable.ele('tr', { class: test.status });
+			const titleEncode = crypto.createHash('md5').update(test.fullName).digest("hex")		
+			const testTr = suiteTable.ele('tr', {  class: test.status });
 				// Suite Name(s)
-				testTr.ele('td', { class: 'suite' }, test.ancestorTitles.join(' > '));
-				// Test name
-				const testTitleTd = testTr.ele('td', { class: 'test' }, test.title);
-				// Test Failure Messages
-				if (test.failureMessages && config.includeFailureMsg) {
-					const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
-					test.failureMessages.forEach((failureMsg) => {
-						failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
-					});
-				}
-				// Test Result
-				testTr.ele('td', { class: 'result' }, (test.status === 'passed') ?
-					`${test.status} in ${test.duration / 1000}s`
-					: test.status
-				);
+			testTr.ele('td', { class: 'suite' }, test.ancestorTitles.join(' > '));
+			// Test name
+			const testTitleTd = testTr.ele('td', { class: 'test' }, test.title);
+			const imgUrl = './screenshots/' + titleEncode + '.jpg'
+			const testImgShow = testTr.ele('td', {id: titleEncode  + 'show', class: 'test' });
+			testImgShow.ele('div', {onclick:`toggleImg(event, "${titleEncode}")`}, 'Show result screenshot')
+			const testImgResult = testTr.ele('td', {id: titleEncode, class: 'test hide' });
+			testImgResult.ele('img', {src: imgUrl})
+			testImgResult.ele('a', {href: '#', style: 'padding-right: 15px', onclick:`toggleImg(event, "${titleEncode}")`}, 'Collapse Image')
+			testImgResult.ele('a', {href: imgUrl, target:"_blank", src: test.fullName.replace(' ', '-')}, 'Download Image')
+			// Test Failure Messages
+			if (test.failureMessages && config.includeFailureMsg) {
+				const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
+				test.failureMessages.forEach((failureMsg) => {
+					failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
+				});
+			}
+			// Test Result
+			testTr.ele('td', { class: 'result' }, (test.status === 'passed') ?
+				`${test.status} in ${test.duration / 1000}s`
+				: test.status
+			);
 		});
 	});
 	return resolve(htmlOutput);
