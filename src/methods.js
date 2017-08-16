@@ -29,7 +29,7 @@ const logMessage = (type, msg) => {
  * Returns the output path for the test report
  * @return {String}
  */
-const getOutputFilepath = () => config.outputPath || path.join(process.cwd(), 'test-report.html');
+const getOutputFilepath = () => config.outputPath || process.env.TEST_REPORT_PATH || path.join(process.cwd(), 'test-report.html');
 /**
  * Creates a file at the given destination
  * @param  {String} filePath
