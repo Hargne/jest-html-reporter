@@ -29,10 +29,10 @@
     "xmlbuilder": "8.2.2"
   },
   "peerDependencies": {
-    "jest": "19.x || 20.x"
+    "jest": "19.x || 20.x || 21.x"
   },
   "devDependencies": {
-    "jest": "^20.0.4",
+    "jest": "^21.2.1",
     "jshint": "^2.9.5"
   },
   "jest-html-reporter": {
