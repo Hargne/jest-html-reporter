@@ -60,11 +60,11 @@ const createHtml = (stylesheet) => xmlbuilder.create({
 	html: {
 		head: {
 			meta: { '@charset': 'utf-8' },
-			title: { '#text': config.pageTitle || 'Test suite' },
+			title: { '#text': config.pageTitle || process.env.TEST_REPORT_TITLE || 'Test suite' },
 			style: { '@type': 'text/css', '#text': stylesheet },
 		},
 		body: {
-			h1: { '#text': config.pageTitle || 'Test suite' },
+			h1: { '#text': config.pageTitle || process.env.TEST_REPORT_TITLE || 'Test suite' },
 		},
 	},
 });
