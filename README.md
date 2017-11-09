@@ -80,4 +80,3 @@ Here is an example of dynamically naming your output file and test report title 
 export BRANCH_NAME=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3`
 export TEST_REPORT_PATH=/home/username/jest-test-output/test-reports/"$BRANCH_NAME".html
 export TEST_REPORT_TITLE="$BRANCH_NAME"\ Test\ Report
-~~~
