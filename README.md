@@ -67,3 +67,11 @@ Have a look at the default styling (located within this repository at *src/style
 	}
 }
 ```
+
+## Continuous Integration
+
+The output path can be set with a environment variable for dynamic file saving paths in different environments. Useful for CI
+
+~~~ bash
+export TEST_REPORT_PATH=/home/username/jest-test-output/test-reports.html
+~~~
