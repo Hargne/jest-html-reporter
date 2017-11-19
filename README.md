@@ -70,8 +70,13 @@ Have a look at the default styling (located within this repository at *src/style
 
 ## Continuous Integration
 
-The output path can be set with a environment variable for dynamic file saving paths in different environments. Useful for CI
+The output path and report title can be set with an environment variable for dynamic file saving paths in different environments. 
+
+Values in package.json will take precedence over environment variables.
+
+Here is an example of dynamically naming your output file and test report title to match your current branch that one might see in a automated deployment pipeline before running their tests.
 
 ~~~ bash
-export TEST_REPORT_PATH=/home/username/jest-test-output/test-reports.html
-~~~
+export BRANCH_NAME=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3`
+export TEST_REPORT_PATH=/home/username/jest-test-output/test-reports/"$BRANCH_NAME".html
+export TEST_REPORT_TITLE="$BRANCH_NAME"\ Test\ Report
