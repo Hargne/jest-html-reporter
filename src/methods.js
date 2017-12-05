@@ -19,7 +19,7 @@ catch (e) { /** do nothing */ }
  * @return {Object}
  */
 const logMessage = (type, msg) => {
-	const types = { default: '\x1b[37m', success: '\x1b[32m', error: '\x1b[31m' };
+	const types = { default: '\x1b[37m%s\x1b[0m', success: '\x1b[32m%s\x1b[0m', error: '\x1b[31m%s\x1b[0m' };
 	const logColor = (!types[type]) ? types.default : types[type];
 	const logMsg = `jest-html-reporter >> ${msg}`;
 	console.log(logColor, logMsg);

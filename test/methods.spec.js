@@ -33,7 +33,7 @@ describe('methods', () => {
 			// Given
 			const log = methods.logMessage('success', 'msg');
 			// Then
-			expect(log.logColor).toEqual('\x1b[32m');
+			expect(log.logColor).toEqual('\x1b[32m%s\x1b[0m');
 			expect(log.logMsg).toEqual('jest-html-reporter >> msg');
 		});
 		it('should set the log type to default if none or an invalid type was provided', () => {
@@ -41,8 +41,8 @@ describe('methods', () => {
 			const log1 = methods.logMessage(null, 'msg');
 			const log2 = methods.logMessage('invalidType', 'msg');
 			// Then
-			expect(log1.logColor).toEqual('\x1b[37m');
-			expect(log2.logColor).toEqual('\x1b[37m');
+			expect(log1.logColor).toEqual('\x1b[37m%s\x1b[0m');
+			expect(log2.logColor).toEqual('\x1b[37m%s\x1b[0m');
 		});
 	});
 });
