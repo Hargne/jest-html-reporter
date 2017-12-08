@@ -64,7 +64,7 @@ const createHtml = (stylesheet) => xmlbuilder.create({
 			style: { '@type': 'text/css', '#text': stylesheet },
 		},
 		body: {
-			h1: { '#text': config.pageTitle || process.env.TEST_REPORT_TITLE || 'Test suite' },
+			h1: { '@id': 'title', '#text': config.pageTitle || process.env.TEST_REPORT_TITLE || 'Test suite' },
 		},
 	},
 });
