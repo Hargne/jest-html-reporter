@@ -29,7 +29,7 @@
     "xmlbuilder": "8.2.2"
   },
   "peerDependencies": {
-    "jest": "19.x || 20.x || 21.x"
+    "jest": "19.x - 22.x"
   },
   "devDependencies": {
     "jest": "^21.2.1",
