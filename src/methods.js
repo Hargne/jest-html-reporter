@@ -29,7 +29,7 @@ const logMessage = (type, msg) => {
  * Returns the output path for the test report
  * @return {String}
  */
-const getOutputFilepath = () => config.outputPath || process.env.TEST_REPORT_PATH || path.join(process.cwd(), 'test-report.html');
+const getOutputFilepath = () => config.outputPath || process.env.JEST_HTML_REPORTER_OUTPUT_PATH || process.env.TEST_REPORT_PATH || path.join(process.cwd(), 'test-report.html');
 /**
  * Creates a file at the given destination
  * @param  {String} filePath
@@ -45,11 +45,12 @@ const writeFile = (filePath, content) => new Promise((resolve, reject) => {
  * @return {Promise}
  */
 const getStylesheet = () => new Promise((resolve, reject) => {
+	const pathToStylesheet = config.styleOverridePath || process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH;
 	// If the styleOverridePath has not been set, return the default stylesheet (style.js).
-	if (!config.styleOverridePath) { return resolve(defaultStylesheet); }
-	fs.readFile(config.styleOverridePath, 'utf8', (err, content) => {
+	if (!pathToStylesheet) { return resolve(defaultStylesheet); }
+	fs.readFile(pathToStylesheet, 'utf8', (err, content) => {
 		// If there were no errors, return the content of the given file.
-		return !err ? resolve(content) : reject(`Could not find the specified styleOverridePath: '${config.styleOverridePath}'`);
+		return !err ? resolve(content) : reject(`Could not find the specified styleOverridePath: '${pathToStylesheet}'`);
 	});
 });
 /**
@@ -60,11 +61,11 @@ const createHtml = (stylesheet) => xmlbuilder.create({
 	html: {
 		head: {
 			meta: { '@charset': 'utf-8' },
-			title: { '#text': config.pageTitle || process.env.TEST_REPORT_TITLE || 'Test suite' },
+			title: { '#text': config.pageTitle || process.env.JEST_HTML_REPORTER_PAGE_TITLE || process.env.TEST_REPORT_TITLE || 'Test suite' },
 			style: { '@type': 'text/css', '#text': stylesheet },
 		},
 		body: {
-			h1: { '@id': 'title', '#text': config.pageTitle || process.env.TEST_REPORT_TITLE || 'Test suite' },
+			h1: { '@id': 'title', '#text': config.pageTitle || process.env.JEST_HTML_REPORTER_PAGE_TITLE || process.env.TEST_REPORT_TITLE || 'Test suite' },
 		},
 	},
 });
@@ -105,7 +106,7 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 				// Test name
 				const testTitleTd = testTr.ele('td', { class: 'test' }, test.title);
 				// Test Failure Messages
-				if (test.failureMessages && config.includeFailureMsg) {
+				if (test.failureMessages && (config.includeFailureMsg || process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG)) {
 					const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' })
 					test.failureMessages.forEach((failureMsg) => {
 						failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
