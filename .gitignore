@@ -1,4 +1,6 @@
-node_modules/
 coverage/
-test-report.html
 npm-debug.log
+node_modules/
+test-report/
+dist/
+test-report.html

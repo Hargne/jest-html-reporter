@@ -1,0 +1,18 @@
+{
+    "extends": "airbnb-base",
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "env": {
+        "jasmine": true
+    },
+    "rules": {
+        "indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
+        "max-len": [2, 150],
+        "no-tabs": "off"
+    }
+}
