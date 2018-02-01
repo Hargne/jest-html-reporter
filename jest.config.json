@@ -2,7 +2,8 @@
 	"roots": ["<rootDir>"],
 	"collectCoverage": true,
 	"collectCoverageFrom" : [
-		"**/*.{js,jsx}",
+		"src/**/*.{js,jsx}",
+		"!src/style.js",
 		"!**/test/*.{js,jsx}",
 		"!**/node_modules/**",
 		"!**/coverage/**",
@@ -18,5 +19,5 @@
 			"statements": 50
 	  	}
 	},
-	"testResultsProcessor": "./src/index.js"
+	"testResultsProcessor": "./src"
 }

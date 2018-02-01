@@ -1,10 +1,10 @@
-const methods = require('./methods');
+const Methods = require('./methods');
 
-module.exports = (testResult) => {
-	// Set output destination
-	const destination = methods.getOutputFilepath();
+const JestHTMLReporter = (testResult) => {
 	// Generate Report
-	methods.createReport(testResult, destination);
+	Methods.createReport(testResult);
 	// Return the results as required by Jest
 	return testResult;
 };
+
+module.exports = JestHTMLReporter;

@@ -1,8 +1,9 @@
-const index = require('../src/index');
-const _mockdata = require('./_mockdata');
+const JestHTMLReporter = require('../src');
+const mockdata = require('./_mockdata');
 
 describe('index', () => {
 	it('should return the jest test data', () => {
-		expect(index(_mockdata.jestTestData)).toEqual(_mockdata.jestTestData);
+		expect(JestHTMLReporter(mockdata.jestTestData))
+			.toEqual(mockdata.jestTestData);
 	});
 });

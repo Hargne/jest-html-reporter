@@ -10,7 +10,7 @@
 	<img src="https://nodei.co/npm/jest-html-reporter.png?downloads=true&stars=true" alt="">
 	<br />
 	<br />
-	<img src="https://cloud.githubusercontent.com/assets/3501024/26726395/251055b0-47a3-11e7-9116-99a6a610eda0.png" alt="">
+	<img src="https://user-images.githubusercontent.com/3501024/35678183-b038d6ca-0752-11e8-85ca-9be570e80872.png" alt="">
 	<br />
 	<br />
 	This plugin was inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
@@ -42,8 +42,10 @@ Although jest.config.js is specifically created for configuring Jest (and not th
 ## Node Compatibility
 This plugin is compatible with Node version `^4.8.3`
 
+---
+
 ## Configuration
-The configurations are done directly within your *package.json* file
+To configure this plugin, create a file named `jesthtmlreporter.config.json` in the root folder of the project. Please note that all configuration properties are optional.
 
 | Property | Type | Description | Default
 |--|--|--|--|
@@ -52,12 +54,24 @@ The configurations are done directly within your *package.json* file
 | `includeFailureMsg` | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
 
-#### *A Note on styleOverridePath
+#### *A note on styleOverridePath
 The plugin will search for the file from the root directory, therefore there is no need to prepend the string with ./ or ../
 
-Have a look at the default styling (located within this repository at *src/style.js*) for a reference to the IDs and classes available for styling.
+Have a look at the default styling (located within the root of this repository named *style.css*) for a reference of the elements available for styling.
 
-### Example configuration (package.json)
+### Example Configuration
+
+```
+{
+	"pageTitle": "Your test suite",
+	"outputPath": "test-report/index.html",
+	"includeFailureMsg": false,
+	"styleOverridePath": "src/teststyle.css"
+}
+```
+
+#### Alternative configuration with package.json
+Add an entry named *"jest-html-reporter"* to your package.json 
 ```
 {
 	...
@@ -70,11 +84,13 @@ Have a look at the default styling (located within this repository at *src/style
 }
 ```
 
+---
+
 ## Continuous Integration
 
-Configuration can also be performed with environment variables for dynamic file saving paths in different environments. 
+Configuration may also be performed with environment variables for dynamic file saving paths in different environments. 
 
-**NOTE:** *Values in package.json will take precedence over environment variables.*
+***NOTE:** jesthtmlreporter.config.json and package.json will take precedence over environment variables.*
 
 ### Example
 Here is an example of dynamically naming your output file and test report title to match your current branch that one might see in a automated deployment pipeline before running their tests.

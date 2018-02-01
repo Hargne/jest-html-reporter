@@ -1,10 +1,19 @@
 {
   "name": "jest-html-reporter",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "Jest test results processor for generating a summary in HTML",
-  "main": "./src/index",
+  "main": "dist/main",
+  "unpkg": "dist/main.min.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "jest --no-cache --config=jest.config.json"
+    "eslint": "eslint ./src/**/*.js",
+    "test": "npm run eslint && jest --no-cache --config=jest.config.json",
+    "bundle": "rollup -c rollup.config.js",
+    "bundle:minified": "rollup -c rollup.config.js --environment BUILD:minified",
+    "bundle:all": "npm run bundle && npm run bundle:minified",
+    "build": "npm run test && npm run bundle:all"
   },
   "repository": {
     "type": "git",
@@ -23,6 +32,9 @@
     "url": "https://github.com/Hargne/jest-html-reporter/issues"
   },
   "homepage": "https://github.com/Hargne/jest-html-reporter#readme",
+  "engines": {
+    "node": ">=4.8.3"
+  },
   "dependencies": {
     "mkdirp": "0.5.1",
     "strip-ansi": "3.0.1",
@@ -32,13 +44,18 @@
     "jest": "19.x - 22.x"
   },
   "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "jest": "^21.2.1",
-    "jshint": "^2.9.5"
+    "rollup": "^0.55.2",
+    "rollup-plugin-commonjs": "^8.3.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "jest-html-reporter": {
     "pageTitle": "Test Suite",
     "outputPath": "test-report.html",
-    "includeFailureMsg": true,
-    "styleOverridePath": "src/style.js"
+    "includeFailureMsg": true
   }
 }
