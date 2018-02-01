@@ -26,11 +26,18 @@ const getOutputFilepath = () =>
 	config.outputPath || process.env.JEST_HTML_REPORTER_OUTPUT_PATH || path.join(process.cwd(), 'test-report.html');
 
 /**
+ * Returns the configured name of theme to be used for styling the report
+ * @return {String}
+ */
+const getTheme = () =>
+	config.theme || process.env.JEST_HTML_REPORTER_THEME || 'defaultTheme';
+
+/**
  * Returns the style-override path for the test report
  * @return {String}
  */
 const getStylesheetFilepath = () =>
-	config.styleOverridePath || process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH || path.join(__dirname, '../style.css');
+	config.styleOverridePath || process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH || path.join(__dirname, `../style/${getTheme()}.css`);
 
 /**
  * Returns the configured test report title
@@ -46,9 +53,19 @@ const getPageTitle = () =>
 const shouldIncludeFailureMessages = () =>
 	config.includeFailureMsg || process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG || false;
 
+/**
+ * Returns the configured threshold (in seconds) when to apply a warning
+ * @return {Number}
+ */
+const getExecutionTimeWarningThreshold = () =>
+	config.executionTimeWarningThreshold || process.env.JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD || 5;
+
 module.exports = {
+	config,
 	getOutputFilepath,
 	getStylesheetFilepath,
 	getPageTitle,
 	shouldIncludeFailureMessages,
+	getExecutionTimeWarningThreshold,
+	getTheme,
 };

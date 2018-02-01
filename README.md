@@ -10,10 +10,11 @@
 	<img src="https://nodei.co/npm/jest-html-reporter.png?downloads=true&stars=true" alt="">
 	<br />
 	<br />
+	Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
+	<br />
+	<br />
+	<hr />
 	<img src="https://user-images.githubusercontent.com/3501024/35678183-b038d6ca-0752-11e8-85ca-9be570e80872.png" alt="">
-	<br />
-	<br />
-	This plugin was inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
   </p>
 </p>
 
@@ -53,11 +54,12 @@ To configure this plugin, create a file named `jesthtmlreporter.config.json` in 
 | `outputPath` | `STRING` | The path to where the plugin will output the HTML report. The path must include the filename and end with .html | `"./test-report.html"`
 | `includeFailureMsg` | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
+| `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
 
 #### *A note on styleOverridePath
 The plugin will search for the file from the root directory, therefore there is no need to prepend the string with ./ or ../
 
-Have a look at the default styling (located within the root of this repository named *style.css*) for a reference of the elements available for styling.
+Have a look at the default styling (located within *style/defaultTheme.css*) for a reference of the elements available for styling.
 
 ### Example Configuration
 
@@ -66,7 +68,8 @@ Have a look at the default styling (located within the root of this repository n
 	"pageTitle": "Your test suite",
 	"outputPath": "test-report/index.html",
 	"includeFailureMsg": false,
-	"styleOverridePath": "src/teststyle.css"
+	"styleOverridePath": "src/teststyle.css",
+	"executionTimeWarningThreshold": 5
 }
 ```
 
@@ -77,9 +80,8 @@ Add an entry named *"jest-html-reporter"* to your package.json
 	...
 	"jest-html-reporter": {
 		"pageTitle": "Your test suite",
-		"outputPath": "test-report/index.html",
-		"includeFailureMsg": false,
-		"styleOverridePath": "src/teststyle.css"
+		"outputPath": "test-report.html",
+		"includeFailureMsg": true
 	}
 }
 ```
@@ -102,10 +104,11 @@ export JEST_HTML_REPORTER_PAGE_TITLE="$BRANCH_NAME"\ Test\ Report
 ```
 
 ### Configuration Environment Variables
-| Variable Name | Type | Description | Default
-|--|--|--|--|
-| `JEST_HTML_REPORTER_PAGE_TITLE` | `STRING` | The title of the document. This string will also be outputted on the top of the page. | `"Test Suite"`
-| `JEST_HTML_REPORTER_OUTPUT_PATH` | `STRING` | The path to where the plugin will output the HTML report. The path must include the filename and end with .html | `"./test-report.html"`
-| `JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG` | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test. | `false`
-| `JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH` | `STRING` | The path to a file containing CSS styles that should override the default styling. | `null`
+The environment variables reflect the properties set in the JSON configuration file. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-in-packagejson) for more information.
+
+* `JEST_HTML_REPORTER_PAGE_TITLE`
+* `JEST_HTML_REPORTER_OUTPUT_PATH`
+* `JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG`
+* `JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH`
+* `JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD`
 

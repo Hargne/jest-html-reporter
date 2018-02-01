@@ -104,7 +104,7 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		suiteInfo.ele('div', { class: 'suite-path' }, suite.testFilePath);
 		// Suite execution time
 		const executionTime = (suite.perfStats.end - suite.perfStats.start) / 1000;
-		suiteInfo.ele('div', { class: `suite-time${executionTime > 1 && ' warn'}` }, `${executionTime}s`);
+		suiteInfo.ele('div', { class: `suite-time${executionTime > 5 && ' warn'}` }, `${executionTime}s`);
 
 		// Suite Test Table
 		const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
