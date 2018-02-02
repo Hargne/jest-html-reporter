@@ -58,6 +58,7 @@
   "jest-html-reporter": {
     "pageTitle": "Test Suite",
     "outputPath": "test-report.html",
-    "includeFailureMsg": true
+    "includeFailureMsg": true,
+    "theme": "lightTheme"
   }
 }

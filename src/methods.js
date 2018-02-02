@@ -84,12 +84,14 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 	// Create an xmlbuilder object with HTML and Body tags
 	const htmlOutput = createHtml(stylesheet);
 
+	const metaDataContainer = htmlOutput.ele('div', { id: 'metadata-container' });
+
 	// Timestamp
 	const timestamp = new Date(testData.startTime);
-	htmlOutput.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, config.getDateFormat())}`);
+	metaDataContainer.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, config.getDateFormat())}`);
 
 	// Test Summary
-	htmlOutput.ele('div', { id: 'summary' }, `
+	metaDataContainer.ele('div', { id: 'summary' }, `
 		${testData.numTotalTests} tests --
 		${testData.numPassedTests} passed /
 		${testData.numFailedTests} failed /
@@ -106,7 +108,7 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		suiteInfo.ele('div', { class: 'suite-path' }, suite.testFilePath);
 		// Suite execution time
 		const executionTime = (suite.perfStats.end - suite.perfStats.start) / 1000;
-		suiteInfo.ele('div', { class: `suite-time${executionTime > 5 && ' warn'}` }, `${executionTime}s`);
+		suiteInfo.ele('div', { class: `suite-time${executionTime > 5 ? ' warn' : ''}` }, `${executionTime}s`);
 
 		// Suite Test Table
 		const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
