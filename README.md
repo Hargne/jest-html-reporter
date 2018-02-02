@@ -10,6 +10,9 @@
 	<img src="https://nodei.co/npm/jest-html-reporter.png?downloads=true&stars=true" alt="">
 	<br />
 	<br />
+	<img src="https://travis-ci.org/Hargne/jest-html-reporter.svg?branch=master">
+	<br />
+	<br />
 	Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
 	<br />
 	<br />
