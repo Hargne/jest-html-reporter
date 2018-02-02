@@ -3,6 +3,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const xmlbuilder = require('xmlbuilder');
 const stripAnsi = require('strip-ansi');
+const dateFormat = require('dateformat');
 const config = require('./config');
 
 /**
@@ -84,7 +85,8 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 	const htmlOutput = createHtml(stylesheet);
 
 	// Timestamp
-	htmlOutput.ele('div', { id: 'timestamp' }, `Start: ${(new Date(testData.startTime)).toLocaleString()}`);
+	const timestamp = new Date(testData.startTime);
+	htmlOutput.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, config.getDateFormat())}`);
 
 	// Test Summary
 	htmlOutput.ele('div', { id: 'summary' }, `

@@ -3,13 +3,15 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const uglify = require('rollup-plugin-uglify');
 
+const externalLibraries = ['fs', 'path', 'xmlbuilder', 'strip-ansi', 'mkdirp', 'dateformat'];
+
 const regularBundleConfig = {
 	input: 'src/index.js',
 	output: {
 		file: 'dist/main.js',
 		format: 'cjs',
 	},
-	external: ['fs', 'path', 'xmlbuilder', 'strip-ansi', 'mkdirp'],
+	external: externalLibraries,
 	plugins: [
 		resolve(),
 		commonjs({
@@ -24,7 +26,7 @@ const minifiedBundleConfig = {
 		file: 'dist/main.min.js',
 		format: 'cjs',
 	},
-	external: ['fs', 'path', 'xmlbuilder', 'strip-ansi', 'mkdirp'],
+	external: externalLibraries,
 	plugins: [
 		resolve(),
 		commonjs({

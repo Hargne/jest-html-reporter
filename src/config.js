@@ -60,6 +60,14 @@ const shouldIncludeFailureMessages = () =>
 const getExecutionTimeWarningThreshold = () =>
 	config.executionTimeWarningThreshold || process.env.JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD || 5;
 
+/**
+ * Returns the configured date/time format.
+ * Uses DateFormat - https://github.com/felixge/node-dateformat
+ * @return {String}
+ */
+const getDateFormat = () =>
+	config.dateFormat || process.env.JEST_HTML_REPORTER_DATE_FORMAT || 'yyyy-mm-dd HH:MM:ss';
+
 module.exports = {
 	config,
 	getOutputFilepath,
@@ -68,4 +76,5 @@ module.exports = {
 	shouldIncludeFailureMessages,
 	getExecutionTimeWarningThreshold,
 	getTheme,
+	getDateFormat,
 };
