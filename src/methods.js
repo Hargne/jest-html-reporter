@@ -26,31 +26,45 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
 	return { logColor, logMsg }; // Return for testing purposes
 };
 
-const sortTestResults = (testResults, sort) => {
+const processTestSuiteResults = (suiteResults, sort) => {
 	if (!sort || sort === 'default') {
-		return testResults;
+		return suiteResults;
 	}
 	if (sort === 'status') {
-		return testResults
-			.slice()
-			.sort((a, b) => {
-				if (a.numPendingTests > 0 && b.numPendingTests === 0) {
-					return -1;
-				}
-				if (b.numPendingTests > 0 && a.numPendingTests === 0) {
-					return 1;
-				}
-				if (a.numFailingTests > 0 && b.numFailingTests === 0) {
-					return -1;
-				}
-				if (b.numFailingTests > 0 && a.numFailingTests === 0) {
-					return 1;
-				}
-				return 0;
-			});
-	}
+		const pendingSuites = [];
+		const failingSuites = [];
+		const passingSuites = [];
 
-	return testResults;
+		suiteResults.forEach((suiteResult) => {
+			const pending = [];
+			const failed = [];
+			const passed = [];
+
+			suiteResult.testResults.forEach((x) => {
+				if (x.status === 'pending') {
+					pending.push(x);
+				} else if (x.status === 'failed') {
+					failed.push(x);
+				} else {
+					passed.push(x);
+				}
+			});
+
+			if (pending.length) {
+				pendingSuites.push(Object.assign({}, suiteResult, { testResults: pending }));
+			}
+			if (failed.length) {
+				failingSuites.push(Object.assign({}, suiteResult, { testResults: failed }));
+			}
+			if (passed.length) {
+				passingSuites.push(Object.assign({}, suiteResult, { testResults: passed }));
+			}
+		});
+
+		return [].concat(pendingSuites, failingSuites, passingSuites);
+	}
+	
+	return suiteResults;
 };
 
 /**
@@ -125,7 +139,7 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		${testData.numPendingTests} pending
 	`);
 
-	const sortedTestResults = sortTestResults(testData.testResults, config.getSort());
+	const sortedTestResults = processTestSuiteResults(testData.testResults, config.getSort());
 
 	// Test Suites
 	sortedTestResults.forEach((suite) => {
@@ -191,7 +205,7 @@ const createReport = (testData, ignoreConsole) => {
 
 module.exports = {
 	logMessage,
-	sortTestResults,
+	processTestSuiteResults,
 	writeFile,
 	createReport,
 	createHtml,
