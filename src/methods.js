@@ -26,6 +26,33 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
 	return { logColor, logMsg }; // Return for testing purposes
 };
 
+const sortTestResults = (testResults, sort) => {
+	if (!sort || sort === 'default') {
+		return testResults;
+	}
+	if (sort === 'status') {
+		return testResults
+			.slice()
+			.sort((a, b) => {
+				if (a.numPendingTests > 0 && b.numPendingTests === 0) {
+					return -1;
+				}
+				if (b.numPendingTests > 0 && a.numPendingTests === 0) {
+					return 1;
+				}
+				if (a.numFailingTests > 0 && b.numFailingTests === 0) {
+					return -1;
+				}
+				if (b.numFailingTests > 0 && a.numFailingTests === 0) {
+					return 1;
+				}
+				return 0;
+			});
+	}
+
+	return testResults;
+};
+
 /**
  * Creates a file at the given destination
  * @param  {String} filePath
@@ -98,8 +125,10 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		${testData.numPendingTests} pending
 	`);
 
+	const sortedTestResults = sortTestResults(testData.testResults, config.getSort());
+
 	// Test Suites
-	testData.testResults.forEach((suite) => {
+	sortedTestResults.forEach((suite) => {
 		if (!suite.testResults || suite.testResults.length <= 0) { return; }
 
 		// Suite Information
@@ -162,6 +191,7 @@ const createReport = (testData, ignoreConsole) => {
 
 module.exports = {
 	logMessage,
+	sortTestResults,
 	writeFile,
 	createReport,
 	createHtml,

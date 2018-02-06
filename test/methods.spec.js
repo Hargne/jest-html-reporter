@@ -1,5 +1,6 @@
 const methods = require('../src/methods');
 const mockdata = require('./_mockdata');
+const mockdataSorting = require('./_mockdata-sorting');
 
 describe('methods', () => {
 	describe('createReport ', () => {
@@ -12,6 +13,35 @@ describe('methods', () => {
 			expect.assertions(1);
 			return methods.createReport(null, true)
 				.then(response => expect(response.logMsg).toEqual('jest-html-reporter >> Error: Test data missing or malformed'));
+		});
+	});
+
+	describe('sort', () => {
+		it('should have a default sort', () => {
+			expect(require('../src/config').getSort()).toEqual('default'); // eslint-disable-line
+		});
+
+		it('should have no effect when sort not configured', () => {
+			const { testResults } = mockdataSorting.jestTestData;
+			const sortedTestResults = methods.sortTestResults(testResults);
+			testResults.forEach((testResult, index) => {
+				expect(sortedTestResults[index].numPassingTests).toEqual(testResult.numPassingTests);
+			});
+		});
+
+		it('should float pending tests to the top when configured as "status"', () => {
+			const { testResults } = mockdataSorting.jestTestData;
+			const sortedTestResults = methods.sortTestResults(testResults, 'status');
+
+			expect(sortedTestResults[0].numPendingTests > 0).toBeTruthy();
+		});
+
+		it('should float failing tests after pending tests when configured as "status"', () => {
+			const { testResults } = mockdataSorting.jestTestData;
+			const sortedTestResults = methods.sortTestResults(testResults, 'status');
+
+			expect(sortedTestResults[0].numFailingTests === 0).toBeTruthy();
+			expect(sortedTestResults[1].numFailingTests > 0).toBeTruthy();
 		});
 	});
 
