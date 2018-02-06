@@ -63,7 +63,7 @@ const processTestSuiteResults = (suiteResults, sort) => {
 
 		return [].concat(pendingSuites, failingSuites, passingSuites);
 	}
-	
+
 	return suiteResults;
 };
 
