@@ -5,6 +5,7 @@ const xmlbuilder = require('xmlbuilder');
 const stripAnsi = require('strip-ansi');
 const dateFormat = require('dateformat');
 const config = require('./config');
+const sorting = require('./sorting');
 
 /**
  * Logs a message of a given type in the terminal
@@ -26,45 +27,14 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
 	return { logColor, logMsg }; // Return for testing purposes
 };
 
-const processTestSuiteResults = (suiteResults, sort) => {
-	if (!sort || sort === 'default') {
-		return suiteResults;
-	}
-	if (sort === 'status') {
-		const pendingSuites = [];
-		const failingSuites = [];
-		const passingSuites = [];
-
-		suiteResults.forEach((suiteResult) => {
-			const pending = [];
-			const failed = [];
-			const passed = [];
-
-			suiteResult.testResults.forEach((x) => {
-				if (x.status === 'pending') {
-					pending.push(x);
-				} else if (x.status === 'failed') {
-					failed.push(x);
-				} else {
-					passed.push(x);
-				}
-			});
-
-			if (pending.length) {
-				pendingSuites.push(Object.assign({}, suiteResult, { testResults: pending }));
-			}
-			if (failed.length) {
-				failingSuites.push(Object.assign({}, suiteResult, { testResults: failed }));
-			}
-			if (passed.length) {
-				passingSuites.push(Object.assign({}, suiteResult, { testResults: passed }));
-			}
-		});
-
-		return [].concat(pendingSuites, failingSuites, passingSuites);
-	}
-
-	return suiteResults;
+/**
+ * Processes an array of test suite results
+ * @param {Array<Object>} suiteResults
+ * @return {Array<Object>}
+ */
+const processSuiteResults = (suiteResults) => {
+	const processedTestResults = sorting.sortSuiteResults(suiteResults, config.getSort());
+	return processedTestResults;
 };
 
 /**
@@ -139,10 +109,10 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		${testData.numPendingTests} pending
 	`);
 
-	const sortedTestResults = processTestSuiteResults(testData.testResults, config.getSort());
+	const processedSuiteResults = processSuiteResults(testData.testResults);
 
 	// Test Suites
-	sortedTestResults.forEach((suite) => {
+	processedSuiteResults.forEach((suite) => {
 		if (!suite.testResults || suite.testResults.length <= 0) { return; }
 
 		// Suite Information
@@ -205,7 +175,7 @@ const createReport = (testData, ignoreConsole) => {
 
 module.exports = {
 	logMessage,
-	processTestSuiteResults,
+	processSuiteResults,
 	writeFile,
 	createReport,
 	createHtml,
