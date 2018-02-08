@@ -60,7 +60,7 @@ To configure this plugin, create a file named `jesthtmlreporter.config.json` in 
 | `theme` | `STRING` | The name of the reporter themes to use when rendering the report. Available themes are located within *style/* | `"defaultTheme"`
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
 | `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
-| `sort` | `STRING` | The default setting has no effect, set to `status` to sort pending tests to the top, followed by failing tests and then passing tests. | `default`
+| `sort` | `STRING` | Sorts the test results with the given method. Available methods are: `"default"`, `"status"` More information can be found in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
 
 #### *A note on styleOverridePath
 The plugin will search for the file from the root directory, therefore there is no need to prepend the string with ./ or ../

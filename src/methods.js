@@ -29,8 +29,8 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
 
 /**
  * Processes an array of test suite results
- * @param {Array<Object>} suiteResults
- * @return {Array<Object>}
+ * @param {Object} suiteResults
+ * @return {Object}
  */
 const processSuiteResults = (suiteResults) => {
 	const processedTestResults = sorting.sortSuiteResults(suiteResults, config.getSort());

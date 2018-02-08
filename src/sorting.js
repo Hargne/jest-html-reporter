@@ -3,7 +3,7 @@
  * 1. Pending
  * 2. Failed
  * 3. Passed
- * @param {Array<Object>} suiteResults
+ * @param {Object} suiteResults
  */
 const sortSuiteResultsByStatus = (suiteResults) => {
 	const pendingSuites = [];
@@ -42,7 +42,7 @@ const sortSuiteResultsByStatus = (suiteResults) => {
 /**
  * Sorts test suite results
  * If sort is undefined or is not a supported value this has no effect
- * @param {Array<Object>} suiteResults
+ * @param {Object} suiteResults
  * @param {String} sort The configured sort
  */
 const sortSuiteResults = (suiteResults, sort) => {
