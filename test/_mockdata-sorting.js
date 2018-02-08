@@ -1,0 +1,115 @@
+module.exports = {
+	jestTestData: {
+		success: true,
+		startTime: 1498476492,
+		numTotalTestSuites: 3,
+		numPassedTestSuites: 1,
+		numFailedTestSuites: 1,
+		numRuntimeErrorTestSuites: 1,
+		numTotalTests: 9,
+		numPassedTests: 7,
+		numFailedTests: 1,
+		numPendingTests: 1,
+		testResults: [
+			{
+				numFailingTests: 0,
+				numPassingTests: 3,
+				numPendingTests: 0,
+				testResults: [
+					{
+						title: 'title',
+						status: 'passed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+					{
+						title: 'title',
+						status: 'passed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+					{
+						title: 'title',
+						status: 'passed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+				],
+				perfStats: {
+					start: 1498476492,
+					end: 1498476639,
+				},
+				testFilePath: 'index-a.js',
+			},
+			{
+				numFailingTests: 1,
+				numPassingTests: 1,
+				numPendingTests: 1,
+				testResults: [
+					{
+						title: 'title',
+						status: 'pending',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+					{
+						title: 'title',
+						status: 'failed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: ['failure'],
+						numPassingAsserts: 0,
+					},
+					{
+						title: 'title',
+						status: 'passed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+				],
+				perfStats: {
+					start: 1498476492,
+					end: 1498476639,
+				},
+				testFilePath: 'index-b.js',
+			},
+			{
+				numFailingTests: 1,
+				numPassingTests: 1,
+				numPendingTests: 1,
+				testResults: [
+					{
+						title: 'title',
+						status: 'pending',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+					{
+						title: 'title',
+						status: 'failed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: ['failure'],
+						numPassingAsserts: 0,
+					},
+					{
+						title: 'title',
+						status: 'passed',
+						ancestorTitles: ['ancestor'],
+						failureMessages: [],
+						numPassingAsserts: 0,
+					},
+				],
+				perfStats: {
+					start: 1498476492,
+					end: 1498476639,
+				},
+				testFilePath: 'index-c.js',
+			},
+		],
+	},
+};

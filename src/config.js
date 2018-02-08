@@ -68,6 +68,9 @@ const getExecutionTimeWarningThreshold = () =>
 const getDateFormat = () =>
 	config.dateFormat || process.env.JEST_HTML_REPORTER_DATE_FORMAT || 'yyyy-mm-dd HH:MM:ss';
 
+const getSort = () =>
+	config.sort || process.env.JEST_HTML_REPORTER_SORT || 'default';
+
 module.exports = {
 	config,
 	getOutputFilepath,
@@ -77,4 +80,5 @@ module.exports = {
 	getExecutionTimeWarningThreshold,
 	getTheme,
 	getDateFormat,
+	getSort,
 };

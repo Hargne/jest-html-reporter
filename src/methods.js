@@ -5,6 +5,7 @@ const xmlbuilder = require('xmlbuilder');
 const stripAnsi = require('strip-ansi');
 const dateFormat = require('dateformat');
 const config = require('./config');
+const sorting = require('./sorting');
 
 /**
  * Logs a message of a given type in the terminal
@@ -24,6 +25,16 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
 		console.log(logColor, logMsg); // eslint-disable-line
 	}
 	return { logColor, logMsg }; // Return for testing purposes
+};
+
+/**
+ * Processes an array of test suite results
+ * @param {Object} suiteResults
+ * @return {Object}
+ */
+const processSuiteResults = (suiteResults) => {
+	const processedTestResults = sorting.sortSuiteResults(suiteResults, config.getSort());
+	return processedTestResults;
 };
 
 /**
@@ -98,8 +109,10 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 		${testData.numPendingTests} pending
 	`);
 
+	const processedSuiteResults = processSuiteResults(testData.testResults);
+
 	// Test Suites
-	testData.testResults.forEach((suite) => {
+	processedSuiteResults.forEach((suite) => {
 		if (!suite.testResults || suite.testResults.length <= 0) { return; }
 
 		// Suite Information
@@ -162,6 +175,7 @@ const createReport = (testData, ignoreConsole) => {
 
 module.exports = {
 	logMessage,
+	processSuiteResults,
 	writeFile,
 	createReport,
 	createHtml,
