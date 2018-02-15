@@ -16,7 +16,7 @@ npm install jest-html-reporter
 You must configure jest to process the test results by adding the following entry to the jest config:
 ```JSON
 {
-	"testResultsProcessor": "./node_modules/jest-html-reporter"
+    "reporters": ["default", "./node_modules/jest-html-reporter"],
 }
 ```
 Then when you run jest from within the terminal, a file called test-report.html will be created within your root folder containing general information about your tests.
@@ -52,12 +52,12 @@ Please refer to the file named *style.js* within the root folder of this plugin 
 ### Example configuration (package.json)
 ```JSON
 {
-	...
-	"jest-html-reporter": {
-		"pageTitle": "Your test suite",
-		"outputPath": "test-report/index.html",
-		"includeFailureMsg": false,
-		"styleOverridePath": "src/teststyle.css"
-	}
+    ...
+    "jest-html-reporter": {
+        "pageTitle": "Your test suite",
+        "outputPath": "test-report/index.html",
+        "includeFailureMsg": false,
+        "styleOverridePath": "src/teststyle.css"
+    }
 }
 ```
