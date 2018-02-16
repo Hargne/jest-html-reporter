@@ -1,5 +1,7 @@
 {
 	"pageTitle": "Test Suite Report",
     "outputPath": "test-report.html",
-    "includeFailureMsg": true
+    "includeFailureMsg": true,
+    "useAsReporter": false,
+    "theme": "lightTheme"
 }

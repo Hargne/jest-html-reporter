@@ -8,7 +8,8 @@
         }
     },
     "env": {
-        "jasmine": true
+        "jasmine": true,
+        "jest": true
     },
     "rules": {
         "indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],

@@ -1,22 +1,30 @@
 const path = require('path');
 const fs = require('fs');
-
+// Initialize an empty config object
 const config = {};
 
-// Attempt to locate and assign configurations from package.json
-try {
-	const packageJson = fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8');
-	if (packageJson) {
-		Object.assign(config, JSON.parse(packageJson)['jest-html-reporter']);
-	}
-} catch (e) { /** do nothing */ }
-// Attempt to locate and assign configurations from jesthtmlreporter.config.json
-try {
-	const jesthtmlreporterconfig = fs.readFileSync(path.join(process.cwd(), 'jesthtmlreporter.config.json'), 'utf8');
-	if (jesthtmlreporterconfig) {
-		Object.assign(config, JSON.parse(jesthtmlreporterconfig));
-	}
-} catch (e) { /** do nothing */ }
+/**
+ * Assigns the given data to the config object
+ * @param {Object} data
+ */
+const setConfigData = data => Object.assign(config, data);
+
+const setup = () => {
+	// Attempt to locate and assign configurations from package.json
+	try {
+		const packageJson = fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8');
+		if (packageJson) {
+			setConfigData(JSON.parse(packageJson)['jest-html-reporter']);
+		}
+	} catch (e) { /** do nothing */ }
+	// Attempt to locate and assign configurations from jesthtmlreporter.config.json
+	try {
+		const jesthtmlreporterconfig = fs.readFileSync(path.join(process.cwd(), 'jesthtmlreporter.config.json'), 'utf8');
+		if (jesthtmlreporterconfig) {
+			setConfigData(JSON.parse(jesthtmlreporterconfig));
+		}
+	} catch (e) { /** do nothing */ }
+};
 
 /**
  * Returns the output path for the test report
@@ -68,11 +76,24 @@ const getExecutionTimeWarningThreshold = () =>
 const getDateFormat = () =>
 	config.dateFormat || process.env.JEST_HTML_REPORTER_DATE_FORMAT || 'yyyy-mm-dd HH:MM:ss';
 
+/**
+ * Returns the configured sorting method
+ * @return {String}
+ */
 const getSort = () =>
 	config.sort || process.env.JEST_HTML_REPORTER_SORT || 'default';
 
+/**
+ * Returns the whether to use the Jest's 'testResultsProcessor' or 'reporters'
+ * @return {Boolean}
+ */
+const useAsReporter = () =>
+	config.useAsReporter || process.env.JEST_HTML_USE_AS_REPORTER || false;
+
 module.exports = {
 	config,
+	setup,
+	setConfigData,
 	getOutputFilepath,
 	getStylesheetFilepath,
 	getPageTitle,
@@ -81,4 +102,5 @@ module.exports = {
 	getTheme,
 	getDateFormat,
 	getSort,
+	useAsReporter,
 };
