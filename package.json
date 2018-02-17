@@ -9,7 +9,7 @@
     "style"
   ],
   "scripts": {
-    "eslint": "eslint ./src/**/*.js",
+    "eslint": "./node_modules/.bin/eslint ./src/**/*.js",
     "test": "npm run eslint && jest --no-cache --config=jest.config.json",
     "bundle": "rollup -c rollup.config.js",
     "bundle:minified": "rollup -c rollup.config.js --environment BUILD:minified",

@@ -18,10 +18,8 @@ describe('index', () => {
 
 	it('should return the jest test data if used with Jest testResultsProcessor configuration', () => {
 		// Mocked config
-		jest.mock(pathToConfig, () => ({
-			useAsReporter: () => false,
-			...mockedConfigFunctions,
-		}));
+		mockedConfigFunctions.useAsReporter = () => false;
+		jest.mock(pathToConfig, () => (mockedConfigFunctions));
 		// The plugin needs to be required after we have mocked the config
 		const JestHTMLReporter = require('../src');
 
@@ -33,10 +31,8 @@ describe('index', () => {
 
 	it('should return the jest test data if used with Jest reporters configuration', () => {
 		// Mocked config
-		jest.mock(pathToConfig, () => ({
-			useAsReporter: () => true,
-			...mockedConfigFunctions,
-		}));
+		mockedConfigFunctions.useAsReporter = () => true;
+		jest.mock(pathToConfig, () => (mockedConfigFunctions));
 		// The plugin needs to be required after we have mocked the config
 		const JestHTMLReporter = require('../src');
 
