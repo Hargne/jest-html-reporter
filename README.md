@@ -30,7 +30,7 @@ npm install jest-html-reporter --save-dev
 
 ## Usage
 Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.js):
-```
+```JSON
 {
 	"testResultsProcessor": "./node_modules/jest-html-reporter"
 }
@@ -42,6 +42,16 @@ Although jest.config.js is specifically created for configuring Jest (and not th
 ```JSON
 "jest": {"testResultsProcessor": "./node_modules/jest-html-reporter" }
 ```
+
+### Usage as Custom Reporter
+Another way to run jest-html-reporter is by defining the plugin as a custom reporter within the Jest config with the following entry:
+
+```JSON
+{
+	"reporters": ["default", "./node_modules/jest-html-reporter"]
+}
+```
+Please note that you need to set the `useAsCustomReporter` setting to true in order for this to work.
 
 ## Node Compatibility
 This plugin is compatible with Node version `^4.8.3`
@@ -61,6 +71,7 @@ To configure this plugin, create a file named `jesthtmlreporter.config.json` in 
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
 | `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
 | `sort` | `STRING` | Sorts the test results with the given method. Available methods are: `"default"`, `"status"` More information can be found in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
+| `useAsCustomReporter` | `BOOLEAN` | If set to true, the plugin will be run via Jest's `reporters` configuration instead of `testResultsProcessor` | `false`
 
 #### *A note on styleOverridePath
 The plugin will search for the file from the root directory, therefore there is no need to prepend the string with ./ or ../
@@ -111,14 +122,5 @@ export JEST_HTML_REPORTER_PAGE_TITLE="$BRANCH_NAME"\ Test\ Report
 ```
 
 ### Configuration Environment Variables
-The environment variables reflect the properties set in the JSON configuration file. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-in-packagejson) for more information.
-
-* `JEST_HTML_REPORTER_PAGE_TITLE`
-* `JEST_HTML_REPORTER_OUTPUT_PATH`
-* `JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG`
-* `JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH`
-* `JEST_HTML_REPORTER_THEME`
-* `JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD`
-* `JEST_HTML_REPORTER_DATE_FORMAT`
-* `JEST_HTML_REPORTER_SORT`
+The environment variables reflect the properties set in the JSON configuration file. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-environment-variables) for more information on these variables.
 

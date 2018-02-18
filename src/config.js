@@ -88,8 +88,8 @@ const getSort = () =>
  * Returns the whether to use the Jest's 'testResultsProcessor' or 'reporters'
  * @return {Boolean}
  */
-const useAsReporter = () =>
-	config.useAsReporter || process.env.JEST_HTML_USE_AS_REPORTER || false;
+const useAsCustomReporter = () =>
+	config.useAsCustomReporter || process.env.JEST_HTML_USE_AS_CUSTOM_REPORTER || false;
 
 module.exports = {
 	config,
@@ -103,5 +103,5 @@ module.exports = {
 	getTheme,
 	getDateFormat,
 	getSort,
-	useAsReporter,
+	useAsCustomReporter,
 };

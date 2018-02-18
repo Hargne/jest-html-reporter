@@ -12,7 +12,7 @@ describe('config', () => {
 			executionTimeWarningThreshold: null,
 			dateFormat: null,
 			sort: null,
-			useAsReporter: null,
+			useAsCustomReporter: null,
 		});
 		delete process.env.JEST_HTML_REPORTER_OUTPUT_PATH;
 		delete process.env.JEST_HTML_REPORTER_THEME;
@@ -22,7 +22,7 @@ describe('config', () => {
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD;
 		delete process.env.JEST_HTML_REPORTER_DATE_FORMAT;
 		delete process.env.JEST_HTML_REPORTER_SORT;
-		delete process.env.JEST_HTML_USE_AS_REPORTER;
+		delete process.env.JEST_HTML_USE_AS_CUSTOM_REPORTER;
 	});
 
 	describe('setup', () => {
@@ -152,17 +152,17 @@ describe('config', () => {
 		});
 	});
 
-	describe('useAsReporter', () => {
+	describe('useAsCustomReporter', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ useAsReporter: true });
-			expect(config.useAsReporter()).toEqual(true);
+			config.setConfigData({ useAsCustomReporter: true });
+			expect(config.useAsCustomReporter()).toEqual(true);
 		});
 		it('should return the environment variable', () => {
-			process.env.JEST_HTML_USE_AS_REPORTER = true;
-			expect(config.useAsReporter()).toEqual('true');
+			process.env.JEST_HTML_USE_AS_CUSTOM_REPORTER = true;
+			expect(config.useAsCustomReporter()).toEqual('true');
 		});
 		it('should return the default value if no setting was provided', () => {
-			expect(config.useAsReporter()).toEqual(false);
+			expect(config.useAsCustomReporter()).toEqual(false);
 		});
 	});
 });

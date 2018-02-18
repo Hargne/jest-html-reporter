@@ -1,7 +1,7 @@
 const ReportGenerator = require('./reportGenerator');
 const config = require('./config');
 
-// Initiate the Report Generator with a given config
+// Initiate the config and the Report Generator class
 config.setup();
 const reportGenerator = new ReportGenerator(config);
 
@@ -17,9 +17,9 @@ const TestResultsProcessor = (testResult) => {
 };
 
 /**
- * Usage as Reporter
+ * Usage as Custom Reporter
  */
-class Reporter {
+class CustomReporter {
 	constructor(globalConfig, options) {
 		this.jestConfig = globalConfig;
 		this.jestOptions = options;
@@ -34,4 +34,4 @@ class Reporter {
 	}
 }
 
-module.exports = (config.useAsReporter()) ? Reporter : TestResultsProcessor;
+module.exports = (config.useAsCustomReporter()) ? CustomReporter : TestResultsProcessor;
