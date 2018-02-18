@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
+const xmlbuilder = require('xmlbuilder');
 
 /**
  * Logs a message of a given type in the terminal
@@ -36,7 +37,25 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
 	});
 });
 
+/**
+ * Sets up a basic HTML page to apply the content to
+ * @return {xmlbuilder}
+ */
+const createHtmlBase = ({ pageTitle, stylesheet }) => xmlbuilder.create({
+	html: {
+		head: {
+			meta: { '@charset': 'utf-8' },
+			title: { '#text': pageTitle },
+			style: { '@type': 'text/css', '#text': stylesheet },
+		},
+		body: {
+			h1: { '@id': 'title', '#text': pageTitle },
+		},
+	},
+});
+
 module.exports = {
 	logMessage,
 	writeFile,
+	createHtmlBase,
 };

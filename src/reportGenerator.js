@@ -2,7 +2,6 @@
 const fs = require('fs');
 const dateFormat = require('dateformat');
 const stripAnsi = require('strip-ansi');
-const xmlbuilder = require('xmlbuilder');
 const utils = require('./utils');
 const sorting = require('./sorting');
 
@@ -68,7 +67,10 @@ class ReportGenerator {
 			if (!data) { return reject(new Error('Test data missing or malformed')); }
 
 			// Create an xmlbuilder object with HTML and Body tags
-			const htmlOutput = this.createHtmlBase({ stylesheet });
+			const htmlOutput = utils.createHtmlBase({
+				pageTitle: this.config.getPageTitle(),
+				stylesheet,
+			});
 
 			// METADATA
 			const metaDataContainer = htmlOutput.ele('div', { id: 'metadata-container' });
@@ -115,7 +117,7 @@ class ReportGenerator {
 					if (test.failureMessages && (this.config.shouldIncludeFailureMessages())) {
 						const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' });
 						test.failureMessages.forEach((failureMsg) => {
-							failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
+							failureMsgDiv.ele('pre', { class: 'failureMsg' }, stripAnsi(failureMsg));
 						});
 					}
 
@@ -124,26 +126,6 @@ class ReportGenerator {
 				});
 			});
 			return resolve(htmlOutput);
-		});
-	}
-
-	/**
-	 * Sets up a basic HTML page to apply the content to
-	 * @return {xmlbuilder}
-	 */
-	createHtmlBase({ stylesheet }) {
-		const pageTitle = this.config.getPageTitle();
-		return xmlbuilder.create({
-			html: {
-				head: {
-					meta: { '@charset': 'utf-8' },
-					title: { '#text': pageTitle },
-					style: { '@type': 'text/css', '#text': stylesheet },
-				},
-				body: {
-					h1: { '@id': 'title', '#text': pageTitle },
-				},
-			},
 		});
 	}
 }
