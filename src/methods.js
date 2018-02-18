@@ -140,7 +140,7 @@ const renderHTML = (testData, stylesheet) => new Promise((resolve, reject) => {
 			if (test.failureMessages && (config.shouldIncludeFailureMessages())) {
 				const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' });
 				test.failureMessages.forEach((failureMsg) => {
-					failureMsgDiv.ele('p', { class: 'failureMsg' }, stripAnsi(failureMsg));
+					failureMsgDiv.ele('pre', { class: 'failureMsg' }, stripAnsi(failureMsg));
 				});
 			}
 
