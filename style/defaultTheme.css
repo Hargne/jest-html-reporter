@@ -33,5 +33,13 @@ body {padding: 1rem;font-size: 0.85rem;}
 .suite-table td {font-size: 0.85rem;border-bottom: 1px solid #aaa;vertical-align: top;}
 .suite-table td.suite {font-weight: bold;width: 20%;}
 .suite-table td.test {font-style: italic;width: 60%;}
-.suite-table td.test .failureMsg {font-weight: bold;font-size: 0.7rem;}
+.suite-table td.test .failureMsg {
+	font-weight: bold;
+	font-size: 0.7rem;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+}
 .suite-table td.result {width: 20%;text-align: right;}
