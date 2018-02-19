@@ -1,4 +1,8 @@
+/* eslint-disable global-require */
 const path = require('path');
+// Mock FS
+jest.mock('fs', () => ({ readFileSync: jest.fn() }));
+const fs = require('fs');
 const config = require('../src/config');
 
 describe('config', () => {
@@ -8,33 +12,30 @@ describe('config', () => {
 			theme: null,
 			styleOverridePath: null,
 			pageTitle: null,
+			logo: null,
 			includeFailureMsg: null,
 			executionTimeWarningThreshold: null,
 			dateFormat: null,
 			sort: null,
-			useAsCustomReporter: null,
+			executionMode: null,
 		});
 		delete process.env.JEST_HTML_REPORTER_OUTPUT_PATH;
 		delete process.env.JEST_HTML_REPORTER_THEME;
 		delete process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH;
 		delete process.env.JEST_HTML_REPORTER_PAGE_TITLE;
+		delete process.env.JEST_HTML_REPORTER_LOGO;
 		delete process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG;
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD;
 		delete process.env.JEST_HTML_REPORTER_DATE_FORMAT;
 		delete process.env.JEST_HTML_REPORTER_SORT;
-		delete process.env.JEST_HTML_USE_AS_CUSTOM_REPORTER;
+		delete process.env.JEST_HTML_REPORTER_EXECUTION_MODE;
 	});
 
 	describe('setup', () => {
 		it('should fetch configurations from jesthtmlreporter.config.json', () => {
+			fs.readFileSync.mockReturnValue('{ "pageTitle": "Test Suite Report" }');
 			const setupResponse = config.setup();
-			expect(setupResponse).toEqual({
-				pageTitle: 'Test Suite Report',
-				outputPath: 'test-report.html',
-				includeFailureMsg: true,
-				useAsReporter: false,
-				theme: 'lightTheme',
-			});
+			expect(setupResponse).toEqual({ pageTitle: 'Test Suite Report' });
 		});
 	});
 
@@ -96,6 +97,20 @@ describe('config', () => {
 		});
 	});
 
+	describe('getLogo', () => {
+		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
+			config.setConfigData({ logo: 'logoFromJson.png' });
+			expect(config.getLogo()).toEqual('logoFromJson.png');
+		});
+		it('should return the environment variable', () => {
+			process.env.JEST_HTML_REPORTER_LOGO = 'logoFromEnv.png';
+			expect(config.getLogo()).toEqual('logoFromEnv.png');
+		});
+		it('should return the default value if no setting was provided', () => {
+			expect(config.getLogo()).toBeNull();
+		});
+	});
+
 	describe('shouldIncludeFailureMessages', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
 			config.setConfigData({ includeFailureMsg: true });
@@ -152,17 +167,17 @@ describe('config', () => {
 		});
 	});
 
-	describe('useAsCustomReporter', () => {
+	describe('getExecutionMode', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ useAsCustomReporter: true });
-			expect(config.useAsCustomReporter()).toEqual(true);
+			config.setConfigData({ executionMode: 'reporter' });
+			expect(config.getExecutionMode()).toEqual('reporter');
 		});
 		it('should return the environment variable', () => {
-			process.env.JEST_HTML_USE_AS_CUSTOM_REPORTER = true;
-			expect(config.useAsCustomReporter()).toEqual('true');
+			process.env.JEST_HTML_REPORTER_EXECUTION_MODE = 'reporter';
+			expect(config.getExecutionMode()).toEqual('reporter');
 		});
 		it('should return the default value if no setting was provided', () => {
-			expect(config.useAsCustomReporter()).toEqual(false);
+			expect(config.getExecutionMode()).toEqual('testResultsProcessor');
 		});
 	});
 });

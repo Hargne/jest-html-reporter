@@ -34,4 +34,4 @@ class CustomReporter {
 	}
 }
 
-module.exports = (config.useAsCustomReporter()) ? CustomReporter : TestResultsProcessor;
+module.exports = (config.getExecutionMode() === 'reporter') ? CustomReporter : TestResultsProcessor;

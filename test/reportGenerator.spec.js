@@ -8,6 +8,7 @@ describe('reportGenerator', () => {
 				getOutputFilepath: () => 'test-report.html',
 				getStylesheetFilepath: () => '../style/defaultTheme.css',
 				getPageTitle: () => 'Test Report',
+				getLogo: () => 'testLogo.png',
 				getDateFormat: () => 'yyyy-mm-dd HH:MM:ss',
 				getSort: () => 'default',
 				shouldIncludeFailureMessages: () => true,

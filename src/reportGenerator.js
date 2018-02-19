@@ -66,11 +66,24 @@ class ReportGenerator {
 			// Make sure that test data was provided
 			if (!data) { return reject(new Error('Test data missing or malformed')); }
 
+			// Fetch Page Title from config
+			const pageTitle = this.config.getPageTitle();
+
 			// Create an xmlbuilder object with HTML and Body tags
 			const htmlOutput = utils.createHtmlBase({
-				pageTitle: this.config.getPageTitle(),
+				pageTitle,
 				stylesheet,
 			});
+
+			// HEADER
+			const header = htmlOutput.ele('header');
+			// Page Title
+			header.ele('h1', { id: 'title' }, pageTitle);
+			// Logo
+			const logo = this.config.getLogo();
+			if (logo) {
+				header.ele('img', { id: 'logo', src: logo });
+			}
 
 			// METADATA
 			const metaDataContainer = htmlOutput.ele('div', { id: 'metadata-container' });

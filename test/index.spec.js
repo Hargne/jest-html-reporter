@@ -8,6 +8,7 @@ const mockedConfigFunctions = {
 	getOutputFilepath: () => 'test-report.html',
 	getStylesheetFilepath: () => '../style/defaultTheme.css',
 	getPageTitle: jest.fn(),
+	getLogo: jest.fn(),
 };
 
 describe('index', () => {
@@ -18,7 +19,7 @@ describe('index', () => {
 
 	it('should return the jest test data if used with Jest testResultsProcessor configuration', () => {
 		// Mocked config
-		mockedConfigFunctions.useAsReporter = () => false;
+		mockedConfigFunctions.getExecutionMode = () => 'testResultsProcessor';
 		jest.mock(pathToConfig, () => (mockedConfigFunctions));
 		// The plugin needs to be required after we have mocked the config
 		const JestHTMLReporter = require('../src');
@@ -31,7 +32,7 @@ describe('index', () => {
 
 	it('should return the jest test data if used with Jest reporters configuration', () => {
 		// Mocked config
-		mockedConfigFunctions.useAsReporter = () => true;
+		mockedConfigFunctions.getExecutionMode = () => 'reporter';
 		jest.mock(pathToConfig, () => (mockedConfigFunctions));
 		// The plugin needs to be required after we have mocked the config
 		const JestHTMLReporter = require('../src');

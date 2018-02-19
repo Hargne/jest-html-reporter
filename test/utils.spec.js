@@ -29,4 +29,16 @@ describe('utils', () => {
 			expect(log2.logColor).toEqual('\x1b[37m%s\x1b[0m');
 		});
 	});
+
+	describe('writeFile', () => {
+		it('should be able to write a file to a given destination', (done) => {
+			return utils.writeFile({
+				filePath: 'test-report.html',
+				content: 'mockedData',
+			}).then((response) => {
+				expect(response).toEqual('test-report.html');
+				done();
+			});
+		});
+	});
 });

@@ -29,11 +29,16 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
  * @param  {Any} 	content
  */
 const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
-	mkdirp(path.dirname(filePath), (err) => {
-		if (err) {
-			return reject(new Error(`Something went wrong when creating the file: ${err}`));
+	mkdirp(path.dirname(filePath), (mkdirpError) => {
+		if (mkdirpError) {
+			return reject(new Error(`Something went wrong when creating the folder: ${mkdirpError}`));
 		}
-		return resolve(fs.writeFile(filePath, content));
+		return fs.writeFile(filePath, content, (writeFileError) => {
+			if (writeFileError) {
+				return reject(new Error(`Something went wrong when creating the file: ${writeFileError}`));
+			}
+			return resolve(filePath);
+		});
 	});
 });
 
@@ -47,9 +52,6 @@ const createHtmlBase = ({ pageTitle, stylesheet }) => xmlbuilder.create({
 			meta: { '@charset': 'utf-8' },
 			title: { '#text': pageTitle },
 			style: { '@type': 'text/css', '#text': stylesheet },
-		},
-		body: {
-			h1: { '@id': 'title', '#text': pageTitle },
 		},
 	},
 });

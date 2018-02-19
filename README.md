@@ -43,15 +43,13 @@ Although jest.config.js is specifically created for configuring Jest (and not th
 "jest": {"testResultsProcessor": "./node_modules/jest-html-reporter" }
 ```
 
-### Usage as Custom Reporter
+### Run as a Custom Reporter
 Another way to run jest-html-reporter is by defining the plugin as a custom reporter within the Jest config with the following entry:
 
 ```JSON
-{
-	"reporters": ["default", "./node_modules/jest-html-reporter"]
-}
+"reporters": ["default", "./node_modules/jest-html-reporter"]
 ```
-Please note that you need to set the `useAsCustomReporter` setting to true in order for this to work.
+Please note that you need to configure `"executionMode": "reporter"` in order for this to work.
 
 ## Node Compatibility
 This plugin is compatible with Node version `^4.8.3`
@@ -67,11 +65,12 @@ To configure this plugin, create a file named `jesthtmlreporter.config.json` in 
 | `outputPath` | `STRING` | The path to where the plugin will output the HTML report. The path must include the filename and end with .html | `"./test-report.html"`
 | `includeFailureMsg` | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
-| `theme` | `STRING` | The name of the reporter themes to use when rendering the report. Available themes are located within *style/* | `"defaultTheme"`
+| `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
+| `logo` | `STRING` | Path to a logo that will be included in the header of the report | `null`
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
 | `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
 | `sort` | `STRING` | Sorts the test results with the given method. Available methods are: `"default"`, `"status"` More information can be found in the [Wiki](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
-| `useAsCustomReporter` | `BOOLEAN` | If set to true, the plugin will be run via Jest's `reporters` configuration instead of `testResultsProcessor` | `false`
+| `executionMode` | `STRING` | Defines the execution mode. Avaiable modes are: `reporter`, `testResultsProcessor` | `"testResultsProcessor"`
 
 #### *A note on styleOverridePath
 The plugin will search for the file from the root directory, therefore there is no need to prepend the string with ./ or ../
@@ -84,10 +83,8 @@ Have a look at the default styling (located within *style/defaultTheme.css*) for
 {
 	"pageTitle": "Your test suite",
 	"outputPath": "test-report/index.html",
-	"includeFailureMsg": false,
-	"styleOverridePath": "src/teststyle.css",
-	"executionTimeWarningThreshold": 5,
-	"dateFormat": "yyyy-mm-dd HH:MM:ss"
+	"includeFailureMsg": true,
+	"styleOverridePath": "src/teststyle.css"
 }
 ```
 

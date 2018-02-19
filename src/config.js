@@ -56,6 +56,13 @@ const getPageTitle = () =>
 	config.pageTitle || process.env.JEST_HTML_REPORTER_PAGE_TITLE || 'Test report';
 
 /**
+ * Returns the configured logo image path
+ * @return {String}
+ */
+const getLogo = () =>
+	config.logo || process.env.JEST_HTML_REPORTER_LOGO || null;
+
+/**
  * Returns whether the report should contain failure messages or not
  * @return {Boolean}
  */
@@ -85,11 +92,11 @@ const getSort = () =>
 	config.sort || process.env.JEST_HTML_REPORTER_SORT || 'default';
 
 /**
- * Returns the whether to use the Jest's 'testResultsProcessor' or 'reporters'
- * @return {Boolean}
+ * Returns the configured mode of execution ('testResultsProcessor' or 'reporters')
+ * @return {String}
  */
-const useAsCustomReporter = () =>
-	config.useAsCustomReporter || process.env.JEST_HTML_USE_AS_CUSTOM_REPORTER || false;
+const getExecutionMode = () =>
+	config.executionMode || process.env.JEST_HTML_REPORTER_EXECUTION_MODE || 'testResultsProcessor';
 
 module.exports = {
 	config,
@@ -98,10 +105,11 @@ module.exports = {
 	getOutputFilepath,
 	getStylesheetFilepath,
 	getPageTitle,
+	getLogo,
 	shouldIncludeFailureMessages,
 	getExecutionTimeWarningThreshold,
 	getTheme,
 	getDateFormat,
 	getSort,
-	useAsCustomReporter,
+	getExecutionMode,
 };
