@@ -32,7 +32,7 @@ npm install jest-html-reporter --save-dev
 Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.js):
 ```
 {
-	"testResultsProcessor": "./node_modules/jest-html-reporter"
+	"reporters": ["default", "./node_modules/jest-html-reporter"]
 }
 ```
 Then when you run Jest from within the terminal, a file called *test-report.html* will be created within your root folder containing information about your tests.

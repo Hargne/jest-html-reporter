@@ -1,10 +1,15 @@
-const Methods = require('./methods');
+const methods = require('./methods');
 
-const JestHTMLReporter = (testResult) => {
-	// Generate Report
-	Methods.createReport(testResult);
-	// Return the results as required by Jest
-	return testResult;
-};
+class HtmlReporter {
+	constructor(globalConfig, options) {
+		this.globalConfig = globalConfig;
+		this.options = options;
+	}
+	/* eslint-disable */
+	onRunComplete(contexts, results) {
+		return methods.createReport(results);
+	}
+	/* eslint-enable */
+}
 
-module.exports = JestHTMLReporter;
+module.exports = HtmlReporter;
