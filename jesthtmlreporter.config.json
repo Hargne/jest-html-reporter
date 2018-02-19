@@ -3,5 +3,4 @@
     "outputPath": "test-report.html",
     "includeFailureMsg": true,
     "useAsReporter": false,
-    "theme": "lightTheme"
 }
