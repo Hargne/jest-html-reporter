@@ -6,11 +6,22 @@ html, body {
 	color: #fff;
 	background-color: #2d2d2d
 }
-body {padding: 3rem;font-size: 0.85rem;}
+body {
+	padding: 3rem;
+	font-size: 0.85rem;
+}
+header {
+	display: flex;
+	align-items: center;
+}
 #title {
-	margin-top: 0;
 	font-weight: 100;
 	font-size: 2rem;
+	margin: 0;
+	flex-grow: 1;
+}
+#logo {
+	height: 4rem;
 }
 #metadata-container {
 	display: flex;
@@ -60,29 +71,54 @@ body {padding: 3rem;font-size: 0.85rem;}
 	font-size: 0.85rem;
 	margin-bottom: 2em;
 }
-.suite-table tr.passed {color: #2ab156;}
-.suite-table tr.passed td.suite {border-left: 0.5rem solid #2ab156;}
-
-.suite-table tr.pending {color: #efc52e;}
-.suite-table tr.pending td.suite {border-left: 0.5rem solid #efc52e;}
-
-.suite-table tr.failed {color: #e6636b;}
-.suite-table tr.failed td.suite {border-left: 0.5rem solid #e6636b;}
+/** PASSED */
+.suite-table tr.passed {
+	color: #2ab156;
+}
+.suite-table tr.passed td.suite {
+	border-left: 0.5rem solid #2ab156;
+}
+/** PENDING */
+.suite-table tr.pending {
+	color: #efc52e;
+}
+.suite-table tr.pending td.suite {
+	border-left: 0.5rem solid #efc52e;
+}
+/** FAILED */
+.suite-table tr.failed {
+	color: #e6636b;
+}
+.suite-table tr.failed td.suite {
+	border-left: 0.5rem solid #e6636b;
+}
 
 .suite-table td {
 	padding: 1rem;
 	font-size: 0.85rem;
 	vertical-align: top;
 }
-.suite-table td.suite {font-weight: bold;width: 20%;}
-.suite-table td.test {font-style: italic;width: 60%;}
-.suite-table td.test .failureMsg {
+.suite-table td.suite {
 	font-weight: bold;
-	font-size: 0.7rem;
+	width: 20%;
+}
+.suite-table td.test {
+	font-style: italic;
+	width: 60%;
+}
+/** FAILURE MESSAGES */
+.suite-table td.test .failureMsg {
+	font-size: 1rem;
+	font-size: 1rem;
+	border-top: 0.2rem solid #e6636b;
+	padding-top: 1rem;
 	white-space: pre-wrap;
 	white-space: -moz-pre-wrap;
 	white-space: -pre-wrap;
 	white-space: -o-pre-wrap;
 	word-wrap: break-word;
 }
-.suite-table td.result {width: 20%;text-align: right;}
+.suite-table td.result {
+	width: 20%;
+	text-align: right;
+}
