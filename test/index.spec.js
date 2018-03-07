@@ -30,7 +30,7 @@ describe('index', () => {
 			.toEqual(mockdata.jestResponse.singleTestResult);
 	});
 
-	it('should return the jest test data if used with Jest reporters configuration', () => {
+	it('should return the jest test data if used with Jest reporters configuration', async () => {
 		// Mocked config
 		mockedConfigFunctions.getExecutionMode = () => 'reporter';
 		jest.mock(pathToConfig, () => (mockedConfigFunctions));
@@ -40,7 +40,7 @@ describe('index', () => {
 		// When run as a Jest reporter, the plugin will be instantiated as a class
 		const ReporterInitiatedByJest = new JestHTMLReporter();
 		// Mock the end of a test run
-		const reporterOutput = ReporterInitiatedByJest.onRunComplete(null, mockdata.jestResponse.singleTestResult);
+		const reporterOutput = await ReporterInitiatedByJest.onRunComplete(null, mockdata.jestResponse.singleTestResult);
 		expect(reporterOutput)
 			.toEqual(mockdata.jestResponse.singleTestResult);
 	});
