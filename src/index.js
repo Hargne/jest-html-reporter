@@ -28,9 +28,7 @@ class CustomReporter {
 	onRunComplete(contexts, testResult) {
 		this.testResult = testResult;
 		// Generate Report
-		reportGenerator.generate({ data: testResult });
-		// Return the results as required by Jest
-		return testResult;
+		return reportGenerator.generate({ data: testResult });
 	}
 }
 
