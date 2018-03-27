@@ -5,9 +5,13 @@ const config = require('../src/config');
 
 const pathToConfig = '../src/config';
 // Mock the static config methods by extending the default config
-const mockedConfigFunctions = { ...config };
-mockedConfigFunctions.setup = jest.fn();
-mockedConfigFunctions.getLogo = jest.fn();
+const mockedConfigFunctions = {
+	...config,
+	// will run into error if getPageTitle return undefined
+	// getPageTitle: jest.fn(),
+	setup: jest.fn(),
+	getLogo: jest.fn(),
+};
 
 describe('index', () => {
 	beforeEach(() => {
