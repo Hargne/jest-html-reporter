@@ -99,7 +99,10 @@ class ReportGenerator {
 			`);
 
 			// Apply the configured sorting of test data
-			const sortedTestData = sorting.sortSuiteResults(data.testResults, this.config.getSort());
+			const sortedTestData = sorting.sortSuiteResults({
+				testData: data.testResults,
+				sortMethod: this.config.getSort(),
+			});
 
 			// Test Suites
 			sortedTestData.forEach((suite) => {
@@ -138,6 +141,11 @@ class ReportGenerator {
 					testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? `${test.status} in ${test.duration / 1000}s` : test.status);
 				});
 			});
+			// Custom Javascript
+			const customScript = this.config.getCustomScriptFilepath();
+			if (customScript) {
+				htmlOutput.ele('script', { src: customScript });
+			}
 			return resolve(htmlOutput);
 		});
 	}

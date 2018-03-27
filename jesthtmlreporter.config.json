@@ -3,4 +3,5 @@
     "outputPath": "test-report.html",
     "includeFailureMsg": true,
     "useAsReporter": false,
+    "sort": "titleAsc"
 }

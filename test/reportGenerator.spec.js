@@ -13,6 +13,7 @@ describe('reportGenerator', () => {
 				getSort: () => 'default',
 				shouldIncludeFailureMessages: () => true,
 				getExecutionTimeWarningThreshold: () => 5,
+				getCustomScriptFilepath: () => 'test.js',
 			};
 			const reportGenerator = new ReportGenerator(mockedConfig);
 
@@ -30,6 +31,7 @@ describe('reportGenerator', () => {
 				getSort: () => 'default',
 				shouldIncludeFailureMessages: () => true,
 				getExecutionTimeWarningThreshold: () => 5,
+				getCustomScriptFilepath: () => 'test.js',
 			};
 			const reportGenerator = new ReportGenerator(mockedConfig);
 

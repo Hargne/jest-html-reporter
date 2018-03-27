@@ -9,6 +9,7 @@ const mockedConfigFunctions = {
 	...config,
 	setup: jest.fn(),
 	getLogo: jest.fn(),
+	getCustomScriptFilepath: () => 'test.js',
 };
 
 describe('index', () => {

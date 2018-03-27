@@ -49,6 +49,13 @@ const getStylesheetFilepath = () =>
 	process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH || config.styleOverridePath || path.join(__dirname, `../style/${getTheme()}.css`);
 
 /**
+ * Returns the Custom Script path that should be injected into the test report
+ * @return {String}
+ */
+const getCustomScriptFilepath = () =>
+	process.env.JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH || config.customScriptPath || null;
+
+/**
  * Returns the configured test report title
  * @return {String}
  */
@@ -104,6 +111,7 @@ module.exports = {
 	setConfigData,
 	getOutputFilepath,
 	getStylesheetFilepath,
+	getCustomScriptFilepath,
 	getPageTitle,
 	getLogo,
 	shouldIncludeFailureMessages,
