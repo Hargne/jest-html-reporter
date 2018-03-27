@@ -7,8 +7,6 @@ const pathToConfig = '../src/config';
 // Mock the static config methods by extending the default config
 const mockedConfigFunctions = {
 	...config,
-	// will run into error if getPageTitle return undefined
-	// getPageTitle: jest.fn(),
 	setup: jest.fn(),
 	getLogo: jest.fn(),
 };
@@ -23,8 +21,6 @@ describe('index', () => {
 		}
 	});
 
-	// change test order, to aviod failure when the next test start before the previous report
-	// has been finished written to disk
 	it('should return the jest test data if used with Jest reporters configuration', async () => {
 		// Mocked config
 		mockedConfigFunctions.getExecutionMode = () => 'reporter';
