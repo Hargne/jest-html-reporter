@@ -56,8 +56,18 @@ const createHtmlBase = ({ pageTitle, stylesheet }) => xmlbuilder.create({
 	},
 });
 
+const sortAlphabetically = ({ a, b, reversed }) => {
+	if ((!reversed && a < b) || (reversed && a > b)) {
+		return -1;
+	} else if ((!reversed && a > b) || (reversed && a < b)) {
+		return 1;
+	}
+	return 0;
+};
+
 module.exports = {
 	logMessage,
 	writeFile,
 	createHtmlBase,
+	sortAlphabetically,
 };
