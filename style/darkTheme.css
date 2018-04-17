@@ -122,3 +122,28 @@ header {
 	width: 20%;
 	text-align: right;
 }
+
+/* CONSOLE LOGS */
+.suite-consolelog {
+	margin-bottom: 2rem;
+	padding: 1rem;
+	border-left: 0.5rem solid #999;
+	color: #999;
+}
+.suite-consolelog-header {
+	font-weight: bold;
+}
+.suite-consolelog-item {
+	padding: 0.5rem;
+}
+.suite-consolelog-item pre {
+	margin: 0;
+}
+.suite-consolelog-item-origin {
+	color: #555;
+	font-weight: bold;
+}
+.suite-consolelog-item-message {
+	font-size: 1rem;
+	padding: 0 0.5rem;
+}

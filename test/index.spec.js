@@ -5,12 +5,11 @@ const config = require('../src/config');
 
 const pathToConfig = '../src/config';
 // Mock the static config methods by extending the default config
-const mockedConfigFunctions = {
-	...config,
+const mockedConfigFunctions = Object.assign({
 	setup: jest.fn(),
 	getLogo: jest.fn(),
 	getCustomScriptFilepath: () => 'test.js',
-};
+}, config);
 
 describe('index', () => {
 	beforeEach(() => {

@@ -14,6 +14,7 @@ describe('config', () => {
 			pageTitle: null,
 			logo: null,
 			includeFailureMsg: null,
+			includeConsoleLog: null,
 			executionTimeWarningThreshold: null,
 			dateFormat: null,
 			sort: null,
@@ -25,6 +26,7 @@ describe('config', () => {
 		delete process.env.JEST_HTML_REPORTER_PAGE_TITLE;
 		delete process.env.JEST_HTML_REPORTER_LOGO;
 		delete process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG;
+		delete process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG;
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD;
 		delete process.env.JEST_HTML_REPORTER_DATE_FORMAT;
 		delete process.env.JEST_HTML_REPORTER_SORT;
@@ -122,6 +124,20 @@ describe('config', () => {
 		});
 		it('should return the default value if no setting was provided', () => {
 			expect(config.shouldIncludeFailureMessages()).toEqual(false);
+		});
+	});
+
+	describe('shouldIncludeConsoleLog', () => {
+		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
+			config.setConfigData({ includeConsoleLog: true });
+			expect(config.shouldIncludeConsoleLog()).toEqual(true);
+		});
+		it('should return the environment variable', () => {
+			process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG = true;
+			expect(config.shouldIncludeConsoleLog()).toEqual('true');
+		});
+		it('should return the default value if no setting was provided', () => {
+			expect(config.shouldIncludeConsoleLog()).toEqual(false);
 		});
 	});
 

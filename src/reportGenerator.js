@@ -140,6 +140,21 @@ class ReportGenerator {
 					// Append data to <tr>
 					testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? `${test.status} in ${test.duration / 1000}s` : test.status);
 				});
+
+				// Test Suite console.logs
+				if (suite.console && suite.console.length > 0 && (this.config.shouldIncludeConsoleLog())) {
+					// Console Log Container
+					const consoleLogContainer = htmlOutput.ele('div', { class: 'suite-consolelog' });
+					// Console Log Header
+					consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
+
+					// Logs
+					suite.console.forEach((log) => {
+						const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
+						logElement.ele('pre', { class: 'suite-consolelog-item-origin' }, stripAnsi(log.origin));
+						logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+					});
+				}
 			});
 			// Custom Javascript
 			const customScript = this.config.getCustomScriptFilepath();
