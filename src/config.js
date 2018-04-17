@@ -77,6 +77,13 @@ const shouldIncludeFailureMessages = () =>
 	process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG || config.includeFailureMsg || false;
 
 /**
+ * Returns whether the report should contain console.logs or not
+ * @return {Boolean}
+ */
+const shouldIncludeConsoleLog = () =>
+	process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG || config.includeConsoleLog || false;
+
+/**
  * Returns the configured threshold (in seconds) when to apply a warning
  * @return {Number}
  */
@@ -115,6 +122,7 @@ module.exports = {
 	getPageTitle,
 	getLogo,
 	shouldIncludeFailureMessages,
+	shouldIncludeConsoleLog,
 	getExecutionTimeWarningThreshold,
 	getTheme,
 	getDateFormat,

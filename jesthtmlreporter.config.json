@@ -2,6 +2,7 @@
 	"pageTitle": "Test Suite Report",
     "outputPath": "test-report.html",
     "includeFailureMsg": true,
+    "includeConsoleLog": true,
     "useAsReporter": false,
     "sort": "titleAsc"
 }

@@ -66,6 +66,7 @@ To configure this plugin, create a file named `jesthtmlreporter.config.json` in 
 | `pageTitle` | `STRING` | The title of the document. This string will also be outputted on the top of the page. | `"Test Suite"`
 | `outputPath` | `STRING` | The path to where the plugin will output the HTML report. The path must include the filename and end with .html | `"./test-report.html"`
 | `includeFailureMsg` | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test. | `false`
+| `includeConsoleLog` | `BOOLEAN` | If set to true, this will output all triggered console logs for each test suite. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
 | `customScriptPath` | `STRING` | Path to a javascript file that should be injected into the test report | `null`
 | `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [Documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
