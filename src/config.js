@@ -105,13 +105,6 @@ const getDateFormat = () =>
 const getSort = () =>
 	process.env.JEST_HTML_REPORTER_SORT || config.sort || 'default';
 
-/**
- * Returns the configured mode of execution ('testResultsProcessor' or 'reporters')
- * @return {String}
- */
-const getExecutionMode = () =>
-	process.env.JEST_HTML_REPORTER_EXECUTION_MODE || config.executionMode || 'testResultsProcessor';
-
 module.exports = {
 	config,
 	setup,
@@ -127,5 +120,4 @@ module.exports = {
 	getTheme,
 	getDateFormat,
 	getSort,
-	getExecutionMode,
 };

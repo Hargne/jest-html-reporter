@@ -28,29 +28,29 @@ npm install jest-html-reporter --save-dev
 ```
 
 ## Usage
-Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.js):
+Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.json):
+```JSON
+"reporters": [
+	"default",
+	"./node_modules/jest-html-reporter", {
+		"pageTitle": "Test Report"
+	}
+]
+```
+As you run Jest from within the terminal, a file called *test-report.html* will be created within your root folder containing information about your tests.
+
+There are multiple configuration options available. To read more about these, please refer to the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
+
+### Alternative Usage as a Test Results Processor
+To run the reporter as a test results processor (after Jest is complete instead of running in parallel), add the following entry to the Jest config (jest.config.json):
 ```JSON
 {
 	"testResultsProcessor": "./node_modules/jest-html-reporter"
 }
-```
-Then when you run Jest from within the terminal, a file called *test-report.html* will be created within your root folder containing information about your tests.
+``` 
 
-#### Alternative usage with package.json
-Although jest.config.js is specifically created for configuring Jest (and not this plugin), it is possible to configure Jest from within package.json by adding the following as a new line:
-```JSON
-"jest": {"testResultsProcessor": "./node_modules/jest-html-reporter" }
-```
-
-### Run as a Custom Reporter
-It is also possible to run jest-html-reporter as a custom reporter within Jest. This allows the plugin to be run in parallel with Jest instead of after a test run, and will guarantee that the test report is generated even if Jest is run with options such as `--forceExit`.
-
-Add the following entry to the Jest config (jest.config.js):
-
-```JSON
-"reporters": ["default", "./node_modules/jest-html-reporter"]
-```
-Please note that you need to add the `"executionMode": "reporter"` configuration within jesthtmlreporter.config.json in order for this to work (more information on configuration can be found within the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration)).
+**Note:** When running as a testResultsProcessor, the configuration needs be placed  within a new file named `jesthtmlreporter.config.json` residing in the root folder.
+More information about this can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
 
 
 ## Node Compatibility
@@ -59,7 +59,7 @@ This plugin is compatible with Node version `^4.8.3`
 ---
 
 ## Configuration
-To configure this plugin, create a file named `jesthtmlreporter.config.json` in the root folder of the project. Please note that all configuration properties are optional.
+Please note that all configuration properties are optional.
 
 | Property | Type | Description | Default
 |--|--|--|--|
@@ -69,39 +69,13 @@ To configure this plugin, create a file named `jesthtmlreporter.config.json` in 
 | `includeConsoleLog` | `BOOLEAN` | If set to true, this will output all triggered console logs for each test suite. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
 | `customScriptPath` | `STRING` | Path to a javascript file that should be injected into the test report | `null`
-| `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [Documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
+| `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
 | `logo` | `STRING` | Path to a logo that will be included in the header of the report | `null`
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
-| `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [Documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
-| `sort` | `STRING` | Sorts the test results using the given method. Available sorting methods can be found in the [Documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
-| `executionMode` | `STRING` | Defines the execution mode. Avaiable modes are: `reporter`, `testResultsProcessor` | `"testResultsProcessor"`
+| `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
+| `sort` | `STRING` | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
 
-#### *A note on styleOverridePath
-The plugin will search for the file from the root directory, therefore there is no need to prepend the string with `./` or `../`. Please have a look at the default styling (located within *style/defaultTheme.css*) for a reference of the elements available for styling.
-
-### Example Configuration
-
-```
-{
-	"pageTitle": "Your test suite",
-	"outputPath": "test-report/index.html",
-	"includeFailureMsg": true,
-	"styleOverridePath": "src/teststyle.css"
-}
-```
-
-#### Alternative configuration with package.json
-Add an entry named *"jest-html-reporter"* to your package.json 
-```
-{
-	...
-	"jest-html-reporter": {
-		"pageTitle": "Your test suite",
-		"outputPath": "test-report.html",
-		"includeFailureMsg": true
-	}
-}
-```
+> *The plugin will search for the *styleOverridePath* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
 
 ---
 
@@ -119,5 +93,5 @@ export JEST_HTML_REPORTER_PAGE_TITLE="$BRANCH_NAME"\ Test\ Report
 ```
 
 ### Configuration Environment Variables
-The environment variables reflect the properties set in the JSON configuration file. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-environment-variables) for more information on these variables.
+The environment variables reflect the configuration options available in JSON format. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-environment-variables) for more information on these variables.
 
