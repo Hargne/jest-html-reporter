@@ -182,18 +182,4 @@ describe('config', () => {
 			expect(config.getSort()).toEqual('default');
 		});
 	});
-
-	describe('getExecutionMode', () => {
-		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ executionMode: 'reporter' });
-			expect(config.getExecutionMode()).toEqual('reporter');
-		});
-		it('should return the environment variable', () => {
-			process.env.JEST_HTML_REPORTER_EXECUTION_MODE = 'reporter';
-			expect(config.getExecutionMode()).toEqual('reporter');
-		});
-		it('should return the default value if no setting was provided', () => {
-			expect(config.getExecutionMode()).toEqual('testResultsProcessor');
-		});
-	});
 });

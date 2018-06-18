@@ -29,7 +29,7 @@ describe('index', () => {
 		const JestHTMLReporter = require('../src');
 
 		// When run as a Jest reporter, the plugin will be instantiated as a class
-		const ReporterInitiatedByJest = new JestHTMLReporter();
+		const ReporterInitiatedByJest = new JestHTMLReporter({});
 		// Mock the end of a test run
 		await ReporterInitiatedByJest.onRunComplete(null, mockdata.jestResponse.singleTestResult);
 		expect(fs.existsSync(mockedConfigFunctions.getOutputFilepath()))

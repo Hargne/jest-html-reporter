@@ -1,8 +1,7 @@
 {
-	"pageTitle": "Test Suite Report",
-    "outputPath": "test-report.html",
+    "pageTitle": "Test Suite Reporter",
+    "outputPath": "testResultsProcessorResult.html",
     "includeFailureMsg": true,
     "includeConsoleLog": true,
-    "useAsReporter": false,
     "sort": "titleAsc"
 }
