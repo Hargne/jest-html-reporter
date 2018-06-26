@@ -159,7 +159,7 @@ class ReportGenerator {
 			// Custom Javascript
 			const customScript = this.config.getCustomScriptFilepath();
 			if (customScript) {
-				htmlOutput.ele('script', { src: customScript });
+				htmlOutput.raw(`<script src="${customScript}"></script>`);
 			}
 			return resolve(htmlOutput);
 		});
