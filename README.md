@@ -81,7 +81,7 @@ Please note that all configuration properties are optional.
 
 ## Continuous Integration
 
-Configuration may also be performed with environment variables for dynamic file saving paths in different environments. ***NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json*
+Configuration may also be performed with environment variables for dynamic file saving paths in different environments. ***NOTE:** Environment variables will take precedence over configurations set in the package.json file of your project, or through a jesthtmlreporter.config.js file or through anthour configuration file,see [cosmiconfig](https://github.com/davidtheclark/cosmiconfig)*
 
 ### Example
 Here is an example of dynamically naming your output file and test report title to match your current branch that one might see in a automated deployment pipeline before running their tests.

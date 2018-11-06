@@ -1,5 +1,5 @@
 const path = require('path');
-const fs = require('fs');
+const cosmiconfig = require('cosmiconfig');
 // Initialize an empty config object
 const config = {};
 
@@ -10,20 +10,12 @@ const config = {};
 const setConfigData = data => Object.assign(config, data);
 
 const setup = () => {
-	// Attempt to locate and assign configurations from jesthtmlreporter.config.json
-	try {
-		const jesthtmlreporterconfig = fs.readFileSync(path.join(process.cwd(), 'jesthtmlreporter.config.json'), 'utf8');
-		if (jesthtmlreporterconfig) {
-			return setConfigData(JSON.parse(jesthtmlreporterconfig));
-		}
-	} catch (e) { /** do nothing */ }
-	// Attempt to locate and assign configurations from package.json
-	try {
-		const packageJson = fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8');
-		if (packageJson) {
-			return setConfigData(JSON.parse(packageJson)['jest-html-reporter']);
-		}
-	} catch (e) { /** do nothing */ }
+	// Attempt to locate and assign configurations
+	const explorer = cosmiconfig('jesthtmlreporter');
+	const result = explorer.searchSync();
+	if (result && result.config) {
+		setConfigData(result.config);
+	}
 	return config;
 };
 

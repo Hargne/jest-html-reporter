@@ -1,9 +1,14 @@
 /* eslint-disable global-require */
 const path = require('path');
-// Mock FS
-jest.mock('fs', () => ({ readFileSync: jest.fn() }));
-const fs = require('fs');
+jest.mock('cosmiconfig');
+const cosmiconfig = require('cosmiconfig');
 const config = require('../src/config');
+
+const mockCosmiconfigWith = result => {
+  cosmiconfig.mockImplementationOnce(() => ({
+    searchSync: () => result
+  }));
+}
 
 describe('config', () => {
 	afterEach(() => {
@@ -34,8 +39,8 @@ describe('config', () => {
 	});
 
 	describe('setup', () => {
-		it('should fetch configurations from jesthtmlreporter.config.json', () => {
-			fs.readFileSync.mockReturnValue('{ "pageTitle": "Test Suite Report" }');
+		it('should load configuration from a package.json property, rc file, or CommonJS module', () => {
+			mockCosmiconfigWith({config: {pageTitle: 'Test Suite Report' }})
 			const setupResponse = config.setup();
 			expect(setupResponse).toEqual({ pageTitle: 'Test Suite Report' });
 		});
