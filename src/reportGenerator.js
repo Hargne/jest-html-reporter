@@ -39,16 +39,20 @@ class ReportGenerator {
 	}
 
 	/**
-	 * Returns the stylesheet to be requireed in the test report.
+	 * Returns the stylesheet to be required in the test report.
 	 * If styleOverridePath is not defined, it will return the defined theme file.
 	 * @return {Promise}
 	 */
 	getStylesheetContent() {
 		const pathToStylesheet = this.config.getStylesheetFilepath();
+		const useCssFile = this.config.shouldUseCssFile();
 		return new Promise((resolve, reject) => {
 			fs.readFile(pathToStylesheet, 'utf8', (err, content) => {
 				if (err) {
 					return reject(new Error(`Could not locate the stylesheet: '${pathToStylesheet}': ${err}`));
+				}
+				if (useCssFile) {
+					return resolve(pathToStylesheet);
 				}
 				return resolve(content);
 			});
@@ -70,13 +74,17 @@ class ReportGenerator {
 			const pageTitle = this.config.getPageTitle();
 
 			// Create an xmlbuilder object with HTML and Body tags
+			const useCssFile = this.config.shouldUseCssFile();
+
 			const htmlOutput = utils.createHtmlBase({
 				pageTitle,
 				stylesheet,
+				useCssFile,
 			});
 
 			// HEADER
 			const header = htmlOutput.ele('header');
+
 			// Page Title
 			header.ele('h1', { id: 'title' }, pageTitle);
 			// Logo

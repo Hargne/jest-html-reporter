@@ -84,6 +84,13 @@ const shouldIncludeConsoleLog = () =>
 	process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG || config.includeConsoleLog || false;
 
 /**
+ * Returns whether the report should use a dedicated .css file
+ * @return {Boolean}
+ */
+const shouldUseCssFile = () =>
+	process.env.JEST_HTML_REPORTER_USE_CSS_FILE || config.useCssFile || false;
+
+/**
  * Returns the configured threshold (in seconds) when to apply a warning
  * @return {Number}
  */
@@ -116,6 +123,7 @@ module.exports = {
 	getLogo,
 	shouldIncludeFailureMessages,
 	shouldIncludeConsoleLog,
+	shouldUseCssFile,
 	getExecutionTimeWarningThreshold,
 	getTheme,
 	getDateFormat,

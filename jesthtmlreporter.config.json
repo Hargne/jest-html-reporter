@@ -3,5 +3,6 @@
     "outputPath": "testResultsProcessorResult.html",
     "includeFailureMsg": true,
     "includeConsoleLog": true,
+    "useCssFile" : true,
     "sort": "titleAsc"
 }
