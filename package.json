@@ -1,5 +1,5 @@
 {
-  "name": "my-jest-html-reporter",
+  "name": "jest-html-reporter",
   "version": "0.0.1",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/main",
