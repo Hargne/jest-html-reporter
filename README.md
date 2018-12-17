@@ -47,7 +47,7 @@ To run the reporter as a test results processor (after Jest is complete instead 
 {
 	"testResultsProcessor": "./node_modules/jest-html-reporter"
 }
-``` 
+```
 
 **Note:** When running as a testResultsProcessor, the configuration needs be placed  within a new file named `jesthtmlreporter.config.json` residing in the root folder.
 More information about this can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
@@ -68,6 +68,7 @@ Please note that all configuration properties are optional.
 | `includeFailureMsg` | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test. | `false`
 | `includeConsoleLog` | `BOOLEAN` | If set to true, this will output all triggered console logs for each test suite. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
+| `shouldUseCssFile` | `BOOLEAN` | If set to true, the CSS styles will use a .css file* | `null`
 | `customScriptPath` | `STRING` | Path to a javascript file that should be injected into the test report | `null`
 | `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
 | `logo` | `STRING` | Path to a logo that will be included in the header of the report | `null`
