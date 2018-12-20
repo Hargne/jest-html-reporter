@@ -17,10 +17,18 @@ class ReportGenerator {
 	 */
 	generate({ data, ignoreConsole }) {
 		const fileDestination = this.config.getOutputFilepath();
+		const useCssFile = this.config.shouldUseCssFile();
+		let stylesheetPath = null;
+
+		if (useCssFile) {
+			stylesheetPath = this.config.getStylesheetFilepath();
+		}
+
 		return this.getStylesheetContent()
 			.then(stylesheet => this.renderHtmlReport({
 				data,
 				stylesheet,
+				stylesheetPath,
 			}))
 			.then(xmlBuilderOutput => utils.writeFile({
 				filePath: fileDestination,
@@ -45,14 +53,10 @@ class ReportGenerator {
 	 */
 	getStylesheetContent() {
 		const pathToStylesheet = this.config.getStylesheetFilepath();
-		const useCssFile = this.config.shouldUseCssFile();
 		return new Promise((resolve, reject) => {
 			fs.readFile(pathToStylesheet, 'utf8', (err, content) => {
 				if (err) {
 					return reject(new Error(`Could not locate the stylesheet: '${pathToStylesheet}': ${err}`));
-				}
-				if (useCssFile) {
-					return resolve(pathToStylesheet);
 				}
 				return resolve(content);
 			});
@@ -65,7 +69,7 @@ class ReportGenerator {
 	 * @param  {Object} data		The test result data
 	 * @return {xmlbuilder}
 	 */
-	renderHtmlReport({ data, stylesheet }) {
+	renderHtmlReport({ data, stylesheet, stylesheetPath }) {
 		return new Promise((resolve, reject) => {
 			// Make sure that test data was provided
 			if (!data) { return reject(new Error('Test data missing or malformed')); }
@@ -74,12 +78,11 @@ class ReportGenerator {
 			const pageTitle = this.config.getPageTitle();
 
 			// Create an xmlbuilder object with HTML and Body tags
-			const useCssFile = this.config.shouldUseCssFile();
 
 			const htmlOutput = utils.createHtmlBase({
 				pageTitle,
 				stylesheet,
-				useCssFile,
+				stylesheetPath,
 			});
 
 			// HEADER

@@ -46,21 +46,22 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
  * Sets up a basic HTML page to apply the content to
  * @return {xmlbuilder}
  */
-const createHtmlBase = ({ pageTitle, stylesheet, useCssFile }) => {
+const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 	const htmlBase = {
 		html: {
 			head: {
 				meta: { '@charset': 'utf-8' },
 				title: { '#text': pageTitle },
-				style: { '@type': 'text/css', '#text': stylesheet },
 			},
 		},
 	};
 
-	if (useCssFile) {
-		delete htmlBase.html.head.style;
-		htmlBase.html.head.link = { '@rel': 'stylesheet', '@type': 'text/css', '@href': stylesheet };
+	if (stylesheetPath) {
+		htmlBase.html.head.link = { '@rel': 'stylesheet', '@type': 'text/css', '@href': stylesheetPath };
+	} else {
+		htmlBase.html.head.style = { '@type': 'text/css', '#text': stylesheet };
 	}
+
 	return xmlbuilder.create(htmlBase);
 };
 
