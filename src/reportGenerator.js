@@ -17,10 +17,18 @@ class ReportGenerator {
 	 */
 	generate({ data, ignoreConsole }) {
 		const fileDestination = this.config.getOutputFilepath();
+		const useCssFile = this.config.shouldUseCssFile();
+		let stylesheetPath = null;
+
+		if (useCssFile) {
+			stylesheetPath = this.config.getStylesheetFilepath();
+		}
+
 		return this.getStylesheetContent()
 			.then(stylesheet => this.renderHtmlReport({
 				data,
 				stylesheet,
+				stylesheetPath,
 			}))
 			.then(xmlBuilderOutput => utils.writeFile({
 				filePath: fileDestination,
@@ -39,7 +47,7 @@ class ReportGenerator {
 	}
 
 	/**
-	 * Returns the stylesheet to be requireed in the test report.
+	 * Returns the stylesheet to be required in the test report.
 	 * If styleOverridePath is not defined, it will return the defined theme file.
 	 * @return {Promise}
 	 */
@@ -61,7 +69,7 @@ class ReportGenerator {
 	 * @param  {Object} data		The test result data
 	 * @return {xmlbuilder}
 	 */
-	renderHtmlReport({ data, stylesheet }) {
+	renderHtmlReport({ data, stylesheet, stylesheetPath }) {
 		return new Promise((resolve, reject) => {
 			// Make sure that test data was provided
 			if (!data) { return reject(new Error('Test data missing or malformed')); }
@@ -70,13 +78,16 @@ class ReportGenerator {
 			const pageTitle = this.config.getPageTitle();
 
 			// Create an xmlbuilder object with HTML and Body tags
+
 			const htmlOutput = utils.createHtmlBase({
 				pageTitle,
 				stylesheet,
+				stylesheetPath,
 			});
 
 			// HEADER
 			const header = htmlOutput.ele('header');
+
 			// Page Title
 			header.ele('h1', { id: 'title' }, pageTitle);
 			// Logo

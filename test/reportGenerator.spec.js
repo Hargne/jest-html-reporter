@@ -14,11 +14,13 @@ describe('reportGenerator', () => {
 				shouldIncludeFailureMessages: () => true,
 				getExecutionTimeWarningThreshold: () => 5,
 				getCustomScriptFilepath: () => 'test.js',
+				shouldUseCssFile: () => false,
 			};
 			const reportGenerator = new ReportGenerator(mockedConfig);
 
 			return reportGenerator.renderHtmlReport({ data: mockdata.jestResponse.multipleTestResults, stylesheet: '' })
-				.then(xmlBuilderOutput => expect(xmlBuilderOutput).not.toBeNull());
+				.then(xmlBuilderOutput =>
+					expect(xmlBuilderOutput).not.toBeNull());
 		});
 
 		it('should return reject the promise if no data was provided', () => {

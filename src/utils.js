@@ -46,15 +46,24 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
  * Sets up a basic HTML page to apply the content to
  * @return {xmlbuilder}
  */
-const createHtmlBase = ({ pageTitle, stylesheet }) => xmlbuilder.create({
-	html: {
-		head: {
-			meta: { '@charset': 'utf-8' },
-			title: { '#text': pageTitle },
-			style: { '@type': 'text/css', '#text': stylesheet },
+const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
+	const htmlBase = {
+		html: {
+			head: {
+				meta: { '@charset': 'utf-8' },
+				title: { '#text': pageTitle },
+			},
 		},
-	},
-});
+	};
+
+	if (stylesheetPath) {
+		htmlBase.html.head.link = { '@rel': 'stylesheet', '@type': 'text/css', '@href': stylesheetPath };
+	} else {
+		htmlBase.html.head.style = { '@type': 'text/css', '#text': stylesheet };
+	}
+
+	return xmlbuilder.create(htmlBase);
+};
 
 const sortAlphabetically = ({ a, b, reversed }) => {
 	if ((!reversed && a < b) || (reversed && a > b)) {
