@@ -98,9 +98,14 @@ class ReportGenerator {
 
 			// METADATA
 			const metaDataContainer = htmlOutput.ele('div', { id: 'metadata-container' });
-			// Timestamp
-			const timestamp = new Date(data.startTime);
-			metaDataContainer.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, this.config.getDateFormat())}`);
+
+			const dateFormatValue = this.config.getDateFormat();
+			if (dateFormatValue) {
+				// Timestamp
+				const timestamp = new Date(data.startTime);
+				metaDataContainer.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, dateFormatValue)}`);
+			}
+
 			// Test Summary
 			metaDataContainer.ele('div', { id: 'summary' }, `
 				${data.numTotalTests} tests --
