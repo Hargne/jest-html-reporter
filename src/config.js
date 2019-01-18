@@ -112,6 +112,13 @@ const getDateFormat = () =>
 const getSort = () =>
 	process.env.JEST_HTML_REPORTER_SORT || config.sort || 'default';
 
+/**
+ * Returns the configured sorting method
+ * @return {String}
+ */
+const getStable = () =>
+	process.env.JEST_HTML_REPORTER_STABLE || config.stable || false;
+
 module.exports = {
 	config,
 	setup,
@@ -128,4 +135,5 @@ module.exports = {
 	getTheme,
 	getDateFormat,
 	getSort,
+	getStable,
 };

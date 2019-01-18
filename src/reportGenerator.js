@@ -99,11 +99,10 @@ class ReportGenerator {
 			// METADATA
 			const metaDataContainer = htmlOutput.ele('div', { id: 'metadata-container' });
 
-			const dateFormatValue = this.config.getDateFormat();
-			if (dateFormatValue) {
+			if (!this.config.getStable()) {
 				// Timestamp
 				const timestamp = new Date(data.startTime);
-				metaDataContainer.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, dateFormatValue)}`);
+				metaDataContainer.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, this.config.getDateFormat())}`);
 			}
 
 			// Test Summary

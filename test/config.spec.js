@@ -18,6 +18,7 @@ describe('config', () => {
 			executionTimeWarningThreshold: null,
 			dateFormat: null,
 			sort: null,
+			stable: null,
 			executionMode: null,
 		});
 		delete process.env.JEST_HTML_REPORTER_OUTPUT_PATH;
@@ -30,6 +31,7 @@ describe('config', () => {
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD;
 		delete process.env.JEST_HTML_REPORTER_DATE_FORMAT;
 		delete process.env.JEST_HTML_REPORTER_SORT;
+		delete process.env.JEST_HTML_REPORTER_STABLE;
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_MODE;
 	});
 
@@ -180,6 +182,20 @@ describe('config', () => {
 		});
 		it('should return the default value if no setting was provided', () => {
 			expect(config.getSort()).toEqual('default');
+		});
+	});
+
+	describe('getStable', () => {
+		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
+			config.setConfigData({ stable: 'setInJson' });
+			expect(config.getStable()).toEqual('setInJson');
+		});
+		it('should return the environment variable', () => {
+			process.env.JEST_HTML_REPORTER_STABLE = 'setInEnv';
+			expect(config.getStable()).toEqual('setInEnv');
+		});
+		it('should return the default value if no setting was provided', () => {
+			expect(config.getStable()).toBeFalsy();
 		});
 	});
 });
