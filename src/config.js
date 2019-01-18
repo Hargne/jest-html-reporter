@@ -3,6 +3,24 @@ const fs = require('fs');
 // Initialize an empty config object
 const config = {};
 
+function parseBool(value) {
+	if (typeof value === 'boolean') {
+		return value;
+	}
+	if (typeof value !== 'string') {
+		// eslint-disable-next-line no-console
+		console.error(`Unexpected boolean value '${value}': ${typeof value}`);
+		return true;
+	}
+	try {
+		return JSON.parse(value);
+	} catch (e) {
+		// eslint-disable-next-line no-console
+		console.error(`Unexpected boolean value '${value}': ${e}`);
+		return true;
+	}
+}
+
 /**
  * Assigns the given data to the config object
  * @param {Object} data
@@ -74,21 +92,21 @@ const getLogo = () =>
  * @return {Boolean}
  */
 const shouldIncludeFailureMessages = () =>
-	process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG || config.includeFailureMsg || false;
+	parseBool(process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG || config.includeFailureMsg || false);
 
 /**
  * Returns whether the report should contain console.logs or not
  * @return {Boolean}
  */
 const shouldIncludeConsoleLog = () =>
-	process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG || config.includeConsoleLog || false;
+	parseBool(process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG || config.includeConsoleLog || false);
 
 /**
  * Returns whether the report should use a dedicated .css file
  * @return {Boolean}
  */
 const shouldUseCssFile = () =>
-	process.env.JEST_HTML_REPORTER_USE_CSS_FILE || config.useCssFile || false;
+	parseBool(process.env.JEST_HTML_REPORTER_USE_CSS_FILE || config.useCssFile || false);
 
 /**
  * Returns the configured threshold (in seconds) when to apply a warning
@@ -113,11 +131,11 @@ const getSort = () =>
 	process.env.JEST_HTML_REPORTER_SORT || config.sort || 'default';
 
 /**
- * Returns the configured sorting method
- * @return {String}
+ * Returns the configured stable output option
+ * @return {Boolean}
  */
 const getStable = () =>
-	process.env.JEST_HTML_REPORTER_STABLE || config.stable || false;
+	parseBool(process.env.JEST_HTML_REPORTER_STABLE || config.stable || false);
 
 module.exports = {
 	config,

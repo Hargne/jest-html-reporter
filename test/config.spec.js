@@ -118,28 +118,32 @@ describe('config', () => {
 	describe('shouldIncludeFailureMessages', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
 			config.setConfigData({ includeFailureMsg: true });
-			expect(config.shouldIncludeFailureMessages()).toEqual(true);
+			expect(config.shouldIncludeFailureMessages()).toBeTruthy();
 		});
 		it('should return the environment variable', () => {
-			process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG = true;
-			expect(config.shouldIncludeFailureMessages()).toEqual('true');
+			process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG = 'true';
+			expect(config.shouldIncludeFailureMessages()).toBeTruthy();
+			process.env.JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG = 'false';
+			expect(config.shouldIncludeFailureMessages()).toBeFalsy();
 		});
 		it('should return the default value if no setting was provided', () => {
-			expect(config.shouldIncludeFailureMessages()).toEqual(false);
+			expect(config.shouldIncludeFailureMessages()).toBeFalsy();
 		});
 	});
 
 	describe('shouldIncludeConsoleLog', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
 			config.setConfigData({ includeConsoleLog: true });
-			expect(config.shouldIncludeConsoleLog()).toEqual(true);
+			expect(config.shouldIncludeConsoleLog()).toBeTruthy();
 		});
 		it('should return the environment variable', () => {
-			process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG = true;
-			expect(config.shouldIncludeConsoleLog()).toEqual('true');
+			process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG = 'true';
+			expect(config.shouldIncludeConsoleLog()).toBeTruthy();
+			process.env.JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG = 'false';
+			expect(config.shouldIncludeConsoleLog()).toBeFalsy();
 		});
 		it('should return the default value if no setting was provided', () => {
-			expect(config.shouldIncludeConsoleLog()).toEqual(false);
+			expect(config.shouldIncludeConsoleLog()).toBeFalsy();
 		});
 	});
 
@@ -187,12 +191,12 @@ describe('config', () => {
 
 	describe('getStable', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ stable: 'setInJson' });
-			expect(config.getStable()).toEqual('setInJson');
+			config.setConfigData({ stable: true });
+			expect(config.getStable()).toBeTruthy();
 		});
 		it('should return the environment variable', () => {
-			process.env.JEST_HTML_REPORTER_STABLE = 'setInEnv';
-			expect(config.getStable()).toEqual('setInEnv');
+			process.env.JEST_HTML_REPORTER_STABLE = true;
+			expect(config.getStable()).toBeTruthy();
 		});
 		it('should return the default value if no setting was provided', () => {
 			expect(config.getStable()).toBeFalsy();
