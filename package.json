@@ -44,7 +44,7 @@
     "xmlbuilder": "8.2.2"
   },
   "peerDependencies": {
-    "jest": "19.x - 23.x"
+    "jest": "19.x - 24.x"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
