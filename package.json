@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/main",
   "unpkg": "dist/main.min.js",
@@ -52,10 +52,10 @@
     "eslint-plugin-import": "^2.13.0",
     "istanbul-api": "1.2.2",
     "istanbul-reports": "1.1.4",
-    "jest": "^21.2.1",
+    "jest": "^24.0.0",
     "rollup": "^0.55.5",
     "rollup-plugin-commonjs": "^8.4.1",
-    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^3.0.0"
   }
 }
