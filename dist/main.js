@@ -70,7 +70,8 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 	if (stylesheetPath) {
 		htmlBase.html.head.link = { '@rel': 'stylesheet', '@type': 'text/css', '@href': stylesheetPath };
 	} else {
-		htmlBase.html.head.style = { '@type': 'text/css', '#text': stylesheet };
+		const styleSheet = stylesheet.replace(/(\r\n|\n|\r)/gm, '');
+		htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
 	}
 
 	return xmlbuilder.create(htmlBase);
@@ -354,6 +355,7 @@ class ReportGenerator {
 			// Test Suites
 			sortedTestData.forEach((suite) => {
 				if (!suite.testResults || suite.testResults.length <= 0) { return; }
+				if (!suite.testResults.find(test => test.status === 'failed')) { return; }
 
 				// Suite Information
 				const suiteInfo = htmlOutput.ele('div', { class: 'suite-info' });
