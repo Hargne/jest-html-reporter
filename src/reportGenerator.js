@@ -118,6 +118,7 @@ class ReportGenerator {
 			// Test Suites
 			sortedTestData.forEach((suite) => {
 				if (!suite.testResults || suite.testResults.length <= 0) { return; }
+				if (!suite.testResults.find(test => test.status === 'failed')) { return; }
 
 				// Suite Information
 				const suiteInfo = htmlOutput.ele('div', { class: 'suite-info' });
