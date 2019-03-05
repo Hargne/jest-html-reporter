@@ -63,6 +63,15 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
 	}
 
+	htmlBase.html.script = {
+		'#text': 'function showHide(item){' +
+		'var element = document.getElementById(item); ' +
+		'if (element.style.display === "block")' +
+		'{ element.style.display = "none";' +
+		'} else { ' +
+		'element.style.display = "block"; }}',
+	};
+
 	return xmlbuilder.create(htmlBase);
 };
 

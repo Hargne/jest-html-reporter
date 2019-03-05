@@ -74,6 +74,15 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
 	}
 
+	htmlBase.html.script = {
+		'#text': 'function showHide(item){' +
+		'var element = document.getElementById(item); ' +
+		'if (element.style.display === "block")' +
+		'{ element.style.display = "none";' +
+		'} else { ' +
+		'element.style.display = "block"; }}',
+	};
+
 	return xmlbuilder.create(htmlBase);
 };
 
@@ -353,6 +362,7 @@ class ReportGenerator {
 			});
 
 			// Test Suites
+			let index = 0;
 			sortedTestData.forEach((suite) => {
 				if (!suite.testResults || suite.testResults.length <= 0) { return; }
 				if (!suite.testResults.find(test => test.status === 'failed')) { return; }
@@ -369,6 +379,8 @@ class ReportGenerator {
 				const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
 
 				// Test Results
+				const failedTests = suite.testResults.map(test => test.status === 'failed');
+				const testsTitles = suite.testResults.map(test => test.title);
 				suite.testResults.forEach((test) => {
 					if (test.status !== 'failed') { return; }
 
@@ -400,10 +412,46 @@ class ReportGenerator {
 					consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
 
 					// Logs
+					let counter = 0;
+					let skipLog = false;
+					let logGroup;
+					let logInnerGroup;
 					suite.console.forEach((log) => {
-						const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
-						logElement.ele('pre', { class: 'suite-consolelog-item-origin' }, stripAnsi(log.origin));
-						logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+						if (log.message === '*** test started ***' && !failedTests[counter]) {
+							skipLog = true;
+							counter += 1;
+						}
+						if (!skipLog) {
+							if (log.message.includes('*** test started ***') || log.message.includes('*** test ended ***')) {
+								const logStartEnd = consoleLogContainer.ele('div', { class: 'suite-consolelog-test' });
+								logStartEnd.ele(
+									'pre', { class: 'suite-consolelog-item-message' },
+									stripAnsi(`${log.message}: ${testsTitles[counter]}`),
+								);
+								return;
+							}
+							if (log.message.includes('URL: ')) {
+								logGroup = consoleLogContainer.ele('div', { class: 'suite-consolelog-group' });
+								const id = `item-message-${index}`;
+								logGroup.ele(
+									'pre', { class: 'suite-consolelog-group-show-hide', onclick: `showHide('${id}')` },
+									stripAnsi(log.message),
+								);
+								logInnerGroup = logGroup.ele('div', { class: 'suite-consolelog-inner-group', id: `${id}` });
+								index += 1;
+								return;
+							}
+							if (logInnerGroup) {
+								const logElement = logInnerGroup.ele('div', { class: 'suite-consolelog-item' });
+								logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+							} else {
+								const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
+								logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+							}
+						}
+						if (log.message === '*** test ended ***' && failedTests[counter]) {
+							skipLog = false;
+						}
 					});
 				}
 			});
