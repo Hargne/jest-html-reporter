@@ -69,7 +69,14 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		'if (element.style.display === "block")' +
 		'{ element.style.display = "none";' +
 		'} else { ' +
-		'element.style.display = "block"; }}',
+		'element.style.display = "block"; }}' +
+		'function showHideAll(){' +
+		'var elements = document.getElementsByClassName("suite-consolelog-inner-group");' +
+		'for(let element of elements){' +
+		'if (element.style.display === "block")' +
+		'{ element.style.display = "none";' +
+		'} else { ' +
+		'element.style.display = "block"; }}}',
 	};
 
 	return xmlbuilder.create(htmlBase);

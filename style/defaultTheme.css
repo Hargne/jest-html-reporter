@@ -109,6 +109,20 @@ header {
 .suite-consolelog-item {
 	padding: 0.5rem;
 }
+.suite-consolelog-group{
+	background-color: lightblue;
+	margin: 10px;
+}
+.suite-consolelog-test{
+	background-color: gray;
+	margin: 10px;
+}
+.suite-consolelog-group-show-hide{
+	background-color: lightcyan;
+	padding: 10px;
+	margin: 0px;
+	font-weight: bold;
+}
 .suite-consolelog-item pre {
 	margin: 0;
 }
@@ -120,4 +134,12 @@ header {
 	color: #000;
 	font-size: 1rem;
 	padding: 0 0.5rem;
+}
+
+.suite-consolelog-inner-group{
+	display: none;
+}
+
+.suite-consolelog-show-hide-all{
+	float: right;
 }

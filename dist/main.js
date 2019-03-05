@@ -80,7 +80,14 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		'if (element.style.display === "block")' +
 		'{ element.style.display = "none";' +
 		'} else { ' +
-		'element.style.display = "block"; }}',
+		'element.style.display = "block"; }}' +
+		'function showHideAll(){' +
+		'var elements = document.getElementsByClassName("suite-consolelog-inner-group");' +
+		'for(let element of elements){' +
+		'if (element.style.display === "block")' +
+		'{ element.style.display = "none";' +
+		'} else { ' +
+		'element.style.display = "block"; }}}',
 	};
 
 	return xmlbuilder.create(htmlBase);
@@ -409,7 +416,8 @@ class ReportGenerator {
 					// Console Log Container
 					const consoleLogContainer = htmlOutput.ele('div', { class: 'suite-consolelog' });
 					// Console Log Header
-					consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
+					const consoleLogHeader = consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
+					consoleLogHeader.ele('button', { class: 'suite-consolelog-show-hide-all', onclick: 'showHideAll()' }, stripAnsi('Show/Hide All'));
 
 					// Logs
 					let counter = 0;
