@@ -370,6 +370,8 @@ class ReportGenerator {
 
 				// Test Results
 				suite.testResults.forEach((test) => {
+					if (test.status !== 'failed') { return; }
+
 					const testTr = suiteTable.ele('tr', { class: test.status });
 
 					// Suite Name(s)
