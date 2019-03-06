@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 const stripAnsi = require('strip-ansi');
 const utils = require('./utils');
 const sorting = require('./sorting');
+const prettyPrintJson = require('pretty-print-json');
 
 class ReportGenerator {
 	constructor(config) {
@@ -204,7 +205,19 @@ class ReportGenerator {
 							}
 							if (logInnerGroup) {
 								const logElement = logInnerGroup.ele('div', { class: 'suite-consolelog-item' });
-								logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+								const logElementPrev = logElement.ele('pre');
+								let c;
+								try {
+									c = JSON.parse(log.message);
+								} catch (e) {
+									//
+								}
+
+								if (c) {
+									logElementPrev.raw(prettyPrintJson.toHtml(c || log.message));
+								} else {
+									logElementPrev.ele('pre', { class: 'suite-consolelog-item-message' }, log.message);
+								}
 							} else {
 								const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
 								logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
@@ -221,6 +234,8 @@ class ReportGenerator {
 			if (customScript) {
 				htmlOutput.raw(`<script src="${customScript}"></script>`);
 			}
+			htmlOutput.raw('<script src="https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.min.js"></script>');
+
 			return resolve(htmlOutput);
 		});
 	}

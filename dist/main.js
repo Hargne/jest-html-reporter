@@ -57,7 +57,7 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
  * Sets up a basic HTML page to apply the content to
  * @return {xmlbuilder}
  */
-const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
+const createHtmlBase = ({ pageTitle, stylesheet }) => {
 	const htmlBase = {
 		html: {
 			head: {
@@ -67,12 +67,13 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		},
 	};
 
-	if (stylesheetPath) {
-		htmlBase.html.head.link = { '@rel': 'stylesheet', '@type': 'text/css', '@href': stylesheetPath };
-	} else {
-		const styleSheet = stylesheet.replace(/(\r\n|\n|\r)/gm, '');
-		htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
-	}
+
+	const styleSheet = stylesheet.replace(/(\r\n|\n|\r)/gm, '');
+	htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
+
+	htmlBase.html.head.link = {
+		'@rel': 'stylesheet', '@type': 'text/css', '@href': 'https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.css',
+	};
 
 	htmlBase.html.script = {
 		'#text': 'function showHide(item){' +
@@ -259,6 +260,62 @@ module.exports = {
 });
 
 var sorting_1 = sorting.sortSuiteResults;
+
+//! pretty-print-json v0.0.6 ~ github.com/center-key/pretty-print-json ~ MIT License
+
+const prettyPrintJson = {
+
+   version: '0.0.6',
+
+   toHtml: (thing) => {
+      const htmlEntities = (string) => {
+         // Makes text displayable in browsers
+         return string
+            .replace(/&/g,   '&amp;')
+            .replace(/\\"/g, '&bsol;&quot;')
+            .replace(/</g,   '&lt;')
+            .replace(/>/g,   '&gt;');
+         };
+      const replacer = (match, p1, p2, p3, p4) => {
+         // Converts the four parenthesized capture groups (indent, key, value, end) into HTML
+         const part =       { indent: p1, key: p2, value: p3, end: p4 };
+         const key =        '<span class=json-key>';
+         const val =        '<span class=json-value>';
+         const bool =       '<span class=json-boolean>';
+         const str =        '<span class=json-string>';
+         const isBool =     ['true', 'false'].includes(part.value);
+         const valSpan =    /^"/.test(part.value) ? str : isBool ? bool : val;
+         const findName =   /"([\w]+)": |(.*): /;
+         const indentHtml = part.indent || '';
+         const keyHtml =    part.key ? key + part.key.replace(findName, '$1$2') + '</span>: ' : '';
+         const valueHtml =  part.value ? valSpan + part.value + '</span>' : '';
+         const endHtml =    part.end || '';
+         return indentHtml + keyHtml + valueHtml + endHtml;
+         };
+      const jsonLine = /^( *)("[^"]+": )?("[^"]*"|[\w.+-]*)?([{}[\],]*)?$/mg;
+      // Regex parses each line of the JSON string into four parts:
+      //    Capture group       Part        Description                  '   "active": true,'
+      //    ------------------  ----------  ---------------------------  --------------------
+      //    ( *)                p1: indent  Spaces for indentation       '   '
+      //    ("[^"]+": )         p2: key     Key name                     '"active": '
+      //    ("[^"]*"|[\w.+-]*)  p3: value   Key value                    'true'
+      //    ([{}[\],]*)         p4: end     Line termination characters  ','
+      return htmlEntities(JSON.stringify(thing, null, 3)).replace(jsonLine, replacer);
+      }
+
+   };
+
+if (typeof module === 'object')
+   module.exports = prettyPrintJson;  //node module loading system (CommonJS)
+if (typeof window === 'object')
+   window.prettyPrintJson = prettyPrintJson;  //support both global and window property
+
+
+var prettyPrintJson$1 = Object.freeze({
+
+});
+
+var prettyPrintJson$2 = ( prettyPrintJson$1 && undefined ) || prettyPrintJson$1;
 
 class ReportGenerator {
 	constructor(config) {
@@ -459,7 +516,19 @@ class ReportGenerator {
 							}
 							if (logInnerGroup) {
 								const logElement = logInnerGroup.ele('div', { class: 'suite-consolelog-item' });
-								logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+								const logElementPrev = logElement.ele('pre');
+								let c;
+								try {
+									c = JSON.parse(log.message);
+								} catch (e) {
+									//
+								}
+
+								if (c) {
+									logElementPrev.raw(prettyPrintJson$2.toHtml(c || log.message));
+								} else {
+									logElementPrev.ele('pre', { class: 'suite-consolelog-item-message' }, log.message);
+								}
 							} else {
 								const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
 								logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
@@ -476,6 +545,8 @@ class ReportGenerator {
 			if (customScript) {
 				htmlOutput.raw(`<script src="${customScript}"></script>`);
 			}
+			htmlOutput.raw('<script src="https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.min.js"></script>');
+
 			return resolve(htmlOutput);
 		});
 	}

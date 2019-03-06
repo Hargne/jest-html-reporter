@@ -46,7 +46,7 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
  * Sets up a basic HTML page to apply the content to
  * @return {xmlbuilder}
  */
-const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
+const createHtmlBase = ({ pageTitle, stylesheet }) => {
 	const htmlBase = {
 		html: {
 			head: {
@@ -56,12 +56,13 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		},
 	};
 
-	if (stylesheetPath) {
-		htmlBase.html.head.link = { '@rel': 'stylesheet', '@type': 'text/css', '@href': stylesheetPath };
-	} else {
-		const styleSheet = stylesheet.replace(/(\r\n|\n|\r)/gm, '');
-		htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
-	}
+
+	const styleSheet = stylesheet.replace(/(\r\n|\n|\r)/gm, '');
+	htmlBase.html.head.style = { '@type': 'text/css', '#text': styleSheet };
+
+	htmlBase.html.head.link = {
+		'@rel': 'stylesheet', '@type': 'text/css', '@href': 'https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.css',
+	};
 
 	htmlBase.html.script = {
 		'#text': 'function showHide(item){' +
