@@ -12,10 +12,7 @@
     "eslint": "./node_modules/.bin/eslint ./src/**/*.js",
     "jest": "jest --no-cache --config=jest.config.json",
     "test": "npm run eslint && npm run jest",
-    "bundle": "rollup -c rollup.config.js",
-    "bundle:minified": "rollup -c rollup.config.js --environment BUILD:minified",
-    "bundle:all": "npm run bundle && npm run bundle:minified",
-    "build": "npm run test && npm run bundle:all"
+    "build": "npm run test"
   },
   "repository": {
     "type": "git",
