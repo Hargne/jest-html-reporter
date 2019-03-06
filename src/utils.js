@@ -76,7 +76,9 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		'if (element.style.display === "block")' +
 		'{ element.style.display = "none";' +
 		'} else { ' +
-		'element.style.display = "block"; }}}',
+		'element.style.display = "block"; }}}' +
+		'function showHideSuite(tableId, consoleLogId){' +
+		'showHide(tableId); showHide(consoleLogId);}',
 	};
 
 	return xmlbuilder.create(htmlBase);

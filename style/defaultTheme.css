@@ -55,6 +55,7 @@ header {
 	width: 100%;
 	font-size: 0.85rem;
 	margin-bottom: 1em;
+	display: none;
 }
 .suite-table td {
 	padding: 0.5rem;
@@ -102,6 +103,7 @@ header {
 	margin-bottom: 2rem;
 	padding: 1rem;
 	background-color: #efefef;
+	display: none;
 }
 .suite-consolelog-header {
 	font-weight: bold;

@@ -87,7 +87,9 @@ const createHtmlBase = ({ pageTitle, stylesheet, stylesheetPath }) => {
 		'if (element.style.display === "block")' +
 		'{ element.style.display = "none";' +
 		'} else { ' +
-		'element.style.display = "block"; }}}',
+		'element.style.display = "block"; }}}' +
+		'function showHideSuite(tableId, consoleLogId){' +
+		'showHide(tableId); showHide(consoleLogId);}',
 	};
 
 	return xmlbuilder.create(htmlBase);
@@ -370,12 +372,16 @@ class ReportGenerator {
 
 			// Test Suites
 			let index = 0;
+			let suiteIndex = 0;
 			sortedTestData.forEach((suite) => {
 				if (!suite.testResults || suite.testResults.length <= 0) { return; }
 				if (!suite.testResults.find(test => test.status === 'failed')) { return; }
 
+				const suiteTableId = `suite-table-${suiteIndex}`;
+				const suiteConsoleLogId = `suite-consolelog-${suiteIndex}`;
+				suiteIndex += 1;
 				// Suite Information
-				const suiteInfo = htmlOutput.ele('div', { class: 'suite-info' });
+				const suiteInfo = htmlOutput.ele('div', { class: 'suite-info', onclick: `showHideSuite('${suiteTableId}','${suiteConsoleLogId}')` });
 				// Suite Path
 				suiteInfo.ele('div', { class: 'suite-path' }, suite.testFilePath);
 				// Suite execution time
@@ -383,7 +389,9 @@ class ReportGenerator {
 				suiteInfo.ele('div', { class: `suite-time${executionTime > 5 ? ' warn' : ''}` }, `${executionTime}s`);
 
 				// Suite Test Table
-				const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
+				const suiteTable = htmlOutput.ele('table', {
+					class: 'suite-table', cellspacing: '0', cellpadding: '0', id: `${suiteTableId}`,
+				});
 
 				// Test Results
 				const failedTests = suite.testResults.map(test => test.status === 'failed');
@@ -414,7 +422,7 @@ class ReportGenerator {
 				// Test Suite console.logs
 				if (suite.console && suite.console.length > 0 && (this.config.shouldIncludeConsoleLog())) {
 					// Console Log Container
-					const consoleLogContainer = htmlOutput.ele('div', { class: 'suite-consolelog' });
+					const consoleLogContainer = htmlOutput.ele('div', { class: 'suite-consolelog', id: `${suiteConsoleLogId}` });
 					// Console Log Header
 					const consoleLogHeader = consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
 					consoleLogHeader.ele('button', { class: 'suite-consolelog-show-hide-all', onclick: 'showHideAll()' }, stripAnsi('Show/Hide All'));
