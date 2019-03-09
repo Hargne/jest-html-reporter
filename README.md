@@ -75,6 +75,8 @@ Please note that all configuration properties are optional.
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
 | `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
 | `sort` | `STRING` | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
+| `statusIgnoreFilter` | `STRING` | A comma-separated string of the test result statuses that should be ignored when rendering the report. Available statuses are: `"passed"`, `"pending"`, `"failed"` | `null`
+| `boilerplate` | `STRING` | The path to a boilerplate file that should be used to render the body of the test results into. `{jesthtmlreporter-content}` within the boilerplate will be replaced with the test results | `null`
 
 > *The plugin will search for the *styleOverridePath* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
 

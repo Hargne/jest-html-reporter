@@ -10,6 +10,7 @@ describe('config', () => {
 		config.setConfigData({
 			outputPath: null,
 			theme: null,
+			boilerplate: null,
 			styleOverridePath: null,
 			pageTitle: null,
 			logo: null,
@@ -19,9 +20,11 @@ describe('config', () => {
 			dateFormat: null,
 			sort: null,
 			executionMode: null,
+			statusIgnoreFilter: null,
 		});
 		delete process.env.JEST_HTML_REPORTER_OUTPUT_PATH;
 		delete process.env.JEST_HTML_REPORTER_THEME;
+		delete process.env.JEST_HTML_REPORTER_BOILERPLATE;
 		delete process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH;
 		delete process.env.JEST_HTML_REPORTER_PAGE_TITLE;
 		delete process.env.JEST_HTML_REPORTER_LOGO;
@@ -31,6 +34,7 @@ describe('config', () => {
 		delete process.env.JEST_HTML_REPORTER_DATE_FORMAT;
 		delete process.env.JEST_HTML_REPORTER_SORT;
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_MODE;
+		delete process.env.JEST_HTML_REPORTER_STATUS_FILTER;
 	});
 
 	describe('setup', () => {
@@ -180,6 +184,34 @@ describe('config', () => {
 		});
 		it('should return the default value if no setting was provided', () => {
 			expect(config.getSort()).toEqual('default');
+		});
+	});
+
+	describe('getBoilerplatePath', () => {
+		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
+			config.setConfigData({ boilerplate: 'setInJson' });
+			expect(config.getBoilerplatePath()).toEqual('setInJson');
+		});
+		it('should return the environment variable', () => {
+			process.env.JEST_HTML_REPORTER_BOILERPLATE = 'setInEnv';
+			expect(config.getBoilerplatePath()).toEqual('setInEnv');
+		});
+		it('should return the default value if no setting was provided', () => {
+			expect(config.getBoilerplatePath()).toBeNull();
+		});
+	});
+
+	describe('getStatusIgnoreFilter', () => {
+		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
+			config.setConfigData({ statusIgnoreFilter: 'setInJson' });
+			expect(config.getStatusIgnoreFilter()).toEqual('setInJson');
+		});
+		it('should return the environment variable', () => {
+			process.env.JEST_HTML_REPORTER_STATUS_FILTER = 'setInEnv';
+			expect(config.getStatusIgnoreFilter()).toEqual('setInEnv');
+		});
+		it('should return the default value if no setting was provided', () => {
+			expect(config.getStatusIgnoreFilter()).toBeNull();
 		});
 	});
 });

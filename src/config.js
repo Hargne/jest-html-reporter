@@ -38,6 +38,13 @@ const getOutputFilepath = () =>
  * Returns the configured name of theme to be used for styling the report
  * @return {String}
  */
+const getBoilerplatePath = () =>
+	process.env.JEST_HTML_REPORTER_BOILERPLATE || config.boilerplate || null;
+
+/**
+ * Returns the configured name of theme to be used for styling the report
+ * @return {String}
+ */
 const getTheme = () =>
 	process.env.JEST_HTML_REPORTER_THEME || config.theme || 'defaultTheme';
 
@@ -112,6 +119,13 @@ const getDateFormat = () =>
 const getSort = () =>
 	process.env.JEST_HTML_REPORTER_SORT || config.sort || 'default';
 
+/**
+ * Returns the filter of test result statuses to be ignored
+ * @return {String}
+ */
+const getStatusIgnoreFilter = () =>
+	process.env.JEST_HTML_REPORTER_STATUS_FILTER || config.statusIgnoreFilter || null;
+
 module.exports = {
 	config,
 	setup,
@@ -125,7 +139,9 @@ module.exports = {
 	shouldIncludeConsoleLog,
 	shouldUseCssFile,
 	getExecutionTimeWarningThreshold,
+	getBoilerplatePath,
 	getTheme,
 	getDateFormat,
 	getSort,
+	getStatusIgnoreFilter,
 };
