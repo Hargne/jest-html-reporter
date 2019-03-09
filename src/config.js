@@ -35,7 +35,7 @@ const getOutputFilepath = () =>
 	process.env.JEST_HTML_REPORTER_OUTPUT_PATH || config.outputPath || path.join(process.cwd(), 'test-report.html');
 
 /**
- * Returns the configured name of theme to be used for styling the report
+ * Returns the configured path to a boilerplate file to be used
  * @return {String}
  */
 const getBoilerplatePath = () =>
