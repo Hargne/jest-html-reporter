@@ -43,6 +43,19 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
 });
 
 /**
+ * Reads and returns the content of a given file
+ * @param  {String} filePath
+ */
+const getFileContent = ({ filePath }) => new Promise((resolve, reject) => {
+	fs.readFile(filePath, 'utf8', (err, content) => {
+		if (err) {
+			return reject(new Error(`Could not locate file: '${filePath}': ${err}`));
+		}
+		return resolve(content);
+	});
+});
+
+/**
  * Sets up a basic HTML page to apply the content to
  * @return {xmlbuilder}
  */
@@ -77,6 +90,7 @@ const sortAlphabetically = ({ a, b, reversed }) => {
 module.exports = {
 	logMessage,
 	writeFile,
+	getFileContent,
 	createHtmlBase,
 	sortAlphabetically,
 };
