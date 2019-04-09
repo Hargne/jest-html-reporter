@@ -1,5 +1,7 @@
 /* eslint-disable global-require */
 const path = require('path');
+const utils = require('../src/utils');
+
 // Mock FS
 jest.mock('fs', () => ({ readFileSync: jest.fn() }));
 const fs = require('fs');
@@ -38,10 +40,23 @@ describe('config', () => {
 	});
 
 	describe('setup', () => {
+		beforeEach(() => {
+			jest.spyOn(utils, 'logMessage')
+				.mockImplementation(() => {});
+		});
+
 		it('should fetch configurations from jesthtmlreporter.config.json', () => {
 			fs.readFileSync.mockReturnValue('{ "pageTitle": "Test Suite Report" }');
 			const setupResponse = config.setup();
 			expect(setupResponse).toEqual({ pageTitle: 'Test Suite Report' });
+		});
+
+		it('should log error if config is invalid', () => {
+			fs.readFileSync.mockReturnValue('{ "theme": "invalidSchemeEnum" }');
+			const setupResponse = config.setup();
+
+			expect(setupResponse.theme).not.toEqual('invalidSchemeEnum');
+			expect(utils.logMessage.mock.calls).toMatchSnapshot();
 		});
 	});
 

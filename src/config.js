@@ -1,5 +1,9 @@
 const path = require('path');
 const fs = require('fs');
+const Ajv = require('ajv');
+
+const utils = require('./utils');
+const schema = require('../configSchema.json');
 // Initialize an empty config object
 const config = {};
 
@@ -9,12 +13,44 @@ const config = {};
  */
 const setConfigData = data => Object.assign(config, data);
 
+const validate = (configObject) => {
+	const ajv = new Ajv();
+	const validator = ajv.compile(schema);
+	const valid = validator(configObject);
+
+	if (!valid) {
+		const wrongKeys = validator.errors.map(error => `${error.dataPath.slice(1)}`);
+
+		utils.logMessage({
+			type: 'error',
+			msg: `Wrong config in paths: ${wrongKeys}`,
+			ignoreConsole: true,
+		});
+
+
+		return Object.keys(configObject)
+			.reduce((acc, key) => {
+				if (!wrongKeys.includes(key)) {
+					acc[key] = configObject[key];
+				}
+
+				return acc;
+			}, {});
+	}
+
+	return configObject;
+};
+
 const setup = () => {
 	// Attempt to locate and assign configurations from jesthtmlreporter.config.json
 	try {
 		const jesthtmlreporterconfig = fs.readFileSync(path.join(process.cwd(), 'jesthtmlreporter.config.json'), 'utf8');
 		if (jesthtmlreporterconfig) {
-			return setConfigData(JSON.parse(jesthtmlreporterconfig));
+			const configObject = JSON.parse(jesthtmlreporterconfig);
+
+			const validConfig = validate(configObject);
+
+			return setConfigData(validConfig);
 		}
 	} catch (e) { /** do nothing */ }
 	// Attempt to locate and assign configurations from package.json

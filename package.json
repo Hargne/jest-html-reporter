@@ -38,6 +38,7 @@
     "node": ">=4.8.3"
   },
   "dependencies": {
+    "ajv": "^6.10.0",
     "dateformat": "3.0.2",
     "mkdirp": "0.5.1",
     "strip-ansi": "3.0.1",

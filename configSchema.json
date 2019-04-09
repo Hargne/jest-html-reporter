@@ -1,0 +1,61 @@
+{
+    "description": "JSON Schema for jesthtmlreporter.config.json",
+    "definitions": {
+        "localFilePath": {
+            "type": "string"
+        },
+        "localFilePathDefaultNull": {
+            "allOf": [ { "$ref": "#/definitions/localFilePath" }, {  "default": null } ]
+        },
+        "suiteStatuses": {
+            "enum": [ "passed", "pending", "failed" ]
+        },
+        "sort": {
+            "enum": [ "default", "executionAsc", "executionDesc", "titleAsc", "titleDesc", "status" ]
+        },
+        "theme": {
+            "enum": [ "defaultTheme", "lightTheme", "darkTheme" ]
+        }
+    },
+    "type": "object",
+    "properties": {
+        "pageTitle": {
+            "type": "string",
+            "default": "Test Suite"
+        },
+        "outputPath": {
+            "allOf": [ { "$ref": "#/definitions/localFilePath" }, {  "default": "./test-report.html" } ]
+        },
+        "includeFailureMsg": {
+            "type": "boolean",
+            "default": false
+        },
+        "includeConsoleLog": {
+            "type": "boolean",
+            "default": false
+        },
+        "styleOverridePath": { "$ref": "#/definitions/localFilePathDefaultNull" },
+        "useCssFile": {
+            "type": "boolean",
+            "default": false
+        },
+        "customScriptPath": { "$ref": "#/definitions/localFilePathDefaultNull" },
+        "theme": {
+            "allOf": [ { "$ref": "#/definitions/theme" }, {  "default": "defaultTheme" } ]
+        },
+        "logo": { "$ref": "#/definitions/localFilePathDefaultNull" },
+        "executionTimeWarningThreshold": {
+            "type": "integer",
+            "default": 5
+        },
+        "dateFormat": {
+            "type": "string",
+            "default": "yyyy-mm-dd HH:MM:ss"
+        },
+        "sort": {
+            "allOf": [ { "$ref": "#/definitions/sort" }, {  "default": "default" } ]
+        },
+        "statusIgnoreFilter": { "$ref": "#/definitions/suiteStatuses" },
+        "boilerplate": { "$ref": "#/definitions/localFilePathDefaultNull" }
+    }
+}

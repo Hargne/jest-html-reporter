@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`config setup should log error if config is invalid 1`] = `
+Array [
+  Array [
+    Object {
+      "ignoreConsole": true,
+      "msg": "Wrong config in paths: theme",
+      "type": "error",
+    },
+  ],
+]
+`;
