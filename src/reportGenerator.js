@@ -18,13 +18,21 @@ class ReportGenerator {
 	generate({ data, ignoreConsole }) {
 		const fileDestination = this.config.getOutputFilepath();
 		const useCssFile = this.config.shouldUseCssFile();
+		const shouldGetStylesheetContent = this.config.shouldGetStylesheetContent();
 		let stylesheetPath = null;
+		let stylesheetContent = null;
 
 		if (useCssFile) {
 			stylesheetPath = this.config.getStylesheetFilepath();
 		}
 
-		return this.getStylesheetContent()
+		if (shouldGetStylesheetContent) {
+			stylesheetContent = () => this.getStylesheetContent();
+		} else {
+			stylesheetContent = () => Promise.resolve();
+		}
+
+		return stylesheetContent()
 			.then(stylesheet => this.renderHtmlReport({
 				data,
 				stylesheet,
