@@ -126,6 +126,14 @@ const getSort = () =>
 const getStatusIgnoreFilter = () =>
 	process.env.JEST_HTML_REPORTER_STATUS_FILTER || config.statusIgnoreFilter || null;
 
+/**
+ * Returns whether the report should contain test invocations number or not
+ * (apply for runs with retryTimes / jest-circus for example)
+ * @return {Boolean}
+ */
+const displayInvocations = () =>
+	process.env.DISPLAY_TEST_INVOCATIONS || config.dispayTestInvocations || false;
+
 module.exports = {
 	config,
 	setup,
@@ -144,4 +152,5 @@ module.exports = {
 	getDateFormat,
 	getSort,
 	getStatusIgnoreFilter,
+	displayInvocations,
 };

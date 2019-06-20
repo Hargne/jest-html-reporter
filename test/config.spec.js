@@ -21,6 +21,7 @@ describe('config', () => {
 			sort: null,
 			executionMode: null,
 			statusIgnoreFilter: null,
+			dispayTestInvocations: null,
 		});
 		delete process.env.JEST_HTML_REPORTER_OUTPUT_PATH;
 		delete process.env.JEST_HTML_REPORTER_THEME;
@@ -35,6 +36,7 @@ describe('config', () => {
 		delete process.env.JEST_HTML_REPORTER_SORT;
 		delete process.env.JEST_HTML_REPORTER_EXECUTION_MODE;
 		delete process.env.JEST_HTML_REPORTER_STATUS_FILTER;
+		delete process.env.DISPLAY_TEST_INVOCATIONS;
 	});
 
 	describe('setup', () => {
@@ -212,6 +214,20 @@ describe('config', () => {
 		});
 		it('should return the default value if no setting was provided', () => {
 			expect(config.getStatusIgnoreFilter()).toBeNull();
+		});
+	});
+
+	describe('displayInvocations', () => {
+		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
+			config.setConfigData({ dispayTestInvocations: true });
+			expect(config.displayInvocations()).toEqual(true);
+		});
+		it('should return the environment variable', () => {
+			process.env.DISPLAY_TEST_INVOCATIONS = true;
+			expect(config.displayInvocations()).toEqual('true');
+		});
+		it('should return the default value if no setting was provided', () => {
+			expect(config.displayInvocations()).toEqual(false);
 		});
 	});
 });

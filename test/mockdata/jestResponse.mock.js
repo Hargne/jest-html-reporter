@@ -108,6 +108,7 @@ module.exports = {
 						ancestorTitles: ['ancestor b'],
 						failureMessages: [],
 						numPassingAsserts: 0,
+						invocations: 2,
 					},
 					{
 						title: 'title c',
@@ -148,6 +149,7 @@ module.exports = {
 						ancestorTitles: ['ancestor c'],
 						failureMessages: ['failure'],
 						numPassingAsserts: 0,
+						invocations: 1,
 					},
 					{
 						title: 'title b',

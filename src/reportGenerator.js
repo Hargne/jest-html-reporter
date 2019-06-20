@@ -201,6 +201,9 @@ class ReportGenerator {
 				}
 				// Append data to <tr>
 				testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? `${test.status} in ${test.duration / 1000}s` : test.status);
+				if (this.config.displayInvocations()) {
+					testTr.ele('td', { class: 'suite' }, `Invocations ${test.invocations}`);
+				}
 			});
 
 			// Test Suite console.logs

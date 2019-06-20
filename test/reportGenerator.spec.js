@@ -14,6 +14,7 @@ const mockedConfig = {
 	getCustomScriptFilepath: () => 'test.js',
 	shouldUseCssFile: () => false,
 	getStatusIgnoreFilter: () => null,
+	displayInvocations: () => false,
 };
 
 describe('reportGenerator', () => {
@@ -41,6 +42,23 @@ describe('reportGenerator', () => {
 
 			const result = reportGenerator.getReportBody({ data: mockdata.jestResponse.multipleTestResults, pageTitle: '' });
 			return expect(result.toString().indexOf('<tr class="passed">') !== -1).toEqual(false);
+		});
+
+		it('shouldn\'t output invocations when not required', () => {
+			const reportGenerator = new ReportGenerator(mockedConfig);
+
+			const result = reportGenerator.getReportBody({ data: mockdata.jestResponse.multipleTestResults, pageTitle: '' });
+			return expect(result.toString().indexOf('Invocations') !== -1).toEqual(false);
+		});
+
+		it('should output invocations when required', () => {
+			mockedConfig.displayInvocations = () => true;
+			const reportGenerator = new ReportGenerator(mockedConfig);
+
+			const result = reportGenerator.getReportBody({ data: mockdata.jestResponse.multipleTestResults, pageTitle: '' });
+			expect(result.toString().indexOf('Invocations 2') !== -1).toEqual(true);
+			expect(result.toString().indexOf('Invocations 1') !== -1).toEqual(true);
+			expect(result.toString().indexOf('Invocations undefined') !== -1).toEqual(true);
 		});
 	});
 });
