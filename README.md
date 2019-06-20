@@ -70,6 +70,7 @@ Please note that all configuration properties are optional.
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
 | `useCssFile` | `BOOLEAN` | If set to true, the CSS styles will link in the current theme's .css file instead of inlining its content on the page | `false`
 | `customScriptPath` | `STRING` | Path to a javascript file that should be injected into the test report | `null`
+| `displayTestInvocations` | `BOOLEAN` | Display test invocations (useful when used with jest-circus and retryTimes to display the amount of retries per test) | `false`
 | `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
 | `logo` | `STRING` | Path to a logo that will be included in the header of the report | `null`
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
