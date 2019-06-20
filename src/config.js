@@ -132,7 +132,7 @@ const getStatusIgnoreFilter = () =>
  * @return {Boolean}
  */
 const displayInvocations = () =>
-	process.env.DISPLAY_TEST_INVOCATIONS || config.dispayTestInvocations || false;
+	process.env.DISPLAY_TEST_INVOCATIONS || config.displayTestInvocations || false;
 
 module.exports = {
 	config,

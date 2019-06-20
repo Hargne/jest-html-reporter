@@ -21,7 +21,7 @@ describe('config', () => {
 			sort: null,
 			executionMode: null,
 			statusIgnoreFilter: null,
-			dispayTestInvocations: null,
+			displayTestInvocations: null,
 		});
 		delete process.env.JEST_HTML_REPORTER_OUTPUT_PATH;
 		delete process.env.JEST_HTML_REPORTER_THEME;
@@ -219,7 +219,7 @@ describe('config', () => {
 
 	describe('displayInvocations', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ dispayTestInvocations: true });
+			config.setConfigData({ displayTestInvocations: true });
 			expect(config.displayInvocations()).toEqual(true);
 		});
 		it('should return the environment variable', () => {
