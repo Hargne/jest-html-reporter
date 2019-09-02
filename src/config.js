@@ -77,6 +77,13 @@ const getLogo = () =>
 	process.env.JEST_HTML_REPORTER_LOGO || config.logo || null;
 
 /**
+ * Returns whether there is a user defined stylesheet override path
+ */
+const getHasStyleOverridePath = () =>
+	Boolean(process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH) ||
+	Boolean(config.styleOverridePath);
+
+/**
  * Returns whether the report should contain failure messages or not
  * @return {Boolean}
  */
@@ -96,6 +103,11 @@ const shouldIncludeConsoleLog = () =>
  */
 const shouldUseCssFile = () =>
 	process.env.JEST_HTML_REPORTER_USE_CSS_FILE || config.useCssFile || false;
+
+/**
+ * Returns whether the report should load the stylesheet content
+ */
+const shouldGetStylesheetContent = () => !(getHasStyleOverridePath() && shouldUseCssFile());
 
 /**
  * Returns the configured threshold (in seconds) when to apply a warning
@@ -132,12 +144,14 @@ module.exports = {
 	setConfigData,
 	getOutputFilepath,
 	getStylesheetFilepath,
+	getHasStyleOverridePath,
 	getCustomScriptFilepath,
 	getPageTitle,
 	getLogo,
 	shouldIncludeFailureMessages,
 	shouldIncludeConsoleLog,
 	shouldUseCssFile,
+	shouldGetStylesheetContent,
 	getExecutionTimeWarningThreshold,
 	getBoilerplatePath,
 	getTheme,

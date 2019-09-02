@@ -89,6 +89,44 @@ describe('config', () => {
 		});
 	});
 
+	describe('getHasStyleOverridePath', () => {
+		it('should return true if the value from package.json or jesthtmlreporter.config.json is set', () => {
+			config.setConfigData({ styleOverridePath: 'setInJson.css' });
+			expect(config.getHasStyleOverridePath()).toEqual(true);
+		});
+		it('should return true if the environment variable is set', () => {
+			process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH = 'setInEnv.css';
+			expect(config.getHasStyleOverridePath()).toEqual(true);
+		});
+		it('should return false if no setting was provided', () => {
+			expect(config.getHasStyleOverridePath()).toEqual(false);
+		});
+	});
+
+	describe('shouldGetStylesheetContent', () => {
+		it('should return false if styleOverridePath and useCssFile from package.json or jesthtmlreporter.config.json is set', () => {
+			config.setConfigData({
+				styleOverridePath: 'setInJson.css',
+				useCssFile: true,
+			});
+			expect(config.shouldGetStylesheetContent()).toEqual(false);
+		});
+		it('should return false if styleOverridePath and useCssFile environment variables are set', () => {
+			process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH = 'setInEnv.css';
+			process.env.JEST_HTML_REPORTER_USE_CSS_FILE = true;
+			expect(config.shouldGetStylesheetContent()).toEqual(false);
+		});
+		it('should return true if only one variable is set', () => {
+			config.setConfigData({
+				useCssFile: true,
+			});
+			expect(config.shouldGetStylesheetContent()).toEqual(true);
+		});
+		it('should return true if no setting was provided', () => {
+			expect(config.shouldGetStylesheetContent()).toEqual(true);
+		});
+	});
+
 	describe('getPageTitle', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
 			config.setConfigData({ pageTitle: 'setInJson' });
