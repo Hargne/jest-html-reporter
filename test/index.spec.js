@@ -21,21 +21,6 @@ describe('index', () => {
 		}
 	});
 
-	it('should return the jest test data if used with Jest reporters configuration', async () => {
-		// Mocked config
-		mockedConfigFunctions.getExecutionMode = () => 'reporter';
-		jest.mock(pathToConfig, () => (mockedConfigFunctions));
-		// The plugin needs to be required after we have mocked the config
-		const JestHTMLReporter = require('../src');
-
-		// When run as a Jest reporter, the plugin will be instantiated as a class
-		const ReporterInitiatedByJest = new JestHTMLReporter({});
-		// Mock the end of a test run
-		await ReporterInitiatedByJest.onRunComplete(null, mockdata.jestResponse.singleTestResult);
-		expect(fs.existsSync(mockedConfigFunctions.getOutputFilepath()))
-			.toEqual(true);
-	});
-
 	it('should return the jest test data if used with Jest testResultsProcessor configuration', () => {
 		// Mocked config
 		mockedConfigFunctions.getExecutionMode = () => 'testResultsProcessor';

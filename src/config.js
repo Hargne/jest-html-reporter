@@ -31,8 +31,10 @@ const setup = () => {
  * Returns the output path for the test report
  * @return {String}
  */
-const getOutputFilepath = () =>
-	process.env.JEST_HTML_REPORTER_OUTPUT_PATH || config.outputPath || path.join(process.cwd(), 'test-report.html');
+const getOutputFilepath = () => {
+	const filepath = process.env.JEST_HTML_REPORTER_OUTPUT_PATH || config.outputPath || path.join(process.cwd(), 'test-report.html');
+	return filepath.replace(/<rootdir>/ig, '.');
+};
 
 /**
  * Returns the configured path to a boilerplate file to be used

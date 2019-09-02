@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/main",
   "unpkg": "dist/main.min.js",
@@ -41,7 +41,7 @@
     "dateformat": "3.0.2",
     "mkdirp": "0.5.1",
     "strip-ansi": "3.0.1",
-    "xmlbuilder": "8.2.2"
+    "xmlbuilder": "13.0.2"
   },
   "peerDependencies": {
     "jest": "19.x - 24.x"
@@ -49,10 +49,10 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-import": "^2.18.2",
     "istanbul-api": "1.2.2",
     "istanbul-reports": "1.1.4",
-    "jest": "^24.0.0",
+    "jest": "^24.9.0",
     "rollup": "^0.55.5",
     "rollup-plugin-commonjs": "^8.4.1",
     "rollup-plugin-node-resolve": "^3.4.0",

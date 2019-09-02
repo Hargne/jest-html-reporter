@@ -19,18 +19,5 @@
 			"statements": 50
 	  	}
 	},
-	"testResultsProcessor": "./src",
-	"reporters": [
-		"default",
-		[
-			"./src",
-			{
-				"pageTitle": "Test Suite Report",
-				"outputPath": "test-report.html",
-				"includeFailureMsg": true,
-				"includeConsoleLog": true,
-				"sort": "titleAsc"
-			}
-		]
-	]
+	"testResultsProcessor": "./src"
 }
