@@ -6,10 +6,8 @@
 		<a href="https://github.com/Hargne/jest-html-reporter/wiki"><strong>Documentation »</strong></a>
 		<br />
 		<br />
-		<img src="https://nodei.co/npm/jest-html-reporter.png?downloads=true&stars=true" alt="">
-		<br />
-		<br />
-		<img src="https://travis-ci.org/Hargne/jest-html-reporter.svg?branch=master">
+		<img src="https://img.shields.io/npm/dm/jest-html-reporter?style=for-the-badge" alt="">
+		<img src="https://img.shields.io/travis/com/hargne/jest-html-reporter?style=for-the-badge">
 		<br />
 		<br />
 		Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
