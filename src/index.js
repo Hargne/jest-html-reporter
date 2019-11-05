@@ -26,12 +26,25 @@ function JestHtmlReporter(globalConfig, options) {
 	 */
 	this.jestConfig = globalConfig;
 	this.jestOptions = options;
+	this.consoleLogs = [];
+
+	this.onTestResult = (data, result) => {
+		// Catch console logs per test
+		if (result.console) {
+			this.consoleLogs.push({
+				testFilePath: result.testFilePath,
+				logs: result.console,
+			});
+		}
+	};
 
 	this.onRunComplete = (contexts, testResult) => {
 		// Apply the configuration within jest.config.json to the current config
 		config.setConfigData(this.jestOptions);
 		// Apply the updated config
 		reportGenerator.config = config;
+		// Add the console logs that we've caught
+		reportGenerator.consoleLogs = this.consoleLogs;
 		// Generate Report
 		return reportGenerator.generate({ data: testResult });
 	};
