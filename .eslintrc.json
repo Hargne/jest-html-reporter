@@ -14,6 +14,9 @@
     "rules": {
         "indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
         "max-len": [2, 150],
-        "no-tabs": "off"
+        "no-tabs": "off",
+        "linebreak-style": 0,
+        "global-require": 0,
+        "eslint linebreak-style": [0, "error", "windows"]
     }
 }
