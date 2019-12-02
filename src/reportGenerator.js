@@ -20,6 +20,7 @@ class ReportGenerator {
 		const fileDestination = this.config.getOutputFilepath();
 		const useCssFile = this.config.shouldUseCssFile();
 		const shouldGetStylesheetContent = this.config.shouldGetStylesheetContent();
+		const getAppend = this.config.getAppend();
 		let stylesheetPath = null;
 		let stylesheetContent = null;
 

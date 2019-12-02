@@ -140,6 +140,13 @@ const getSort = () =>
 const getStatusIgnoreFilter = () =>
 	process.env.JEST_HTML_REPORTER_STATUS_FILTER || config.statusIgnoreFilter || null;
 
+/**
+ * Returns whether or not new reports should be Appended to existing report
+ * @return {Boolean}
+ */
+const getAppend = () =>
+	process.env.JEST_HTML_REPORTER_APPEND|| config.append || false;
+
 module.exports = {
 	config,
 	setup,
@@ -160,4 +167,5 @@ module.exports = {
 	getDateFormat,
 	getSort,
 	getStatusIgnoreFilter,
+	getAppend,
 };
