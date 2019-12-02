@@ -5,5 +5,5 @@
     "includeConsoleLog": true,
     "useCssFile" : true,
     "sort": "titleAsc",
-    "append": true
+    "append": false
 }

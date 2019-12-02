@@ -43,6 +43,20 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
 });
 
 /**
+ * Appends a file at the given destination
+ * @param  {String} filePath
+ * @param  {Any} 	content
+ */
+const appendFile = ({ filePath, content }) => new Promise((resolve, reject) => {
+	return fs.appendFile(filePath, content, (writeFileError) => {
+		if (writeFileError) {
+			return reject(new Error(`Something went wrong when appending the file: ${writeFileError}`));
+		}
+		return resolve(filePath);
+	});
+});
+
+/**
  * Reads and returns the content of a given file
  * @param  {String} filePath
  */
@@ -90,6 +104,7 @@ const sortAlphabetically = ({ a, b, reversed }) => {
 module.exports = {
 	logMessage,
 	writeFile,
+	appendFile,
 	getFileContent,
 	createHtmlBase,
 	sortAlphabetically,

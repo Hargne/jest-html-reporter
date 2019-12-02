@@ -145,7 +145,7 @@ const getStatusIgnoreFilter = () =>
  * @return {Boolean}
  */
 const getAppend = () =>
-	process.env.JEST_HTML_REPORTER_APPEND|| config.append || false;
+	process.env.JEST_HTML_REPORTER_APPEND || config.append || false;
 
 module.exports = {
 	config,

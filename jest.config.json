@@ -27,7 +27,8 @@
 			"includeFailureMsg": true,
 			"includeConsoleLog": true,
 			"useCssFile" : true,
-			"sort": "titleAsc"
+			"sort": "titleAsc",
+			"append": false
 		}]
 	]
 }
