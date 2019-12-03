@@ -1,6 +1,6 @@
 {
-  "name": "jest-html-reporter",
-  "version": "2.7.0",
+  "name": "jest-html-reporter-chunghee-version",
+  "version": "2.7.1",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/main",
   "unpkg": "dist/main.min.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hargne/jest-html-reporter.git"
+    "url": "git+https://github.com/chungheek/jest-html-reporter.git"
   },
   "keywords": [
     "jest",
@@ -28,12 +28,12 @@
     "report",
     "plugin"
   ],
-  "author": "Johan Hargne",
+  "author": "Chunghee Kim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Hargne/jest-html-reporter/issues"
+    "url": "https://github.com/chungheek/jest-html-reporter/issues"
   },
-  "homepage": "https://github.com/Hargne/jest-html-reporter#readme",
+  "homepage": "https://github.com/chungheek/jest-html-reporter#readme",
   "engines": {
     "node": ">=4.8.3"
   },
