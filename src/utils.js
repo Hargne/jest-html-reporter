@@ -48,11 +48,16 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
  * @param  {Any} 	content
  */
 const appendFile = ({ filePath, content }) => new Promise((resolve, reject) => {
-	return fs.appendFile(filePath, content, (writeFileError) => {
-		if (writeFileError) {
-			return reject(new Error(`Something went wrong when appending the file: ${writeFileError}`));
+	mkdirp(path.dirname(filePath), (mkdirpError) => {
+		if (mkdirpError) {
+			return reject(new Error(`Something went wrong when creating the folder: ${mkdirpError}`));
 		}
-		return resolve(filePath);
+		return fs.appendFile(filePath, content, (writeFileError) => {
+			if (writeFileError) {
+				return reject(new Error(`Something went wrong when appending the file: ${writeFileError}`));
+			}
+			return resolve(filePath);
+		});
 	});
 });
 
