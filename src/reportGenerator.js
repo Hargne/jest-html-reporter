@@ -20,6 +20,7 @@ class ReportGenerator {
 		const fileDestination = this.config.getOutputFilepath();
 		const useCssFile = this.config.shouldUseCssFile();
 		const shouldGetStylesheetContent = this.config.shouldGetStylesheetContent();
+		const append = this.config.getAppend();
 		let stylesheetPath = null;
 		let stylesheetContent = null;
 
@@ -39,10 +40,13 @@ class ReportGenerator {
 				stylesheet,
 				stylesheetPath,
 			}))
-			.then(xmlBuilderOutput => utils.writeFile({
+			.then(xmlBuilderOutput => (append ? utils.appendFile({
 				filePath: fileDestination,
 				content: xmlBuilderOutput,
-			}))
+			}) : utils.writeFile({
+				filePath: fileDestination,
+				content: xmlBuilderOutput,
+			})))
 			.then(() => utils.logMessage({
 				type: 'success',
 				msg: `Report generated (${fileDestination})`,

@@ -75,6 +75,7 @@ Please note that all configuration properties are optional.
 | `sort` | `STRING` | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
 | `statusIgnoreFilter` | `STRING` | A comma-separated string of the test result statuses that should be ignored when rendering the report. Available statuses are: `"passed"`, `"pending"`, `"failed"` | `null`
 | `boilerplate` | `STRING` | The path to a boilerplate file that should be used to render the body of the test results into. `{jesthtmlreporter-content}` within the boilerplate will be replaced with the test results | `null`
+| `append` | `BOOLEAN` | If set to true, new test results will be appended to the existing test report | `false`
 
 > *The plugin will search for the *styleOverridePath* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
 
