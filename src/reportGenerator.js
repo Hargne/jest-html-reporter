@@ -8,6 +8,7 @@ const sorting = require('./sorting');
 class ReportGenerator {
 	constructor(config) {
 		this.config = config;
+		this.consoleLogs = null;
 	}
 
 	/**
@@ -19,6 +20,7 @@ class ReportGenerator {
 		const fileDestination = this.config.getOutputFilepath();
 		const useCssFile = this.config.shouldUseCssFile();
 		const shouldGetStylesheetContent = this.config.shouldGetStylesheetContent();
+		const append = this.config.getAppend();
 		let stylesheetPath = null;
 		let stylesheetContent = null;
 
@@ -38,10 +40,13 @@ class ReportGenerator {
 				stylesheet,
 				stylesheetPath,
 			}))
-			.then(xmlBuilderOutput => utils.writeFile({
+			.then(xmlBuilderOutput => (append ? utils.appendFile({
 				filePath: fileDestination,
 				content: xmlBuilderOutput,
-			}))
+			}) : utils.writeFile({
+				filePath: fileDestination,
+				content: xmlBuilderOutput,
+			})))
 			.then(() => utils.logMessage({
 				type: 'success',
 				msg: `Report generated (${fileDestination})`,
@@ -84,7 +89,11 @@ class ReportGenerator {
 	 * @param  {String} stylesheetPath	Optional path to an external stylesheet
 	 * @return {xmlbuilder}
 	 */
-	renderHtmlReport({ data, stylesheet, stylesheetPath }) {
+	renderHtmlReport({
+		data,
+		stylesheet,
+		stylesheetPath,
+	}) {
 		return new Promise((resolve, reject) => {
 			// Make sure that test data was provided
 			if (!data) { return reject(new Error('Test data missing or malformed')); }
@@ -211,18 +220,32 @@ class ReportGenerator {
 				testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? `${test.status} in ${test.duration / 1000}s` : test.status);
 			});
 
-			// Test Suite console.logs
-			if (suite.console && suite.console.length > 0 && (this.config.shouldIncludeConsoleLog())) {
-				// Console Log Container
-				const consoleLogContainer = reportBody.ele('div', { class: 'suite-consolelog' });
-				// Console Log Header
-				consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
-				// Logs
-				suite.console.forEach((log) => {
-					const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
-					logElement.ele('pre', { class: 'suite-consolelog-item-origin' }, stripAnsi(log.origin));
-					logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
-				});
+			// All console.logs caught during the test run
+			if (this.consoleLogs && this.consoleLogs.length > 0 && (this.config.shouldIncludeConsoleLog())) {
+				// Filter out the logs for this test file path
+				const filteredConsoleLogs = this.consoleLogs.find(logs => logs.testFilePath === suite.testFilePath);
+				if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
+					// Console Log Container
+					const consoleLogContainer = reportBody.ele('div', { class: 'suite-consolelog' });
+					// Console Log Header
+					consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
+					// Sort the order by the path
+					const sortedConsoleLogs = filteredConsoleLogs.logs.sort((a, b) => {
+						if (a.origin < b.origin) {
+							return -1;
+						}
+						if (a.origin > b.origin) {
+							return 1;
+						}
+						return 0;
+					});
+					// Apply the logs to the body
+					sortedConsoleLogs.forEach((log) => {
+						const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
+						logElement.ele('pre', { class: 'suite-consolelog-item-origin' }, stripAnsi(log.origin));
+						logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
+					});
+				}
 			}
 		});
 
