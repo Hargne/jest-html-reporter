@@ -9,6 +9,9 @@ body {
 	padding: 3rem;
 	font-size: 0.85rem;
 }
+#jesthtml-content {
+	margin-bottom: 2rem;
+}
 header {
 	display: flex;
 	align-items: center;

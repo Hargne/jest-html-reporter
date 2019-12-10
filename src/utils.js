@@ -52,11 +52,41 @@ const appendFile = ({ filePath, content }) => new Promise((resolve, reject) => {
 		if (mkdirpError) {
 			return reject(new Error(`Something went wrong when creating the folder: ${mkdirpError}`));
 		}
-		return fs.appendFile(filePath, content, (writeFileError) => {
-			if (writeFileError) {
-				return reject(new Error(`Something went wrong when appending the file: ${writeFileError}`));
+
+		// Check if the file exists or not
+		return fs.readFile(filePath, 'utf8', (err, existingContent) => {
+			let parsedContent = content;
+			// The file exists - we need to strip all unecessary html
+			if (!err) {
+				const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
+				if (contentSearch) {
+					const [strippedContent] = contentSearch;
+					parsedContent = strippedContent;
+				}
+				// Then we need to add the stripped content just before the </body> tag
+				if (existingContent) {
+					let newContent = existingContent;
+					const closingBodyTag = /<\/body>/gm.exec(existingContent);
+					const indexOfClosingBodyTag = closingBodyTag ? closingBodyTag.index : 0;
+
+					newContent = [existingContent.slice(0, indexOfClosingBodyTag), parsedContent, existingContent.slice(indexOfClosingBodyTag)]
+						.join('');
+
+					return fs.writeFile(filePath, newContent, (writeFileError) => {
+						if (writeFileError) {
+							return reject(new Error(`Something went wrong when creating the file: ${writeFileError}`));
+						}
+						return resolve(filePath);
+					});
+				}
 			}
-			return resolve(filePath);
+
+			return fs.appendFile(filePath, parsedContent, (writeFileError) => {
+				if (writeFileError) {
+					return reject(new Error(`Something went wrong when appending the file: ${writeFileError}`));
+				}
+				return resolve(filePath);
+			});
 		});
 	});
 });
