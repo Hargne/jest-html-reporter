@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "dateformat": "3.0.2",
-    "mkdirp": "0.5.1",
+    "mkdirp": "0.5.3",
     "strip-ansi": "3.0.1",
     "xmlbuilder": "13.0.2"
   },
