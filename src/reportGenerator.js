@@ -229,18 +229,8 @@ class ReportGenerator {
 					const consoleLogContainer = reportBody.ele('div', { class: 'suite-consolelog' });
 					// Console Log Header
 					consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
-					// Sort the order by the path
-					const sortedConsoleLogs = filteredConsoleLogs.logs.sort((a, b) => {
-						if (a.origin < b.origin) {
-							return -1;
-						}
-						if (a.origin > b.origin) {
-							return 1;
-						}
-						return 0;
-					});
 					// Apply the logs to the body
-					sortedConsoleLogs.forEach((log) => {
+					filteredConsoleLogs.logs.forEach((log) => {
 						const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
 						logElement.ele('pre', { class: 'suite-consolelog-item-origin' }, stripAnsi(log.origin));
 						logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
