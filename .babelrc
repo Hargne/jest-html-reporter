@@ -1,0 +1,13 @@
+{
+  "presets": [
+    ["@babel/typescript", { "allowNamespaces": true }],
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ]
+}

@@ -1,33 +1,36 @@
 {
-	"roots": ["<rootDir>"],
-	"collectCoverage": true,
-	"collectCoverageFrom" : [
-		"src/**/*.{js,jsx}",
-		"!src/style.js",
-		"!**/test/*.{js,jsx}",
-		"!**/node_modules/**",
-		"!**/coverage/**",
-		"!**/vendor/**"
-	],
-	"coverageDirectory": "./coverage",
-    "coverageReporters": ["json", "html", "text", "text-summary"],
-	"coverageThreshold": {
-		"global": {
-			"branches": 50,
-			"functions": 50,
-			"lines": 50,
-			"statements": 50
-	  	}
-	},
-	"reporters": [
-		"default",
-		["./src", {
-			"pageTitle": "Test Suite Reporter",
-			"outputPath": "testResultsProcessorResult.html",
-			"includeFailureMsg": true,
-			"includeConsoleLog": true,
-			"useCssFile" : true,
-			"sort": "titleAsc"
-		}]
-	]
+  "roots": ["<rootDir>"],
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "./src/**/*.{ts,tsx}",
+    "!src/style.ts",
+    "!**/test/*.{js,jsx}",
+    "!**/node_modules/**",
+    "!**/coverage/**",
+    "!**/vendor/**"
+  ],
+  "coverageDirectory": "./coverage",
+  "coverageReporters": ["json", "html", "text", "text-summary"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 50,
+      "functions": 50,
+      "lines": 50,
+      "statements": 50
+    }
+  },
+  "reporters": [
+    "default",
+    [
+      "./dist",
+      {
+        "pageTitle": "Test Suite Reporter",
+        "outputPath": "testResultsProcessorResult.html",
+        "includeFailureMsg": true,
+        "includeConsoleLog": true,
+        "useCssFile": true,
+        "sort": "titleAsc"
+      }
+    ]
+  ]
 }
