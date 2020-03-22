@@ -2,7 +2,7 @@ import { AggregatedResult, TestResult } from "@jest/test-result";
 import { Circus, Config } from "@jest/types";
 
 import htmlreporter from "./htmlreporter";
-import { IJestHTMLReporterConsole, IJestHTMLReporterOptions } from "./index.d";
+import { IJestHTMLReporterConsole, IJestHTMLReporterOptions } from "./types";
 
 function JestHtmlReporter(
   globalConfig: Config.GlobalConfig,
@@ -34,10 +34,8 @@ function JestHtmlReporter(
    * This should eventually be turned into a proper class (whenever the testResultsProcessor option is phased out)
    * https://facebook.github.io/jest/docs/en/configuration.html#reporters-array-modulename-modulename-options
    */
-  this.jestConfig = globalConfig;
-  this.jestOptions = options;
 
-  this.onTestResult = (data: any, result: TestResult) => {
+  const onTestResult = (data: any, result: TestResult) => {
     // Catch console logs per test
     if (result.console) {
       consoleLogs.push({
@@ -47,13 +45,12 @@ function JestHtmlReporter(
     }
   };
 
-  this.onRunComplete = (contexts: any, testResult: AggregatedResult) => {
+  const onRunComplete = (contexts: any, testResult: AggregatedResult) => {
     const reporter = new htmlreporter(
       testResult,
       options as IJestHTMLReporterOptions
     );
-    reporter.generate();
-    // generateReport(testResult, consoleLogs);
+    return reporter.generate();
   };
 }
 

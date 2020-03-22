@@ -1,0 +1,320 @@
+import { AggregatedResult } from "@jest/test-result";
+import { Config } from "@jest/types";
+
+const mockedJestResponseBase: AggregatedResult = {
+  numFailedTestSuites: 1,
+  numFailedTests: 1,
+  numPassedTestSuites: 0,
+  numPassedTests: 0,
+  numPendingTestSuites: 0,
+  numPendingTests: 0,
+  numRuntimeErrorTestSuites: 0,
+  numTodoTests: 0,
+  numTotalTestSuites: 1,
+  numTotalTests: 1,
+  openHandles: [],
+  snapshot: {
+    added: 0,
+    didUpdate: false,
+    failure: false,
+    filesAdded: 0,
+    filesRemoved: 0,
+    filesRemovedList: [],
+    filesUnmatched: 0,
+    filesUpdated: 0,
+    matched: 0,
+    total: 0,
+    unchecked: 0,
+    uncheckedKeysByFile: [],
+    unmatched: 0,
+    updated: 0
+  },
+  startTime: 1584892601719,
+  success: false,
+  testResults: [],
+  wasInterrupted: false,
+  coverageMap: null
+};
+
+export const mockedJestResponseSingleTestResult: AggregatedResult = {
+  ...mockedJestResponseBase,
+  testResults: [
+    {
+      console: undefined,
+      failureMessage: null,
+      numFailingTests: 1,
+      numPassingTests: 0,
+      numPendingTests: 0,
+      numTodoTests: 0,
+      perfStats: {
+        start: 1498476492,
+        end: 1498476650
+      },
+      snapshot: undefined,
+      testFilePath: "/mocked/path/to/test.ts",
+      skipped: false,
+      displayName: undefined,
+      leaks: false,
+      sourceMaps: undefined,
+      coverage: undefined,
+      openHandles: [],
+      testResults: [
+        {
+          title: "title",
+          status: "passed",
+          ancestorTitles: ["ancestor"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 1
+        },
+        {
+          title: "title",
+          status: "failed",
+          ancestorTitles: ["ancestor"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 2
+        },
+        {
+          title: "title",
+          status: "pending",
+          ancestorTitles: ["ancestor"],
+          failureMessages: ["failure"],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        }
+      ]
+    }
+  ]
+};
+
+export const mockedJestResponseMultipleTestResult: AggregatedResult = {
+  ...mockedJestResponseBase,
+  testResults: [
+    {
+      console: undefined,
+      failureMessage: null,
+      numFailingTests: 1,
+      numPassingTests: 0,
+      numPendingTests: 0,
+      numTodoTests: 0,
+      perfStats: {
+        start: 1498476492,
+        end: 1498476650
+      },
+      snapshot: undefined,
+      testFilePath: "index-a.js",
+      skipped: false,
+      displayName: undefined,
+      leaks: false,
+      sourceMaps: undefined,
+      coverage: undefined,
+      openHandles: [],
+      testResults: [
+        {
+          title: "title b",
+          status: "passed",
+          ancestorTitles: ["ancestor b"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        },
+        {
+          title: "title c",
+          status: "passed",
+          ancestorTitles: ["ancestor c"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        },
+        {
+          title: "title a",
+          status: "passed",
+          ancestorTitles: ["ancestor a"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        }
+      ]
+    },
+    {
+      console: undefined,
+      failureMessage: null,
+      numFailingTests: 1,
+      numPassingTests: 0,
+      numPendingTests: 0,
+      numTodoTests: 0,
+      perfStats: {
+        start: 1498476492,
+        end: 1498476650
+      },
+      snapshot: undefined,
+      testFilePath: "index-b.js",
+      skipped: false,
+      displayName: undefined,
+      leaks: false,
+      sourceMaps: undefined,
+      coverage: undefined,
+      openHandles: [],
+      testResults: [
+        {
+          title: "title b",
+          status: "pending",
+          ancestorTitles: ["ancestor b"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        },
+        {
+          title: "title c",
+          status: "failed",
+          ancestorTitles: ["ancestor c", "ancestor child"],
+          failureMessages: ["failure"],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        },
+        {
+          title: "title a",
+          status: "passed",
+          ancestorTitles: ["ancestor a"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        }
+      ]
+    },
+    {
+      console: undefined,
+      failureMessage: null,
+      numFailingTests: 1,
+      numPassingTests: 0,
+      numPendingTests: 0,
+      numTodoTests: 0,
+      perfStats: {
+        start: 1498476492,
+        end: 1498476650
+      },
+      snapshot: undefined,
+      testFilePath: "index-c.js",
+      skipped: false,
+      displayName: undefined,
+      leaks: false,
+      sourceMaps: undefined,
+      coverage: undefined,
+      openHandles: [],
+      testResults: [
+        {
+          title: "title a",
+          status: "pending",
+          ancestorTitles: ["ancestor a"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        },
+        {
+          title: "title c",
+          status: "failed",
+          ancestorTitles: ["ancestor c"],
+          failureMessages: ["failure"],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        },
+        {
+          title: "title b",
+          status: "passed",
+          ancestorTitles: ["ancestor b"],
+          failureMessages: [],
+          numPassingAsserts: 0,
+          fullName: undefined,
+          location: null,
+          duration: 3
+        }
+      ]
+    }
+  ]
+};
+
+export const mockedFullReportOutput = `<html><head><meta charset="utf-8"/><title>Test Report</title></head><body>A Test!</body></html>`;
+export const mockedSingleTestResultReportHTML = `<div id=\"jesthtml-content\"><header><h1 id=\"title\">Test Report</h1></header><div id=\"metadata-container\"><div id=\"timestamp\">Start: 2020-03-22 00:00:00</div><div id=\"summary\">1 tests -- 0 passed / 1 failed / 0 pending</div></div><div class=\"suite-info\"><div class=\"suite-path\">/mocked/path/to/test.ts</div><div class=\"suite-time\">0.158s</div></div><table class=\"suite-table\" cellspacing=\"0\" cellpadding=\"0\"><tr class=\"passed\"><td class=\"suite\">ancestor</td><td class=\"test\">title</td><td class=\"result\">passed in 0.001s</td></tr><tr class=\"failed\"><td class=\"suite\">ancestor</td><td class=\"test\">title</td><td class=\"result\">failed</td></tr><tr class=\"pending\"><td class=\"suite\">ancestor</td><td class=\"test\">title</td><td class=\"result\">pending</td></tr></table></div>`;
+
+export const mockedJestGlobalConfig: Config.GlobalConfig = {
+  bail: 0,
+  changedFilesWithAncestor: false,
+  changedSince: undefined,
+  coverageProvider: "v8",
+  collectCoverage: true,
+  collectCoverageFrom: [],
+  collectCoverageOnlyFrom: undefined,
+  coverageDirectory: "/path",
+  coverageReporters: ["json", "html", "text", "text-summary"],
+  coverageThreshold: {
+    global: { branches: 50, functions: 50, lines: 50, statements: 50 }
+  },
+  detectLeaks: false,
+  detectOpenHandles: false,
+  enabledTestsMap: undefined,
+  errorOnDeprecated: false,
+  expand: false,
+  filter: null,
+  findRelatedTests: undefined,
+  forceExit: undefined,
+  globalSetup: null,
+  globalTeardown: null,
+  json: false,
+  lastCommit: undefined,
+  listTests: false,
+  logHeapUsage: undefined,
+  maxConcurrency: 5,
+  maxWorkers: 7,
+  noSCM: undefined,
+  noStackTrace: false,
+  nonFlagArgs: [],
+  notify: false,
+  notifyMode: "failure-change",
+  onlyChanged: undefined,
+  onlyFailures: undefined,
+  outputFile: undefined,
+  passWithNoTests: false,
+  projects: null,
+  replname: undefined,
+  reporters: [["default", {}]],
+  rootDir: "/path",
+  runTestsByPath: false,
+  silent: undefined,
+  skipFilter: false,
+  testFailureExitCode: 1,
+  testNamePattern: undefined,
+  testPathPattern: "",
+  testResultsProcessor: null,
+  testSequencer: "/path",
+  testTimeout: undefined,
+  updateSnapshot: "new",
+  useStderr: false,
+  verbose: null,
+  watch: false,
+  watchAll: undefined,
+  watchPlugins: undefined,
+  watchman: true
+};

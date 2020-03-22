@@ -1,5 +1,5 @@
 import { AggregatedResult, AssertionResult } from "@jest/test-result";
-import { JestHTMLReporterSortType } from "src/index.d";
+import { JestHTMLReporterSortType } from "src/types";
 
 export const sortTestResults = (
   testResults: AggregatedResult["testResults"],
