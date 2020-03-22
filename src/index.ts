@@ -1,8 +1,8 @@
 import { AggregatedResult, TestResult } from "@jest/test-result";
 import { Circus, Config } from "@jest/types";
 
-import { IJestHTMLReporterConsole } from "./index.d";
-import { generateReport } from "./reporter";
+import htmlreporter from "./htmlreporter";
+import { IJestHTMLReporterConsole, IJestHTMLReporterOptions } from "./index.d";
 
 function JestHtmlReporter(
   globalConfig: Config.GlobalConfig,
@@ -19,8 +19,12 @@ function JestHtmlReporter(
    */
   if (Object.prototype.hasOwnProperty.call(globalConfig, "testResults")) {
     // Generate Report
-    // @ts-ignore
-    generateReport(globalConfig.testResults, consoleLogs);
+    const reporter = new htmlreporter(
+      // @ts-ignore
+      globalConfig.testResults,
+      options as IJestHTMLReporterOptions
+    );
+    reporter.generate();
     // Return the results as required by Jest
     return globalConfig;
   }
@@ -43,12 +47,14 @@ function JestHtmlReporter(
     }
   };
 
-  this.onRunComplete = (
-    contexts: Circus.TestContext,
-    testResult: AggregatedResult
-  ) => {
-    generateReport(testResult, consoleLogs);
+  this.onRunComplete = (contexts: any, testResult: AggregatedResult) => {
+    const reporter = new htmlreporter(
+      testResult,
+      options as IJestHTMLReporterOptions
+    );
+    reporter.generate();
+    // generateReport(testResult, consoleLogs);
   };
 }
 
-module.exports = JestHtmlReporter;
+export default JestHtmlReporter;

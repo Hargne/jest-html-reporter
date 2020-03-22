@@ -2,6 +2,7 @@ import { ConsoleBuffer } from "@jest/console";
 
 export interface IJestHTMLReporterConfigOption<T> {
   environmentVariable: string;
+  configValue?: T;
   defaultValue: T;
 }
 
@@ -11,6 +12,24 @@ export type JestHTMLReporterSortType =
   | "executionasc"
   | "titledesc"
   | "titleasc";
+
+export interface IJestHTMLReporterOptions {
+  append?: boolean;
+  boilerplate?: string;
+  customScriptPath?: string;
+  dateFormat?: string;
+  executionTimeWarningThreshold?: number;
+  includeConsoleLog?: boolean;
+  includeFailureMsg?: boolean;
+  logo?: string;
+  outputPath?: string;
+  pageTitle?: string;
+  sort?: JestHTMLReporterSortType;
+  statusIgnoreFilter?: string;
+  styleOverridePath?: string;
+  theme?: string;
+  useCssFile?: boolean;
+}
 
 export interface IJestHTMLReporterConfig {
   append: IJestHTMLReporterConfigOption<boolean>;
