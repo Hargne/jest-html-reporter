@@ -32,6 +32,10 @@ describe('reportGenerator', () => {
 			return expect(reportGenerator.renderHtmlReport({ data: null, stylesheet: null })).rejects
 				.toHaveProperty('message', 'Test data missing or malformed');
 		});
+
+		it('should be able to print out console.logs written in tests', () => {
+			console.log('Here is a console.log'); // eslint-disable-line
+		});
 	});
 
 	describe('getReportBody', () => {
