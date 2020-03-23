@@ -50,7 +50,7 @@ class HTMLReporter {
 
   public async renderTestReport() {
     // Generate the content of the test report
-    const reportBody = await this.renderTestReportBody();
+    const reportContent = await this.renderTestReportContent();
 
     // --
 
@@ -62,7 +62,7 @@ class HTMLReporter {
       );
       return boilerplateContent.replace(
         "{jesthtmlreporter-content}",
-        reportBody.toString()
+        reportContent.toString()
       );
     }
 
@@ -110,11 +110,19 @@ class HTMLReporter {
       };
     }
     const report = xmlbuilder.create(HTMLBase);
-    report.ele("body").raw(reportBody.toString());
+    const reportBody = report.ele("body");
+    // Add the test report to the body
+    reportBody.raw(reportContent.toString());
+    // Add any given custom script to the end of the body
+    if (!!this.getConfigValue("customScriptPath")) {
+      reportBody.raw(
+        `<script src="${this.getConfigValue("customScriptPath")}"></script>`
+      );
+    }
     return report;
   }
 
-  public async renderTestReportBody() {
+  public async renderTestReportContent() {
     try {
       if (!this.testData || Object.entries(this.testData).length === 0) {
         throw Error("No test data provided");
@@ -207,7 +215,14 @@ class HTMLReporter {
           (suite.perfStats.end - suite.perfStats.start) / 1000;
         suiteInfo.ele(
           "div",
-          { class: `suite-time${executionTime > 5 ? " warn" : ""}` },
+          {
+            class: `suite-time${
+              executionTime >
+              (this.getConfigValue("executionTimeWarningThreshold") as number)
+                ? " warn"
+                : ""
+            }`
+          },
           `${executionTime}s`
         );
 

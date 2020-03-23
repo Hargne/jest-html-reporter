@@ -2,8 +2,8 @@
   "name": "jest-html-reporter",
   "version": "3.0.0",
   "description": "Jest test results processor for generating a summary in HTML",
-  "main": "dist/main",
-  "unpkg": "dist/main.min.js",
+  "main": "dist/index.js",
+  "unpkg": "dist/index.js",
   "files": [
     "dist",
     "style"
@@ -60,6 +60,7 @@
     "rollup": "^2.1.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.3.0",
     "sinon": "^9.0.1",
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.18.0",

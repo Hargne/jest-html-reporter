@@ -18,23 +18,24 @@ describe("HTMLReporter", () => {
       const report = await reporter.generate();
 
       expect(report.toString().substring(0, 6)).toEqual("<html>");
-
       mockedFS.mockRestore();
     });
   });
 
-  describe("renderTestReportBody", () => {
-    it("should return a HTML report body", async () => {
+  describe("renderTestReportContent", () => {
+    it("should return the content of the report in HTML", async () => {
       const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {});
-      const reportBody = await reporter.renderTestReportBody();
-      expect(reportBody.toString()).toEqual(mockedSingleTestResultReportHTML);
+      const reportContent = await reporter.renderTestReportContent();
+      expect(reportContent.toString()).toEqual(
+        mockedSingleTestResultReportHTML
+      );
     });
 
     it("should cast an error if no test data was provided", async () => {
       expect.assertions(1);
       // @ts-ignore
       const reporter = new HTMLReporter({}, {});
-      expect(await reporter.renderTestReportBody()).toBeUndefined();
+      expect(await reporter.renderTestReportContent()).toBeUndefined();
     });
   });
 
@@ -42,10 +43,12 @@ describe("HTMLReporter", () => {
     it("should return configured environment variable", async () => {
       process.env.JEST_HTML_REPORTER_LOGO = "logoFromEnv.png";
       const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {});
-      const reportBody = (await reporter.renderTestReportBody()).toString();
+      const reportContent = (
+        await reporter.renderTestReportContent()
+      ).toString();
 
       expect(
-        reportBody.indexOf('<img id="logo" src="logoFromEnv.png"/>')
+        reportContent.indexOf('<img id="logo" src="logoFromEnv.png"/>')
       ).toBeGreaterThan(-1);
       delete process.env.JEST_HTML_REPORTER_LOGO;
     });
@@ -107,9 +110,11 @@ describe("HTMLReporter", () => {
             }
           ]
         );
-        const reportBody = (await reporter.renderTestReportBody()).toString();
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
         expect(
-          reportBody.indexOf(
+          reportContent.indexOf(
             '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
           )
         ).toBeGreaterThan(-1);
@@ -133,9 +138,11 @@ describe("HTMLReporter", () => {
             }
           ]
         );
-        const reportBody = (await reporter.renderTestReportBody()).toString();
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
         expect(
-          reportBody.indexOf(
+          reportContent.indexOf(
             '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
           )
         ).toBe(-1);
@@ -150,9 +157,11 @@ describe("HTMLReporter", () => {
             statusIgnoreFilter: "passed"
           }
         );
-        const reportBody = (await reporter.renderTestReportBody()).toString();
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
 
-        expect(reportBody.indexOf('<tr class="passed">')).toBe(-1);
+        expect(reportContent.indexOf('<tr class="passed">')).toBe(-1);
       });
     });
 
@@ -164,10 +173,12 @@ describe("HTMLReporter", () => {
             includeFailureMsg: true
           }
         );
-        const reportBody = (await reporter.renderTestReportBody()).toString();
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
 
         expect(
-          reportBody.indexOf('<div class="failureMessages">')
+          reportContent.indexOf('<div class="failureMessages">')
         ).toBeGreaterThan(-1);
       });
     });
@@ -177,10 +188,76 @@ describe("HTMLReporter", () => {
         const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
           logo: "logo.png"
         });
-        const reportBody = (await reporter.renderTestReportBody()).toString();
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
 
         expect(
-          reportBody.indexOf('<img id="logo" src="logo.png"/>')
+          reportContent.indexOf('<img id="logo" src="logo.png"/>')
+        ).toBeGreaterThan(-1);
+      });
+    });
+
+    describe("customScriptPath", () => {
+      it("should add assigned custom script path to the report", async () => {
+        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
+          customScriptPath: "path/to/script.js"
+        });
+        const report = (await reporter.renderTestReport()).toString();
+
+        expect(
+          report.indexOf('<script src="path/to/script.js"></script>')
+        ).toBeGreaterThan(-1);
+      });
+    });
+
+    describe("pageTitle", () => {
+      it("should add the given string as a title tag", async () => {
+        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
+          pageTitle: "My Report"
+        });
+        const report = (await reporter.renderTestReport()).toString();
+
+        expect(report.indexOf('<h1 id="title">My Report</h1>')).toBeGreaterThan(
+          -1
+        );
+      });
+
+      it("should add the given string as a header", async () => {
+        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
+          pageTitle: "My Report"
+        });
+        const report = (await reporter.renderTestReport()).toString();
+
+        expect(report.indexOf("<title>My Report</title>")).toBeGreaterThan(-1);
+      });
+    });
+
+    describe("executionTimeWarningThreshold", () => {
+      it("should mark tests that have surpassed the threshold", async () => {
+        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
+          executionTimeWarningThreshold: 0.00001
+        });
+        const report = (await reporter.renderTestReport()).toString();
+
+        expect(report.indexOf('<div class="suite-time warn">')).toBeGreaterThan(
+          -1
+        );
+      });
+    });
+
+    describe("dateFormat", () => {
+      it("should format the date in the given format", async () => {
+        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
+          dateFormat: "yyyy"
+        });
+        const report = (await reporter.renderTestReport()).toString();
+        const now = new Date();
+
+        expect(
+          report.indexOf(
+            `<div id="timestamp">Start: ${now.getFullYear()}</div>`
+          )
         ).toBeGreaterThan(-1);
       });
     });
