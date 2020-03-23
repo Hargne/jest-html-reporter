@@ -12,7 +12,7 @@ import {
 import stripAnsi from "strip-ansi";
 import xmlbuilder, { XMLElement } from "xmlbuilder";
 
-import { sortTestResults } from "./sortingMethods";
+import sorting from "./sorting";
 
 class HTMLReporter {
   public testData: AggregatedResult;
@@ -33,8 +33,14 @@ class HTMLReporter {
     try {
       const report = await this.renderTestReport();
       const outputPath = this.getConfigValue("outputPath") as string;
+
       await mkdirp(path.dirname(outputPath));
-      await fs.writeFileSync(outputPath, report);
+      if (this.getConfigValue("append") as boolean) {
+        await fs.appendFileSync(outputPath, report);
+      } else {
+        await fs.writeFileSync(outputPath, report);
+      }
+
       this.logMessage("success", `Report generated (${outputPath})`);
       return report;
     } catch (e) {
@@ -158,7 +164,7 @@ class HTMLReporter {
       /**
        * Apply any given sorting method to the test results
        */
-      const sortedTestResults = sortTestResults(
+      const sortedTestResults = sorting(
         this.testData.testResults,
         this.getConfigValue("sort") as JestHTMLReporterSortType
       );

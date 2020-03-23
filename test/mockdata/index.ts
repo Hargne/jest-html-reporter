@@ -98,18 +98,13 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
   ...mockedJestResponseBase,
   testResults: [
     {
+      numFailingTests: 0,
+      numPassingTests: 3,
+      numPendingTests: 0,
       console: undefined,
       failureMessage: null,
-      numFailingTests: 1,
-      numPassingTests: 0,
-      numPendingTests: 0,
       numTodoTests: 0,
-      perfStats: {
-        start: 1498476492,
-        end: 1498476650
-      },
       snapshot: undefined,
-      testFilePath: "index-a.js",
       skipped: false,
       displayName: undefined,
       leaks: false,
@@ -147,21 +142,21 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           location: null,
           duration: 3
         }
-      ]
-    },
-    {
-      console: undefined,
-      failureMessage: null,
-      numFailingTests: 1,
-      numPassingTests: 0,
-      numPendingTests: 0,
-      numTodoTests: 0,
+      ],
       perfStats: {
         start: 1498476492,
-        end: 1498476650
+        end: 1498476640
       },
+      testFilePath: "index-a.js"
+    },
+    {
+      numFailingTests: 1,
+      numPassingTests: 1,
+      numPendingTests: 1,
+      console: undefined,
+      failureMessage: null,
+      numTodoTests: 0,
       snapshot: undefined,
-      testFilePath: "index-b.js",
       skipped: false,
       displayName: undefined,
       leaks: false,
@@ -199,21 +194,21 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           location: null,
           duration: 3
         }
-      ]
-    },
-    {
-      console: undefined,
-      failureMessage: null,
-      numFailingTests: 1,
-      numPassingTests: 0,
-      numPendingTests: 0,
-      numTodoTests: 0,
+      ],
       perfStats: {
         start: 1498476492,
-        end: 1498476650
+        end: 1498476639
       },
+      testFilePath: "index-b.js"
+    },
+    {
+      numFailingTests: 1,
+      numPassingTests: 1,
+      numPendingTests: 1,
+      console: undefined,
+      failureMessage: null,
+      numTodoTests: 0,
       snapshot: undefined,
-      testFilePath: "index-c.js",
       skipped: false,
       displayName: undefined,
       leaks: false,
@@ -251,7 +246,12 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           location: null,
           duration: 3
         }
-      ]
+      ],
+      perfStats: {
+        start: 1498476492,
+        end: 1498476650
+      },
+      testFilePath: "index-c.js"
     }
   ]
 };

@@ -1,3 +1,6 @@
+import fs from "fs";
+import sinon from "sinon";
+
 import JestHTMLReporter from "../src";
 import {
   mockedFullReportOutput,
@@ -6,12 +9,16 @@ import {
 } from "./mockdata";
 
 describe("index", () => {
+  let writeFileSync;
+
   beforeEach(() => {
-    // Reset the mocked modules prior to each test case
-    jest.resetModules();
+    writeFileSync = sinon.stub(fs, "writeFileSync").returns({});
+  });
+  afterEach(() => {
+    writeFileSync.restore();
   });
 
-  it("should return the jest global config if used as a testResultsProcessor", () => {
+  it("should return the jest global config if used as a testResultsProcessor", async () => {
     const input = {
       ...mockedJestGlobalConfig,
       testResults: mockedJestResponseSingleTestResult
@@ -19,7 +26,7 @@ describe("index", () => {
 
     // Trigger the reporter as a testResultsProcessor
     // @ts-ignore
-    const testResultsProcessorOutput = JestHTMLReporter(input, {});
+    const testResultsProcessorOutput = await JestHTMLReporter(input, {});
     expect(testResultsProcessorOutput).toEqual(input);
   });
 });
