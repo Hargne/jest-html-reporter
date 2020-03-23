@@ -29,6 +29,10 @@ header {
   color: #666;
   margin-bottom: 0.5rem;
 }
+#suite-summary {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
 #summary {
   color: #999;
   margin-bottom: 1rem;

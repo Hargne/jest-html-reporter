@@ -37,15 +37,6 @@
     "node": ">=4.8.3"
   },
   "dependencies": {
-    "dateformat": "3.0.2",
-    "mkdirp": "0.5.3",
-    "strip-ansi": "6.0.0",
-    "xmlbuilder": "15.0.0"
-  },
-  "peerDependencies": {
-    "jest": "19.x - 24.x"
-  },
-  "devDependencies": {
     "@babel/preset-env": "^7.8.7",
     "@babel/preset-typescript": "^7.8.3",
     "@jest/console": "^25.1.0",
@@ -56,6 +47,15 @@
     "@types/jest": "^25.1.4",
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^12.12.7",
+    "dateformat": "3.0.2",
+    "mkdirp": "0.5.3",
+    "strip-ansi": "6.0.0",
+    "xmlbuilder": "15.0.0"
+  },
+  "peerDependencies": {
+    "jest": "19.x - 24.x"
+  },
+  "devDependencies": {
     "jest": "^24.9.0",
     "rollup": "^2.1.0",
     "rollup-plugin-babel": "^4.4.0",

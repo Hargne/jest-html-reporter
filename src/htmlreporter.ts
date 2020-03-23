@@ -154,6 +154,12 @@ class HTMLReporter {
           this.getConfigValue("dateFormat") as string
         )}`
       );
+      // Suite Summary
+      metaDataContainer.ele(
+        "div",
+        { id: "suite-summary" },
+        `${this.testData.numTotalTestSuites} suites -- ${this.testData.numPassedTestSuites} passed / ${this.testData.numFailedTestSuites} failed / ${this.testData.numPassedTestSuites} pending`
+      );
       // Test Summary
       metaDataContainer.ele(
         "div",
