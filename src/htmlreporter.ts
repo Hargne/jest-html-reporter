@@ -5,8 +5,8 @@ import mkdirp from "mkdirp";
 import path from "path";
 import {
   IJestHTMLReporterConfig,
+  IJestHTMLReporterConfigOptions,
   IJestHTMLReporterConsole,
-  IJestHTMLReporterOptions,
   JestHTMLReporterSortType
 } from "src/types";
 import stripAnsi from "strip-ansi";
@@ -21,7 +21,7 @@ class HTMLReporter {
 
   constructor(
     testData: AggregatedResult,
-    options: IJestHTMLReporterOptions,
+    options: IJestHTMLReporterConfigOptions,
     consoleLogs?: IJestHTMLReporterConsole[]
   ) {
     this.testData = testData;
@@ -322,7 +322,7 @@ class HTMLReporter {
   /**
    * Fetch and setup configuration
    */
-  private setupConfig(options: IJestHTMLReporterOptions) {
+  private setupConfig(options: IJestHTMLReporterConfigOptions) {
     this.config = {
       append: {
         defaultValue: false,
@@ -464,8 +464,7 @@ class HTMLReporter {
    */
   private logMessage(
     type: "default" | "success" | "error" = "default",
-    message: string,
-    ignoreConsole?: boolean
+    message: string
   ) {
     const logTypes = {
       default: "\x1b[37m%s\x1b[0m",
@@ -474,7 +473,8 @@ class HTMLReporter {
     };
     const logColor = !logTypes[type] ? logTypes.default : logTypes[type];
     const logMsg = `jest-html-reporter >> ${message}`;
-    if (!ignoreConsole) {
+    // Let's log messages to the terminal only if we aren't testing this very module
+    if (process.env.JEST_WORKER_ID === undefined) {
       console.log(logColor, logMsg);
     }
     return { logColor, logMsg }; // Return for testing purposes

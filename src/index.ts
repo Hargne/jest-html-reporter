@@ -2,8 +2,30 @@ import { AggregatedResult, TestResult } from "@jest/test-result";
 import { Circus, Config } from "@jest/types";
 
 import htmlreporter from "./htmlreporter";
-import { IJestHTMLReporterConsole, IJestHTMLReporterOptions } from "./types";
+import {
+  IJestHTMLReporterConfigOptions,
+  IJestHTMLReporterConsole
+} from "./types";
 
+/**
+ * Setup Jest HTML Reporter and generate a report with the given data
+ */
+const setupAndRun = (
+  testResults: AggregatedResult,
+  options: Config.DefaultOptions,
+  logs?: IJestHTMLReporterConsole[]
+) => {
+  const reporter = new htmlreporter(
+    testResults,
+    options as IJestHTMLReporterConfigOptions,
+    logs
+  );
+  return reporter.generate();
+};
+
+/**
+ * The test runner function passed to Jest
+ */
 function JestHtmlReporter(
   globalConfig: Config.GlobalConfig,
   options: Config.DefaultOptions
@@ -41,21 +63,5 @@ function JestHtmlReporter(
   this.onRunComplete = (contexts: any, testResult: AggregatedResult) =>
     setupAndRun(testResult, options, consoleLogs);
 }
-
-/**
- * Setup Jest HTML Reporter and generate a report with the given data
- */
-const setupAndRun = (
-  testResults: AggregatedResult,
-  options: Config.DefaultOptions,
-  logs?: IJestHTMLReporterConsole[]
-) => {
-  const reporter = new htmlreporter(
-    testResults,
-    options as IJestHTMLReporterOptions,
-    logs
-  );
-  return reporter.generate();
-};
 
 export default JestHtmlReporter;

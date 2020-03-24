@@ -19,6 +19,7 @@
       "statements": 50
     }
   },
+  "verbose": true,
   "reporters": [
     "default",
     [
