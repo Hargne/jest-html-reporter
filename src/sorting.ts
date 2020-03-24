@@ -112,12 +112,17 @@ const sortByTitleDesc = (testResults: AggregatedResult["testResults"]) => {
     );
     // Sort Suite testResults
     sorted.forEach(suite => {
+      // By Ancestor Titles
       suite.testResults.sort((a, b) =>
         sortAlphabetically(
           a.ancestorTitles.join(" "),
           b.ancestorTitles.join(" "),
           true
         )
+      );
+      // By Test Titles
+      suite.testResults.sort((a, b) =>
+        sortAlphabetically(a.title, b.title, true)
       );
     });
     return sorted;
@@ -136,12 +141,15 @@ const sortByTitleAsc = (testResults: AggregatedResult["testResults"]) => {
     );
     // Sort Suite testResults
     sorted.forEach(suite => {
+      // By Ancestor Titles
       suite.testResults.sort((a, b) =>
         sortAlphabetically(
           a.ancestorTitles.join(" "),
           b.ancestorTitles.join(" ")
         )
       );
+      // By Test Titles
+      suite.testResults.sort((a, b) => sortAlphabetically(a.title, b.title));
     });
     return sorted;
   }
