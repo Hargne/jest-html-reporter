@@ -1,39 +1,28 @@
-/* eslint-disable import/no-extraneous-dependencies, no-console */
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const uglify = require('rollup-plugin-uglify');
+import babel from "rollup-plugin-babel";
+import resolve from "@rollup/plugin-node-resolve";
+import { terser } from "rollup-plugin-terser";
 
-const externalLibraries = ['fs', 'path', 'xmlbuilder', 'strip-ansi', 'mkdirp', 'dateformat'];
+const extensions = [".ts", ".js"];
 
-const regularBundleConfig = {
-	input: 'src/index.js',
-	output: {
-		file: 'dist/main.js',
-		format: 'cjs',
-	},
-	external: externalLibraries,
-	plugins: [
-		resolve(),
-		commonjs({
-			exclude: ['node_modules/**'],
-		}),
-	],
+const config = {
+  input: "src/index.ts",
+  output: [
+    {
+      dir: "dist",
+      format: "cjs"
+    }
+  ],
+  external: ["xmlbuilder", "fs", "path", "dateformat", "mkdirp", "strip-ansi"],
+  plugins: [
+    resolve({
+      jsnext: true,
+      extensions
+    }),
+    babel({
+      extensions
+    }),
+    terser()
+  ]
 };
 
-const minifiedBundleConfig = {
-	input: 'src/index.js',
-	output: {
-		file: 'dist/main.min.js',
-		format: 'cjs',
-	},
-	external: externalLibraries,
-	plugins: [
-		resolve(),
-		commonjs({
-			exclude: ['node_modules/**'],
-		}),
-		uglify(),
-	],
-};
-
-export default (process.env.BUILD === 'minified') ? minifiedBundleConfig : regularBundleConfig;
+export default config;
