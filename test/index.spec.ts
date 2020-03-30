@@ -1,5 +1,5 @@
 import fs from "fs";
-import sinon from "sinon";
+import sinon, { SinonStub } from "sinon";
 
 import JestHTMLReporter from "../src";
 import {
@@ -9,10 +9,10 @@ import {
 } from "./mockdata";
 
 describe("index", () => {
-  let writeFileSync;
+  let writeFileSync: SinonStub;
 
   beforeEach(() => {
-    writeFileSync = sinon.stub(fs, "writeFileSync").returns({});
+    writeFileSync = sinon.stub(fs, "writeFileSync").returns(null as void);
   });
   afterEach(() => {
     writeFileSync.restore();
