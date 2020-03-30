@@ -52,6 +52,7 @@ function JestHtmlReporter(
 
   this.onTestResult = (data: any, result: TestResult) => {
     // Catch console logs per test
+    // TestResult will only contain console logs if Jest is run with verbose=false
     if (result.console) {
       consoleLogs.push({
         filePath: result.testFilePath,

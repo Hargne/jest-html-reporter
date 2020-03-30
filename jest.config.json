@@ -4,7 +4,7 @@
   "collectCoverageFrom": [
     "./src/**/*.{ts,tsx}",
     "!src/style.ts",
-    "!**/test/*.{js,jsx}",
+    "!**/test/*.{ts,tsx}",
     "!**/node_modules/**",
     "!**/coverage/**",
     "!**/vendor/**"
@@ -19,7 +19,7 @@
       "statements": 50
     }
   },
-  "verbose": true,
+  "verbose": false,
   "reporters": [
     "default",
     [

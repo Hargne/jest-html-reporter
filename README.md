@@ -13,8 +13,9 @@
 		Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
 		<br />
 		<br />
-		<hr />
-		<img src="https://user-images.githubusercontent.com/3501024/36374670-711b7cea-156c-11e8-8b7b-7fc5f38b1866.png" alt="">
+		<div style="text-align:center">
+			<img src="https://user-images.githubusercontent.com/3501024/77887991-d511c480-726b-11ea-9ed8-2e581206900c.png" alt="" style="max-width:75%">
+		</div>
 	</p>
 </p>
 
@@ -81,7 +82,6 @@ Please note that all configuration properties are optional.
 | `sort`                          | `STRING`  | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods).                                 | `"default"`             |
 | `statusIgnoreFilter`            | `STRING`  | A comma-separated string of the test result statuses that should be ignored when rendering the report. Available statuses are: `"passed"`, `"pending"`, `"failed"`                                               | `null`                  |
 | `styleOverridePath`             | `STRING`  | The path to a file containing CSS styles that should override the default styling.\*                                                                                                                             | `null`                  |
-| `theme`                         | `STRING`  | The name of the reporter themes to use when rendering the report. You can find the available themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes)                 | `"defaultTheme"`        |
 | `useCssFile`                    | `BOOLEAN` | If set to true, the CSS styles will link in the current theme's .css file instead of inlining its content on the page                                                                                            | `false`                 |
 
 > *The plugin will search for the *styleOverridePath\* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).

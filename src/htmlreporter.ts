@@ -157,22 +157,81 @@ class HTMLReporter {
       metaDataContainer.ele(
         "div",
         { id: "timestamp" },
-        `Start: ${dateformat(
-          timestamp.toDateString(),
+        `Started: ${dateformat(
+          timestamp,
           this.getConfigValue("dateFormat") as string
         )}`
       );
+      // Summary
+      const summaryContainer = metaDataContainer.ele("div", { id: "summary" });
       // Suite Summary
-      metaDataContainer.ele(
+      const suiteSummary = summaryContainer.ele("div", { id: "suite-summary" });
+      suiteSummary.ele(
         "div",
-        { id: "suite-summary" },
-        `${this.testData.numTotalTestSuites} suites -- ${this.testData.numPassedTestSuites} passed / ${this.testData.numFailedTestSuites} failed / ${this.testData.numPassedTestSuites} pending`
+        { class: "summary-total" },
+        `Suites (${this.testData.numTotalTestSuites})`
       );
-      // Test Summary
-      metaDataContainer.ele(
+      suiteSummary.ele(
         "div",
-        { id: "summary" },
-        `${this.testData.numTotalTests} tests -- ${this.testData.numPassedTests} passed / ${this.testData.numFailedTests} failed / ${this.testData.numPendingTests} pending`
+        {
+          class: `summary-passed${
+            this.testData.numPassedTestSuites === 0 ? " summary-empty" : ""
+          }`
+        },
+        `${this.testData.numPassedTestSuites} passed`
+      );
+      suiteSummary.ele(
+        "div",
+        {
+          class: `summary-failed${
+            this.testData.numFailedTestSuites === 0 ? " summary-empty" : ""
+          }`
+        },
+        `${this.testData.numFailedTestSuites} failed`
+      );
+      suiteSummary.ele(
+        "div",
+        {
+          class: `summary-pending${
+            this.testData.numPendingTestSuites === 0 ? " summary-empty" : ""
+          }`
+        },
+        `${this.testData.numPendingTestSuites} pending`
+      );
+
+      // Test Summary
+      const testSummary = summaryContainer.ele("div", { id: "test-summary" });
+      testSummary.ele(
+        "div",
+        { class: "summary-total" },
+        `Tests (${this.testData.numTotalTests})`
+      );
+      testSummary.ele(
+        "div",
+        {
+          class: `summary-passed${
+            this.testData.numPassedTests === 0 ? " summary-empty" : ""
+          }`
+        },
+        `${this.testData.numPassedTests} passed`
+      );
+      testSummary.ele(
+        "div",
+        {
+          class: `summary-failed${
+            this.testData.numFailedTests === 0 ? " summary-empty" : ""
+          }`
+        },
+        `${this.testData.numFailedTests} failed`
+      );
+      testSummary.ele(
+        "div",
+        {
+          class: `summary-pending${
+            this.testData.numPendingTests === 0 ? " summary-empty" : ""
+          }`
+        },
+        `${this.testData.numPendingTests} pending`
       );
 
       /**
@@ -200,14 +259,19 @@ class HTMLReporter {
       /**
        * Test Suites
        */
-      sortedTestResults.map(suite => {
+      sortedTestResults.map((suite, i) => {
         // Ignore this suite if there are no results
         if (!suite.testResults || suite.testResults.length <= 0) {
           return;
         }
 
+        const suiteContainer = reportBody.ele("div", {
+          id: `suite-${i + 1}`,
+          class: "suite-container"
+        });
+
         // Suite Information
-        const suiteInfo = reportBody.ele("div", { class: "suite-info" });
+        const suiteInfo = suiteContainer.ele("div", { class: "suite-info" });
         // Suite Path
         suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
         // Suite execution time
@@ -226,34 +290,50 @@ class HTMLReporter {
           `${executionTime}s`
         );
 
-        // Suite Test Table
-        const suiteTable = reportBody.ele("table", {
-          class: "suite-table",
-          cellspacing: "0",
-          cellpadding: "0"
-        });
+        // Test Container
+        const suiteTests = suiteContainer.ele("div", { class: "suite-tests" });
+
         // Test Results
         suite.testResults
           // Filter out the test results with statuses that equals the statusIgnoreFilter
           .filter(s => !ignoredStatuses.includes(s.status))
-          .forEach(test => {
-            const testTr = suiteTable.ele("tr", { class: test.status });
-            // Suite Name(s)
-            testTr.ele(
-              "td",
-              { class: "suite" },
+          .forEach(async test => {
+            const testResult = suiteTests.ele("div", {
+              class: `test-result ${test.status}`
+            });
+
+            // Test Info
+            const testInfo = testResult.ele("div", { class: "test-info" });
+            // Suite Name
+            testInfo.ele(
+              "div",
+              { class: "test-suitename" },
               test.ancestorTitles.join(" > ")
             );
-            // Test name
-            const testTitleTd = testTr.ele("td", { class: "test" }, test.title);
+            // Test Title
+            testInfo.ele("div", { class: "test-title" }, test.title);
+            // Test Status
+            testInfo.ele("div", { class: "test-status" }, test.status);
+            // Test Duration
+            testInfo.ele(
+              "div",
+              { class: "test-duration" },
+              `${test.duration / 1000}s`
+            );
+
             // Test Failure Messages
             if (
               test.failureMessages &&
+              test.failureMessages.length > 0 &&
               this.getConfigValue("includeFailureMsg")
             ) {
-              const failureMsgDiv = testTitleTd.ele("div", {
-                class: "failureMessages"
-              });
+              const failureMsgDiv = testResult.ele(
+                "div",
+                {
+                  class: "failureMessages"
+                },
+                " "
+              );
               test.failureMessages.forEach(failureMsg => {
                 failureMsgDiv.ele(
                   "pre",
@@ -262,14 +342,6 @@ class HTMLReporter {
                 );
               });
             }
-            // Append data to <tr>
-            testTr.ele(
-              "td",
-              { class: "result" },
-              test.status === "passed"
-                ? `${test.status} in ${test.duration / 1000}s`
-                : test.status
-            );
           });
 
         // All console.logs caught during the test run
@@ -284,7 +356,7 @@ class HTMLReporter {
           );
           if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
             // Console Log Container
-            const consoleLogContainer = reportBody.ele("div", {
+            const consoleLogContainer = suiteContainer.ele("div", {
               class: "suite-consolelog"
             });
             // Console Log Header

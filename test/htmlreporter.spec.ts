@@ -26,9 +26,9 @@ describe("HTMLReporter", () => {
     it("should return the content of the report in HTML", async () => {
       const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {});
       const reportContent = await reporter.renderTestReportContent();
-      expect(reportContent.toString()).toEqual(
-        mockedSingleTestResultReportHTML
-      );
+      expect(
+        reportContent.toString().indexOf(mockedSingleTestResultReportHTML)
+      ).toBeGreaterThan(-1);
     });
 
     it("should cast an error if no test data was provided", async () => {
@@ -256,7 +256,7 @@ describe("HTMLReporter", () => {
 
         expect(
           report.indexOf(
-            `<div id="timestamp">Start: ${now.getFullYear()}</div>`
+            `<div id="timestamp">Started: ${now.getFullYear()}</div>`
           )
         ).toBeGreaterThan(-1);
       });

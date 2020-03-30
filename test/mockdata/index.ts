@@ -1,6 +1,9 @@
 import { AggregatedResult } from "@jest/test-result";
 import { Config } from "@jest/types";
 
+import mockedContent from "./mockedcontent";
+export const mockedSingleTestResultReportHTML = mockedContent;
+
 const mockedJestResponseBase: AggregatedResult = {
   numFailedTestSuites: 1,
   numFailedTests: 1,
@@ -257,7 +260,6 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
 };
 
 export const mockedFullReportOutput = `<html><head><meta charset="utf-8"/><title>Test Report</title></head><body>A Test!</body></html>`;
-export const mockedSingleTestResultReportHTML = `<div id=\"jesthtml-content\"><header><h1 id=\"title\">Test Report</h1></header><div id=\"metadata-container\"><div id=\"timestamp\">Start: 2020-03-22 00:00:00</div><div id=\"suite-summary\">1 suites -- 0 passed / 1 failed / 0 pending</div><div id=\"summary\">1 tests -- 0 passed / 1 failed / 0 pending</div></div><div class=\"suite-info\"><div class=\"suite-path\">/mocked/path/to/test.ts</div><div class=\"suite-time\">0.158s</div></div><table class=\"suite-table\" cellspacing=\"0\" cellpadding=\"0\"><tr class=\"passed\"><td class=\"suite\">ancestor</td><td class=\"test\">title</td><td class=\"result\">passed in 0.001s</td></tr><tr class=\"failed\"><td class=\"suite\">ancestor</td><td class=\"test\">title</td><td class=\"result\">failed</td></tr><tr class=\"pending\"><td class=\"suite\">ancestor</td><td class=\"test\">title</td><td class=\"result\">pending</td></tr></table></div>`;
 
 export const mockedJestGlobalConfig: Config.GlobalConfig = {
   bail: 0,
