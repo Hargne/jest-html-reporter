@@ -16,18 +16,18 @@
 		<div style="text-align:center">
 			<img src="https://user-images.githubusercontent.com/3501024/77887991-d511c480-726b-11ea-9ed8-2e581206900c.png" alt="" style="max-width:75%">
 		</div>
+		<br />
+		<br />
 	</p>
 </p>
 
----
-
-## Installation
+### Installation
 
 ```shell
 $ yarn add jest-html-reporter --dev
 ```
 
-## Usage
+### Usage
 
 Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.json):
 
@@ -57,13 +57,13 @@ To run the reporter as a test results processor (after Jest is complete instead 
 **Note:** When running as a testResultsProcessor, the configuration needs be placed within a new file named `jesthtmlreporter.config.json` residing in the root folder.
 More information about this can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
 
-## Node Compatibility
+### Node Compatibility
 
 This plugin is compatible with Node version `^4.8.3`
 
 ---
 
-## Configuration
+### Configuration
 
 Please note that all configuration properties are optional.
 
@@ -88,11 +88,11 @@ Please note that all configuration properties are optional.
 
 ---
 
-## Continuous Integration
+### Continuous Integration
 
 Configuration may also be performed with environment variables for dynamic file saving paths in different environments. **\*NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json\*
 
-### Example
+#### Example
 
 Here is an example of dynamically naming your output file and test report title to match your current branch that one might see in a automated deployment pipeline before running their tests.
 
@@ -102,6 +102,6 @@ export JEST_HTML_REPORTER_OUTPUT_PATH=/home/username/jest-test-output/test-repor
 export JEST_HTML_REPORTER_PAGE_TITLE="$BRANCH_NAME"\ Test\ Report
 ```
 
-### Configuration Environment Variables
+#### Configuration Environment Variables
 
 The environment variables reflect the configuration options available in JSON format. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-environment-variables) for more information on these variables.
