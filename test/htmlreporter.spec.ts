@@ -55,7 +55,7 @@ describe("HTMLReporter", () => {
   });
 
   describe("config options", () => {
-    describe("boilerplate", () => {
+    /* describe("boilerplate", () => {
       it("should insert the test report HTML into the given file", async () => {
         const mockedFS = jest.spyOn(fs, "readFileSync");
         mockedFS.mockImplementation(
@@ -71,7 +71,7 @@ describe("HTMLReporter", () => {
         );
         mockedFS.mockRestore();
       });
-    });
+    }); */
 
     describe("styleOverridePath", () => {
       it("should insert a link to the overriding stylesheet path", async () => {
