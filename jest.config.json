@@ -23,20 +23,5 @@
       "statements": 50
     }
   },
-  "verbose": false,
-  "reporters": [
-    "default",
-    [
-      "./dist",
-      {
-        "pageTitle": "Test Suite Reporter",
-        "outputPath": "testResultsProcessorResult.html",
-        "includeFailureMsg": true,
-        "includeConsoleLog": true,
-        "useCssFile": true,
-        "sort": "titleAsc",
-        "append": false
-      }
-    ]
-  ]
+  "verbose": false
 }
