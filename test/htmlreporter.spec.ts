@@ -47,24 +47,6 @@ describe("HTMLReporter", () => {
   });
 
   describe("config options", () => {
-    describe("boilerplate", () => {
-      it("should insert the test report HTML into the given file", async () => {
-        const mockedFS = jest.spyOn(fs, "readFileSync");
-        mockedFS.mockImplementation(
-          () => "<div>{jesthtmlreporter-content}</div>"
-        );
-        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
-          boilerplate: path.join(process.cwd(), "/path/to/boilerplate.html")
-        });
-
-        const report = await reporter.renderTestReport();
-        expect(report).toEqual(
-          `<div>${mockedSingleTestResultReportHTML}</div>`
-        );
-        mockedFS.mockRestore();
-      });
-    });
-
     describe("styleOverridePath", () => {
       it("should insert a link to the overriding stylesheet path", async () => {
         const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
