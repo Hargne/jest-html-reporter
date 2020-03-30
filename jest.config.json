@@ -1,8 +1,10 @@
 {
   "roots": ["<rootDir>"],
   "preset": "ts-jest",
-  "transform": {
-    "^.+\\.tsx?$": "babel-jest"
+  "globals": {
+    "ts-jest": {
+      "babelConfig": true
+    }
   },
   "collectCoverage": true,
   "collectCoverageFrom": [
@@ -23,5 +25,20 @@
       "statements": 50
     }
   },
-  "verbose": false
+  "verbose": false,
+  "reporters": [
+    "default",
+    [
+      "./dist",
+      {
+        "pageTitle": "Test Suite Reporter",
+        "outputPath": "testResultsProcessorResult.html",
+        "includeFailureMsg": true,
+        "includeConsoleLog": true,
+        "useCssFile": true,
+        "sort": "titleAsc",
+        "append": false
+      }
+    ]
+  ]
 }
