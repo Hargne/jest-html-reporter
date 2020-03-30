@@ -23,14 +23,6 @@ describe("HTMLReporter", () => {
   });
 
   describe("renderTestReportContent", () => {
-    it("should return the content of the report in HTML", async () => {
-      const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {});
-      const reportContent = await reporter.renderTestReportContent();
-      expect(
-        reportContent.toString().indexOf(mockedSingleTestResultReportHTML)
-      ).toBeGreaterThan(-1);
-    });
-
     it("should cast an error if no test data was provided", async () => {
       expect.assertions(1);
       // @ts-ignore
@@ -55,11 +47,11 @@ describe("HTMLReporter", () => {
   });
 
   describe("config options", () => {
-    /* describe("boilerplate", () => {
+    describe("boilerplate", () => {
       it("should insert the test report HTML into the given file", async () => {
         const mockedFS = jest.spyOn(fs, "readFileSync");
         mockedFS.mockImplementation(
-          () => `<div>{jesthtmlreporter-content}</div>`
+          () => "<div>{jesthtmlreporter-content}</div>"
         );
         const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
           boilerplate: path.join(process.cwd(), "/path/to/boilerplate.html")
@@ -71,7 +63,7 @@ describe("HTMLReporter", () => {
         );
         mockedFS.mockRestore();
       });
-    }); */
+    });
 
     describe("styleOverridePath", () => {
       it("should insert a link to the overriding stylesheet path", async () => {
