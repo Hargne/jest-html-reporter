@@ -1,4 +1,5 @@
 <p align="center">
+	<p align="center" style="font-size: 3rem;margin: 0;">📜</p>
 	<h3 align="center">jest-html-reporter</h3>
 	<p align="center">
 		A <a href="https://github.com/facebook/jest">Jest</a> test results processor for generating a summary in HTML.
@@ -6,8 +7,9 @@
 		<a href="https://github.com/Hargne/jest-html-reporter/wiki"><strong>Documentation »</strong></a>
 		<br />
 		<br />
-		<img src="https://img.shields.io/npm/dm/jest-html-reporter?style=for-the-badge" alt="">
-		<img src="https://img.shields.io/travis/com/hargne/jest-html-reporter?style=for-the-badge">
+		<img src="https://img.shields.io/npm/v/jest-html-reporter?style=flat-square">
+		<img src="https://img.shields.io/npm/dm/jest-html-reporter?style=flat-square">
+		<img src="https://img.shields.io/travis/com/hargne/jest-html-reporter?style=flat-square">
 		<br />
 		<br />
 		Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
@@ -21,13 +23,13 @@
 	</p>
 </p>
 
-### Installation
+## Installation
 
 ```shell
 $ yarn add jest-html-reporter --dev
 ```
 
-### Usage
+## Usage
 
 Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.json):
 
@@ -44,7 +46,7 @@ As you run Jest from within the terminal, a file called _test-report.html_ will 
 
 There are multiple configuration options available. To read more about these, please refer to the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
 
-### Alternative Usage as a Test Results Processor
+#### Alternative Usage as a Test Results Processor
 
 To run the reporter as a test results processor (after Jest is complete instead of running in parallel), add the following entry to the Jest config (jest.config.json):
 
@@ -59,11 +61,11 @@ More information about this can be found in the [documentation](https://github.c
 
 ### Node Compatibility
 
+<img src="https://img.shields.io/node/v/jest-html-reporter?style=flat-square">
+
 This plugin is compatible with Node version `^4.8.3`
 
----
-
-### Configuration
+## Configuration
 
 Please note that all configuration properties are optional.
 
@@ -86,9 +88,7 @@ Please note that all configuration properties are optional.
 
 > *The plugin will search for the *styleOverridePath\* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
 
----
-
-### Continuous Integration
+## Continuous Integration
 
 Configuration may also be performed with environment variables for dynamic file saving paths in different environments. **\*NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json\*
 
