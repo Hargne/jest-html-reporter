@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "babel-jest": "^25.2.4",
     "jest": "^25.1.0",
     "rollup": "1.20.0",
     "rollup-plugin-babel": "^4.4.0",

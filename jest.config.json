@@ -1,7 +1,8 @@
 {
   "roots": ["<rootDir>"],
+  "preset": "ts-jest",
   "transform": {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.tsx?$": "babel-jest"
   },
   "collectCoverage": true,
   "collectCoverageFrom": [
