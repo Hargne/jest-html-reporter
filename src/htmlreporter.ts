@@ -32,11 +32,13 @@ class HTMLReporter {
   public async generate() {
     try {
       const report = await this.renderTestReport();
-      const outputPath = this.getConfigValue("outputPath") as string;
+      let outputPath = this.getConfigValue("outputPath") as string;
+      // Replace <rootDir> with the actual path to root
+      outputPath = outputPath.replace(/<rootdir>/gi, ".");
 
       await mkdirp(path.dirname(outputPath));
       if (this.getConfigValue("append") as boolean) {
-        await fs.appendFileSync(outputPath, report);
+        await this.appendToFile(outputPath, report);
       } else {
         await fs.writeFileSync(outputPath, report);
       }
@@ -548,6 +550,38 @@ class HTMLReporter {
       return process.env[option.environmentVariable];
     }
     return option.configValue || option.defaultValue;
+  }
+
+  /**
+   * Appends the report to the given file and attempts to integrate the report into any existing HTML.
+   * @param filePath
+   * @param content
+   */
+  public async appendToFile(filePath: string, content: any) {
+    let parsedContent = content;
+    // Check if the file exists or not
+    const fileToAppend = await fs.readFileSync(filePath, "utf8");
+    // The file exists - we need to strip all unecessary html
+    if (fileToAppend) {
+      const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
+      if (contentSearch) {
+        const [strippedContent] = contentSearch;
+        parsedContent = strippedContent;
+      }
+      // Then we need to add the stripped content just before the </body> tag
+      let newContent = fileToAppend;
+      const closingBodyTag = /<\/body>/gm.exec(fileToAppend);
+      const indexOfClosingBodyTag = closingBodyTag ? closingBodyTag.index : 0;
+
+      newContent = [
+        fileToAppend.slice(0, indexOfClosingBodyTag),
+        parsedContent,
+        fileToAppend.slice(indexOfClosingBodyTag)
+      ].join("");
+
+      return fs.writeFileSync(filePath, newContent);
+    }
+    return fs.appendFileSync(filePath, parsedContent);
   }
 
   /**
