@@ -17,7 +17,7 @@ import sorting from "./sorting";
 class HTMLReporter {
   public testData: AggregatedResult;
   public consoleLogList: IJestHTMLReporterConsole[];
-  private config: IJestHTMLReporterConfig;
+  public config: IJestHTMLReporterConfig;
 
   constructor(
     testData: AggregatedResult,
@@ -394,83 +394,104 @@ class HTMLReporter {
   /**
    * Fetch and setup configuration
    */
-  private setupConfig(options: IJestHTMLReporterConfigOptions) {
+  public setupConfig(
+    options: IJestHTMLReporterConfigOptions
+  ): IJestHTMLReporterConfig {
+    // Extract config values and make sure that the config object actually exist
+    const {
+      append,
+      boilerplate,
+      customScriptPath,
+      dateFormat,
+      executionTimeWarningThreshold,
+      logo,
+      includeConsoleLog,
+      includeFailureMsg,
+      outputPath,
+      pageTitle,
+      theme,
+      sort,
+      statusIgnoreFilter,
+      styleOverridePath,
+      useCssFile
+    } = options || {};
+
     this.config = {
       append: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_APPEND",
-        configValue: options.append
+        configValue: append
       },
       boilerplate: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_BOILERPLATE",
-        configValue: options.boilerplate
+        configValue: boilerplate
       },
       customScriptPath: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH",
-        configValue: options.customScriptPath
+        configValue: customScriptPath
       },
       dateFormat: {
         defaultValue: "yyyy-mm-dd HH:MM:ss",
         environmentVariable: "JEST_HTML_REPORTER_DATE_FORMAT",
-        configValue: options.dateFormat
+        configValue: dateFormat
       },
       executionTimeWarningThreshold: {
         defaultValue: 5,
         environmentVariable:
           "JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD",
-        configValue: options.executionTimeWarningThreshold
+        configValue: executionTimeWarningThreshold
       },
       logo: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_LOGO",
-        configValue: options.logo
+        configValue: logo
       },
       includeFailureMsg: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG",
-        configValue: options.includeFailureMsg
+        configValue: includeFailureMsg
       },
       includeConsoleLog: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG",
-        configValue: options.includeConsoleLog
+        configValue: includeConsoleLog
       },
       outputPath: {
         defaultValue: path.join(process.cwd(), "test-report.html"),
         environmentVariable: "JEST_HTML_REPORTER_OUTPUT_PATH",
-        configValue: options.outputPath
+        configValue: outputPath
       },
       pageTitle: {
         defaultValue: "Test Report",
         environmentVariable: "JEST_HTML_REPORTER_PAGE_TITLE",
-        configValue: options.pageTitle
+        configValue: pageTitle
       },
       theme: {
         defaultValue: "defaultTheme",
         environmentVariable: "JEST_HTML_REPORTER_THEME",
-        configValue: options.theme
+        configValue: theme
       },
       sort: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_SORT",
-        configValue: options.sort
+        configValue: sort
       },
       statusIgnoreFilter: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_STATUS_FILTER",
-        configValue: options.statusIgnoreFilter
+        configValue: statusIgnoreFilter
       },
       styleOverridePath: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH",
-        configValue: options.styleOverridePath
+        configValue: styleOverridePath
       },
       useCssFile: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_USE_CSS_FILE",
-        configValue: options.useCssFile
+        configValue: useCssFile
       }
     };
     // Attempt to collect and assign config settings from jesthtmlreporter.config.json
@@ -487,7 +508,7 @@ class HTMLReporter {
               parsedConfig[key];
           }
         }
-        return;
+        return this.config;
       }
     } catch (e) {
       /** do nothing */
@@ -506,6 +527,7 @@ class HTMLReporter {
               parsedConfig[key];
           }
         }
+        return this.config;
       }
     } catch (e) {
       /** do nothing */
@@ -517,7 +539,7 @@ class HTMLReporter {
    * Environment Variable > JSON configured value > Default value
    * @param key
    */
-  private getConfigValue(key: keyof IJestHTMLReporterConfig) {
+  public getConfigValue(key: keyof IJestHTMLReporterConfig) {
     const option = this.config[key];
     if (!option) {
       return;
@@ -534,7 +556,7 @@ class HTMLReporter {
    * @param message
    * @param ignoreConsole
    */
-  private logMessage(
+  public logMessage(
     type: "default" | "success" | "error" = "default",
     message: string
   ) {

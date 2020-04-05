@@ -1,11 +1,9 @@
 import fs from "fs";
-import path from "path";
 
 import HTMLReporter from "../src/htmlreporter";
 import {
   mockedJestResponseMultipleTestResult,
-  mockedJestResponseSingleTestResult,
-  mockedSingleTestResultReportHTML
+  mockedJestResponseSingleTestResult
 } from "./mockdata";
 
 describe("HTMLReporter", () => {
@@ -254,6 +252,18 @@ describe("HTMLReporter", () => {
           )
         ).toBeGreaterThan(-1);
       });
+    });
+  });
+
+  describe("setupConfig", () => {
+    it("should return default value if no options were provided", async () => {
+      const reporter = new HTMLReporter(
+        mockedJestResponseSingleTestResult,
+        null
+      );
+      expect(reporter.config).toBeDefined();
+      expect(reporter.config.append.configValue).not.toBeDefined();
+      expect(reporter.getConfigValue("append")).toEqual(false);
     });
   });
 });
