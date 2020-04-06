@@ -69,23 +69,18 @@ class HTMLReporter {
       );
       return boilerplateContent.replace(
         "{jesthtmlreporter-content}",
-        reportContent.toString()
+        reportContent && reportContent.toString()
       );
     }
 
     // --
 
     // Create HTML and apply reporter content
-    const HTMLBase = {
-      html: {
-        head: {
-          meta: { "@charset": "utf-8" },
-          title: { "#text": this.getConfigValue("pageTitle") },
-          style: undefined as object,
-          link: undefined as object,
-        },
-      },
-    };
+    const report = xmlbuilder.create({ html: {} });
+    const headTag = report.ele("head");
+    headTag.ele("meta", { charset: "utf-8" });
+    headTag.ele("title", {}, this.getConfigValue("pageTitle"));
+
     // Default to the currently set theme
     let stylesheetFilePath: string = path.join(
       __dirname,
@@ -105,21 +100,20 @@ class HTMLReporter {
         stylesheetFilePath,
         "utf8"
       );
-      HTMLBase.html.head.style = {
-        "@type": "text/css",
-        "#text": stylesheetContent,
-      };
+      headTag.raw(`<style type="text/css">${stylesheetContent}</style>`);
     } else {
-      HTMLBase.html.head.link = {
-        "@rel": "stylesheet",
-        "@type": "text/css",
-        "@href": stylesheetFilePath,
-      };
+      headTag.ele("link", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: stylesheetFilePath,
+      });
     }
-    const report = xmlbuilder.create(HTMLBase);
+
     const reportBody = report.ele("body");
     // Add the test report to the body
-    reportBody.raw(reportContent.toString());
+    if (reportContent) {
+      reportBody.raw(reportContent.toString());
+    }
     // Add any given custom script to the end of the body
     if (!!this.getConfigValue("customScriptPath")) {
       reportBody.raw(
@@ -160,15 +154,21 @@ class HTMLReporter {
         id: "metadata-container",
       });
       // Timestamp
-      const timestamp = new Date(this.testData.startTime);
-      metaDataContainer.ele(
-        "div",
-        { id: "timestamp" },
-        `Started: ${dateformat(
-          timestamp,
-          this.getConfigValue("dateFormat") as string
-        )}`
-      );
+      if (this.testData.startTime && !isNaN(this.testData.startTime)) {
+        const timestamp = new Date(this.testData.startTime);
+        if (timestamp) {
+          const formattedTimestamp = dateformat(
+            timestamp,
+            this.getConfigValue("dateFormat") as string
+          );
+          metaDataContainer.ele(
+            "div",
+            { id: "timestamp" },
+            `Started: ${formattedTimestamp}`
+          );
+        }
+      }
+
       // Summary
       const summaryContainer = metaDataContainer.ele("div", { id: "summary" });
       // Suite Summary
@@ -266,131 +266,135 @@ class HTMLReporter {
       /**
        * Test Suites
        */
-      sortedTestResults.map((suite, i) => {
-        // Ignore this suite if there are no results
-        if (!suite.testResults || suite.testResults.length <= 0) {
-          return;
-        }
+      if (sortedTestResults) {
+        sortedTestResults.map((suite, i) => {
+          // Ignore this suite if there are no results
+          if (!suite.testResults || suite.testResults.length <= 0) {
+            return;
+          }
 
-        const suiteContainer = reportBody.ele("div", {
-          id: `suite-${i + 1}`,
-          class: "suite-container",
-        });
+          const suiteContainer = reportBody.ele("div", {
+            id: `suite-${i + 1}`,
+            class: "suite-container",
+          });
 
-        // Suite Information
-        const suiteInfo = suiteContainer.ele("div", { class: "suite-info" });
-        // Suite Path
-        suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
-        // Suite execution time
-        const executionTime =
-          (suite.perfStats.end - suite.perfStats.start) / 1000;
-        suiteInfo.ele(
-          "div",
-          {
-            class: `suite-time${
-              executionTime >
-              (this.getConfigValue("executionTimeWarningThreshold") as number)
-                ? " warn"
-                : ""
-            }`,
-          },
-          `${executionTime}s`
-        );
+          // Suite Information
+          const suiteInfo = suiteContainer.ele("div", { class: "suite-info" });
+          // Suite Path
+          suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
+          // Suite execution time
+          const executionTime =
+            (suite.perfStats.end - suite.perfStats.start) / 1000;
+          suiteInfo.ele(
+            "div",
+            {
+              class: `suite-time${
+                executionTime >
+                (this.getConfigValue("executionTimeWarningThreshold") as number)
+                  ? " warn"
+                  : ""
+              }`,
+            },
+            `${executionTime}s`
+          );
 
-        // Test Container
-        const suiteTests = suiteContainer.ele("div", { class: "suite-tests" });
+          // Test Container
+          const suiteTests = suiteContainer.ele("div", {
+            class: "suite-tests",
+          });
 
-        // Test Results
-        suite.testResults
-          // Filter out the test results with statuses that equals the statusIgnoreFilter
-          .filter((s) => !ignoredStatuses.includes(s.status))
-          .forEach(async (test) => {
-            const testResult = suiteTests.ele("div", {
-              class: `test-result ${test.status}`,
+          // Test Results
+          suite.testResults
+            // Filter out the test results with statuses that equals the statusIgnoreFilter
+            .filter((s) => !ignoredStatuses.includes(s.status))
+            .forEach(async (test) => {
+              const testResult = suiteTests.ele("div", {
+                class: `test-result ${test.status}`,
+              });
+
+              // Test Info
+              const testInfo = testResult.ele("div", { class: "test-info" });
+              // Suite Name
+              testInfo.ele(
+                "div",
+                { class: "test-suitename" },
+                test.ancestorTitles.join(" > ")
+              );
+              // Test Title
+              testInfo.ele("div", { class: "test-title" }, test.title);
+              // Test Status
+              testInfo.ele("div", { class: "test-status" }, test.status);
+              // Test Duration
+              testInfo.ele(
+                "div",
+                { class: "test-duration" },
+                `${test.duration / 1000}s`
+              );
+
+              // Test Failure Messages
+              if (
+                test.failureMessages &&
+                test.failureMessages.length > 0 &&
+                this.getConfigValue("includeFailureMsg")
+              ) {
+                const failureMsgDiv = testResult.ele(
+                  "div",
+                  {
+                    class: "failureMessages",
+                  },
+                  " "
+                );
+                test.failureMessages.forEach((failureMsg) => {
+                  failureMsgDiv.ele(
+                    "pre",
+                    { class: "failureMsg" },
+                    stripAnsi(failureMsg)
+                  );
+                });
+              }
             });
 
-            // Test Info
-            const testInfo = testResult.ele("div", { class: "test-info" });
-            // Suite Name
-            testInfo.ele(
-              "div",
-              { class: "test-suitename" },
-              test.ancestorTitles.join(" > ")
+          // All console.logs caught during the test run
+          if (
+            this.consoleLogList &&
+            this.consoleLogList.length > 0 &&
+            this.getConfigValue("includeConsoleLog")
+          ) {
+            // Filter out the logs for this test file path
+            const filteredConsoleLogs = this.consoleLogList.find(
+              (logs) => logs.filePath === suite.testFilePath
             );
-            // Test Title
-            testInfo.ele("div", { class: "test-title" }, test.title);
-            // Test Status
-            testInfo.ele("div", { class: "test-status" }, test.status);
-            // Test Duration
-            testInfo.ele(
-              "div",
-              { class: "test-duration" },
-              `${test.duration / 1000}s`
-            );
-
-            // Test Failure Messages
-            if (
-              test.failureMessages &&
-              test.failureMessages.length > 0 &&
-              this.getConfigValue("includeFailureMsg")
-            ) {
-              const failureMsgDiv = testResult.ele(
+            if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
+              // Console Log Container
+              const consoleLogContainer = suiteContainer.ele("div", {
+                class: "suite-consolelog",
+              });
+              // Console Log Header
+              consoleLogContainer.ele(
                 "div",
-                {
-                  class: "failureMessages",
-                },
-                " "
+                { class: "suite-consolelog-header" },
+                "Console Log"
               );
-              test.failureMessages.forEach((failureMsg) => {
-                failureMsgDiv.ele(
+              // Apply the logs to the body
+              filteredConsoleLogs.logs.forEach((log) => {
+                const logElement = consoleLogContainer.ele("div", {
+                  class: "suite-consolelog-item",
+                });
+                logElement.ele(
                   "pre",
-                  { class: "failureMsg" },
-                  stripAnsi(failureMsg)
+                  { class: "suite-consolelog-item-origin" },
+                  stripAnsi(log.origin)
+                );
+                logElement.ele(
+                  "pre",
+                  { class: "suite-consolelog-item-message" },
+                  stripAnsi(log.message)
                 );
               });
             }
-          });
-
-        // All console.logs caught during the test run
-        if (
-          this.consoleLogList &&
-          this.consoleLogList.length > 0 &&
-          this.getConfigValue("includeConsoleLog")
-        ) {
-          // Filter out the logs for this test file path
-          const filteredConsoleLogs = this.consoleLogList.find(
-            (logs) => logs.filePath === suite.testFilePath
-          );
-          if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
-            // Console Log Container
-            const consoleLogContainer = suiteContainer.ele("div", {
-              class: "suite-consolelog",
-            });
-            // Console Log Header
-            consoleLogContainer.ele(
-              "div",
-              { class: "suite-consolelog-header" },
-              "Console Log"
-            );
-            // Apply the logs to the body
-            filteredConsoleLogs.logs.forEach((log) => {
-              const logElement = consoleLogContainer.ele("div", {
-                class: "suite-consolelog-item",
-              });
-              logElement.ele(
-                "pre",
-                { class: "suite-consolelog-item-origin" },
-                stripAnsi(log.origin)
-              );
-              logElement.ele(
-                "pre",
-                { class: "suite-consolelog-item-message" },
-                stripAnsi(log.message)
-              );
-            });
           }
-        }
-      });
+        });
+      }
 
       return reportBody;
     } catch (e) {
