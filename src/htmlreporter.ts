@@ -1,4 +1,5 @@
 import { AggregatedResult } from "@jest/test-result";
+import { Config } from "@jest/types";
 import dateformat from "dateformat";
 import fs from "fs";
 import mkdirp from "mkdirp";
@@ -7,7 +8,7 @@ import {
   IJestHTMLReporterConfig,
   IJestHTMLReporterConfigOptions,
   IJestHTMLReporterConsole,
-  JestHTMLReporterSortType
+  JestHTMLReporterSortType,
 } from "src/types";
 import stripAnsi from "strip-ansi";
 import xmlbuilder, { XMLElement } from "xmlbuilder";
@@ -17,14 +18,17 @@ import sorting from "./sorting";
 class HTMLReporter {
   public testData: AggregatedResult;
   public consoleLogList: IJestHTMLReporterConsole[];
-  private config: IJestHTMLReporterConfig;
+  public jestConfig: Config.GlobalConfig;
+  public config: IJestHTMLReporterConfig;
 
   constructor(
     testData: AggregatedResult,
     options: IJestHTMLReporterConfigOptions,
+    jestConfig: Config.GlobalConfig,
     consoleLogs?: IJestHTMLReporterConsole[]
   ) {
     this.testData = testData;
+    this.jestConfig = jestConfig;
     this.consoleLogList = consoleLogs;
     this.setupConfig(options);
   }
@@ -32,11 +36,14 @@ class HTMLReporter {
   public async generate() {
     try {
       const report = await this.renderTestReport();
-      const outputPath = this.getConfigValue("outputPath") as string;
+      const outputPath = this.replaceRootDirInPath(
+        this.jestConfig ? this.jestConfig.rootDir : "",
+        this.getConfigValue("outputPath") as string
+      );
 
       await mkdirp(path.dirname(outputPath));
       if (this.getConfigValue("append") as boolean) {
-        await fs.appendFileSync(outputPath, report);
+        await this.appendToFile(outputPath, report);
       } else {
         await fs.writeFileSync(outputPath, report);
       }
@@ -62,23 +69,18 @@ class HTMLReporter {
       );
       return boilerplateContent.replace(
         "{jesthtmlreporter-content}",
-        reportContent.toString()
+        reportContent && reportContent.toString()
       );
     }
 
     // --
 
     // Create HTML and apply reporter content
-    const HTMLBase = {
-      html: {
-        head: {
-          meta: { "@charset": "utf-8" },
-          title: { "#text": this.getConfigValue("pageTitle") },
-          style: undefined as object,
-          link: undefined as object
-        }
-      }
-    };
+    const report = xmlbuilder.create({ html: {} });
+    const headTag = report.ele("head");
+    headTag.ele("meta", { charset: "utf-8" });
+    headTag.ele("title", {}, this.getConfigValue("pageTitle"));
+
     // Default to the currently set theme
     let stylesheetFilePath: string = path.join(
       __dirname,
@@ -98,21 +100,20 @@ class HTMLReporter {
         stylesheetFilePath,
         "utf8"
       );
-      HTMLBase.html.head.style = {
-        "@type": "text/css",
-        "#text": stylesheetContent
-      };
+      headTag.raw(`<style type="text/css">${stylesheetContent}</style>`);
     } else {
-      HTMLBase.html.head.link = {
-        "@rel": "stylesheet",
-        "@type": "text/css",
-        "@href": stylesheetFilePath
-      };
+      headTag.ele("link", {
+        rel: "stylesheet",
+        type: "text/css",
+        href: stylesheetFilePath,
+      });
     }
-    const report = xmlbuilder.create(HTMLBase);
+
     const reportBody = report.ele("body");
     // Add the test report to the body
-    reportBody.raw(reportContent.toString());
+    if (reportContent) {
+      reportBody.raw(reportContent.toString());
+    }
     // Add any given custom script to the end of the body
     if (!!this.getConfigValue("customScriptPath")) {
       reportBody.raw(
@@ -130,7 +131,7 @@ class HTMLReporter {
 
       // HTML Body
       const reportBody: XMLElement = xmlbuilder.begin().element("div", {
-        id: "jesthtml-content"
+        id: "jesthtml-content",
       });
 
       /**
@@ -150,18 +151,24 @@ class HTMLReporter {
        * Meta-Data
        */
       const metaDataContainer = reportBody.ele("div", {
-        id: "metadata-container"
+        id: "metadata-container",
       });
       // Timestamp
-      const timestamp = new Date(this.testData.startTime);
-      metaDataContainer.ele(
-        "div",
-        { id: "timestamp" },
-        `Started: ${dateformat(
-          timestamp,
-          this.getConfigValue("dateFormat") as string
-        )}`
-      );
+      if (this.testData.startTime && !isNaN(this.testData.startTime)) {
+        const timestamp = new Date(this.testData.startTime);
+        if (timestamp) {
+          const formattedTimestamp = dateformat(
+            timestamp,
+            this.getConfigValue("dateFormat") as string
+          );
+          metaDataContainer.ele(
+            "div",
+            { id: "timestamp" },
+            `Started: ${formattedTimestamp}`
+          );
+        }
+      }
+
       // Summary
       const summaryContainer = metaDataContainer.ele("div", { id: "summary" });
       // Suite Summary
@@ -176,7 +183,7 @@ class HTMLReporter {
         {
           class: `summary-passed${
             this.testData.numPassedTestSuites === 0 ? " summary-empty" : ""
-          }`
+          }`,
         },
         `${this.testData.numPassedTestSuites} passed`
       );
@@ -185,7 +192,7 @@ class HTMLReporter {
         {
           class: `summary-failed${
             this.testData.numFailedTestSuites === 0 ? " summary-empty" : ""
-          }`
+          }`,
         },
         `${this.testData.numFailedTestSuites} failed`
       );
@@ -194,7 +201,7 @@ class HTMLReporter {
         {
           class: `summary-pending${
             this.testData.numPendingTestSuites === 0 ? " summary-empty" : ""
-          }`
+          }`,
         },
         `${this.testData.numPendingTestSuites} pending`
       );
@@ -211,7 +218,7 @@ class HTMLReporter {
         {
           class: `summary-passed${
             this.testData.numPassedTests === 0 ? " summary-empty" : ""
-          }`
+          }`,
         },
         `${this.testData.numPassedTests} passed`
       );
@@ -220,7 +227,7 @@ class HTMLReporter {
         {
           class: `summary-failed${
             this.testData.numFailedTests === 0 ? " summary-empty" : ""
-          }`
+          }`,
         },
         `${this.testData.numFailedTests} failed`
       );
@@ -229,7 +236,7 @@ class HTMLReporter {
         {
           class: `summary-pending${
             this.testData.numPendingTests === 0 ? " summary-empty" : ""
-          }`
+          }`,
         },
         `${this.testData.numPendingTests} pending`
       );
@@ -259,131 +266,135 @@ class HTMLReporter {
       /**
        * Test Suites
        */
-      sortedTestResults.map((suite, i) => {
-        // Ignore this suite if there are no results
-        if (!suite.testResults || suite.testResults.length <= 0) {
-          return;
-        }
+      if (sortedTestResults) {
+        sortedTestResults.map((suite, i) => {
+          // Ignore this suite if there are no results
+          if (!suite.testResults || suite.testResults.length <= 0) {
+            return;
+          }
 
-        const suiteContainer = reportBody.ele("div", {
-          id: `suite-${i + 1}`,
-          class: "suite-container"
-        });
+          const suiteContainer = reportBody.ele("div", {
+            id: `suite-${i + 1}`,
+            class: "suite-container",
+          });
 
-        // Suite Information
-        const suiteInfo = suiteContainer.ele("div", { class: "suite-info" });
-        // Suite Path
-        suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
-        // Suite execution time
-        const executionTime =
-          (suite.perfStats.end - suite.perfStats.start) / 1000;
-        suiteInfo.ele(
-          "div",
-          {
-            class: `suite-time${
-              executionTime >
-              (this.getConfigValue("executionTimeWarningThreshold") as number)
-                ? " warn"
-                : ""
-            }`
-          },
-          `${executionTime}s`
-        );
+          // Suite Information
+          const suiteInfo = suiteContainer.ele("div", { class: "suite-info" });
+          // Suite Path
+          suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
+          // Suite execution time
+          const executionTime =
+            (suite.perfStats.end - suite.perfStats.start) / 1000;
+          suiteInfo.ele(
+            "div",
+            {
+              class: `suite-time${
+                executionTime >
+                (this.getConfigValue("executionTimeWarningThreshold") as number)
+                  ? " warn"
+                  : ""
+              }`,
+            },
+            `${executionTime}s`
+          );
 
-        // Test Container
-        const suiteTests = suiteContainer.ele("div", { class: "suite-tests" });
+          // Test Container
+          const suiteTests = suiteContainer.ele("div", {
+            class: "suite-tests",
+          });
 
-        // Test Results
-        suite.testResults
-          // Filter out the test results with statuses that equals the statusIgnoreFilter
-          .filter(s => !ignoredStatuses.includes(s.status))
-          .forEach(async test => {
-            const testResult = suiteTests.ele("div", {
-              class: `test-result ${test.status}`
+          // Test Results
+          suite.testResults
+            // Filter out the test results with statuses that equals the statusIgnoreFilter
+            .filter((s) => !ignoredStatuses.includes(s.status))
+            .forEach(async (test) => {
+              const testResult = suiteTests.ele("div", {
+                class: `test-result ${test.status}`,
+              });
+
+              // Test Info
+              const testInfo = testResult.ele("div", { class: "test-info" });
+              // Suite Name
+              testInfo.ele(
+                "div",
+                { class: "test-suitename" },
+                test.ancestorTitles.join(" > ")
+              );
+              // Test Title
+              testInfo.ele("div", { class: "test-title" }, test.title);
+              // Test Status
+              testInfo.ele("div", { class: "test-status" }, test.status);
+              // Test Duration
+              testInfo.ele(
+                "div",
+                { class: "test-duration" },
+                `${test.duration / 1000}s`
+              );
+
+              // Test Failure Messages
+              if (
+                test.failureMessages &&
+                test.failureMessages.length > 0 &&
+                this.getConfigValue("includeFailureMsg")
+              ) {
+                const failureMsgDiv = testResult.ele(
+                  "div",
+                  {
+                    class: "failureMessages",
+                  },
+                  " "
+                );
+                test.failureMessages.forEach((failureMsg) => {
+                  failureMsgDiv.ele(
+                    "pre",
+                    { class: "failureMsg" },
+                    stripAnsi(failureMsg)
+                  );
+                });
+              }
             });
 
-            // Test Info
-            const testInfo = testResult.ele("div", { class: "test-info" });
-            // Suite Name
-            testInfo.ele(
-              "div",
-              { class: "test-suitename" },
-              test.ancestorTitles.join(" > ")
+          // All console.logs caught during the test run
+          if (
+            this.consoleLogList &&
+            this.consoleLogList.length > 0 &&
+            this.getConfigValue("includeConsoleLog")
+          ) {
+            // Filter out the logs for this test file path
+            const filteredConsoleLogs = this.consoleLogList.find(
+              (logs) => logs.filePath === suite.testFilePath
             );
-            // Test Title
-            testInfo.ele("div", { class: "test-title" }, test.title);
-            // Test Status
-            testInfo.ele("div", { class: "test-status" }, test.status);
-            // Test Duration
-            testInfo.ele(
-              "div",
-              { class: "test-duration" },
-              `${test.duration / 1000}s`
-            );
-
-            // Test Failure Messages
-            if (
-              test.failureMessages &&
-              test.failureMessages.length > 0 &&
-              this.getConfigValue("includeFailureMsg")
-            ) {
-              const failureMsgDiv = testResult.ele(
+            if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
+              // Console Log Container
+              const consoleLogContainer = suiteContainer.ele("div", {
+                class: "suite-consolelog",
+              });
+              // Console Log Header
+              consoleLogContainer.ele(
                 "div",
-                {
-                  class: "failureMessages"
-                },
-                " "
+                { class: "suite-consolelog-header" },
+                "Console Log"
               );
-              test.failureMessages.forEach(failureMsg => {
-                failureMsgDiv.ele(
+              // Apply the logs to the body
+              filteredConsoleLogs.logs.forEach((log) => {
+                const logElement = consoleLogContainer.ele("div", {
+                  class: "suite-consolelog-item",
+                });
+                logElement.ele(
                   "pre",
-                  { class: "failureMsg" },
-                  stripAnsi(failureMsg)
+                  { class: "suite-consolelog-item-origin" },
+                  stripAnsi(log.origin)
+                );
+                logElement.ele(
+                  "pre",
+                  { class: "suite-consolelog-item-message" },
+                  stripAnsi(log.message)
                 );
               });
             }
-          });
-
-        // All console.logs caught during the test run
-        if (
-          this.consoleLogList &&
-          this.consoleLogList.length > 0 &&
-          this.getConfigValue("includeConsoleLog")
-        ) {
-          // Filter out the logs for this test file path
-          const filteredConsoleLogs = this.consoleLogList.find(
-            logs => logs.filePath === suite.testFilePath
-          );
-          if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
-            // Console Log Container
-            const consoleLogContainer = suiteContainer.ele("div", {
-              class: "suite-consolelog"
-            });
-            // Console Log Header
-            consoleLogContainer.ele(
-              "div",
-              { class: "suite-consolelog-header" },
-              "Console Log"
-            );
-            // Apply the logs to the body
-            filteredConsoleLogs.logs.forEach(log => {
-              const logElement = consoleLogContainer.ele("div", {
-                class: "suite-consolelog-item"
-              });
-              logElement.ele(
-                "pre",
-                { class: "suite-consolelog-item-origin" },
-                stripAnsi(log.origin)
-              );
-              logElement.ele(
-                "pre",
-                { class: "suite-consolelog-item-message" },
-                stripAnsi(log.message)
-              );
-            });
           }
-        }
-      });
+        });
+      }
 
       return reportBody;
     } catch (e) {
@@ -394,84 +405,105 @@ class HTMLReporter {
   /**
    * Fetch and setup configuration
    */
-  private setupConfig(options: IJestHTMLReporterConfigOptions) {
+  public setupConfig(
+    options: IJestHTMLReporterConfigOptions
+  ): IJestHTMLReporterConfig {
+    // Extract config values and make sure that the config object actually exist
+    const {
+      append,
+      boilerplate,
+      customScriptPath,
+      dateFormat,
+      executionTimeWarningThreshold,
+      logo,
+      includeConsoleLog,
+      includeFailureMsg,
+      outputPath,
+      pageTitle,
+      theme,
+      sort,
+      statusIgnoreFilter,
+      styleOverridePath,
+      useCssFile,
+    } = options || {};
+
     this.config = {
       append: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_APPEND",
-        configValue: options.append
+        configValue: append,
       },
       boilerplate: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_BOILERPLATE",
-        configValue: options.boilerplate
+        configValue: boilerplate,
       },
       customScriptPath: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH",
-        configValue: options.customScriptPath
+        configValue: customScriptPath,
       },
       dateFormat: {
         defaultValue: "yyyy-mm-dd HH:MM:ss",
         environmentVariable: "JEST_HTML_REPORTER_DATE_FORMAT",
-        configValue: options.dateFormat
+        configValue: dateFormat,
       },
       executionTimeWarningThreshold: {
         defaultValue: 5,
         environmentVariable:
           "JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD",
-        configValue: options.executionTimeWarningThreshold
+        configValue: executionTimeWarningThreshold,
       },
       logo: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_LOGO",
-        configValue: options.logo
+        configValue: logo,
       },
       includeFailureMsg: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG",
-        configValue: options.includeFailureMsg
+        configValue: includeFailureMsg,
       },
       includeConsoleLog: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG",
-        configValue: options.includeConsoleLog
+        configValue: includeConsoleLog,
       },
       outputPath: {
         defaultValue: path.join(process.cwd(), "test-report.html"),
         environmentVariable: "JEST_HTML_REPORTER_OUTPUT_PATH",
-        configValue: options.outputPath
+        configValue: outputPath,
       },
       pageTitle: {
         defaultValue: "Test Report",
         environmentVariable: "JEST_HTML_REPORTER_PAGE_TITLE",
-        configValue: options.pageTitle
+        configValue: pageTitle,
       },
       theme: {
         defaultValue: "defaultTheme",
         environmentVariable: "JEST_HTML_REPORTER_THEME",
-        configValue: options.theme
+        configValue: theme,
       },
       sort: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_SORT",
-        configValue: options.sort
+        configValue: sort,
       },
       statusIgnoreFilter: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_STATUS_FILTER",
-        configValue: options.statusIgnoreFilter
+        configValue: statusIgnoreFilter,
       },
       styleOverridePath: {
         defaultValue: null,
         environmentVariable: "JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH",
-        configValue: options.styleOverridePath
+        configValue: styleOverridePath,
       },
       useCssFile: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_USE_CSS_FILE",
-        configValue: options.useCssFile
-      }
+        configValue: useCssFile,
+      },
     };
     // Attempt to collect and assign config settings from jesthtmlreporter.config.json
     try {
@@ -487,7 +519,7 @@ class HTMLReporter {
               parsedConfig[key];
           }
         }
-        return;
+        return this.config;
       }
     } catch (e) {
       /** do nothing */
@@ -506,6 +538,7 @@ class HTMLReporter {
               parsedConfig[key];
           }
         }
+        return this.config;
       }
     } catch (e) {
       /** do nothing */
@@ -517,7 +550,7 @@ class HTMLReporter {
    * Environment Variable > JSON configured value > Default value
    * @param key
    */
-  private getConfigValue(key: keyof IJestHTMLReporterConfig) {
+  public getConfigValue(key: keyof IJestHTMLReporterConfig) {
     const option = this.config[key];
     if (!option) {
       return;
@@ -529,19 +562,71 @@ class HTMLReporter {
   }
 
   /**
+   * Appends the report to the given file and attempts to integrate the report into any existing HTML.
+   * @param filePath
+   * @param content
+   */
+  public async appendToFile(filePath: string, content: any) {
+    let parsedContent = content;
+    // Check if the file exists or not
+    const fileToAppend = await fs.readFileSync(filePath, "utf8");
+    // The file exists - we need to strip all unecessary html
+    if (fileToAppend) {
+      const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
+      if (contentSearch) {
+        const [strippedContent] = contentSearch;
+        parsedContent = strippedContent;
+      }
+      // Then we need to add the stripped content just before the </body> tag
+      let newContent = fileToAppend;
+      const closingBodyTag = /<\/body>/gm.exec(fileToAppend);
+      const indexOfClosingBodyTag = closingBodyTag ? closingBodyTag.index : 0;
+
+      newContent = [
+        fileToAppend.slice(0, indexOfClosingBodyTag),
+        parsedContent,
+        fileToAppend.slice(indexOfClosingBodyTag),
+      ].join("");
+
+      return fs.writeFileSync(filePath, newContent);
+    }
+    return fs.appendFileSync(filePath, parsedContent);
+  }
+
+  /**
+   * Replaces <rootDir> in the file path with the actual path, as performed within Jest
+   * Copy+paste from https://github.com/facebook/jest/blob/master/packages/jest-config/src/utils.ts
+   * @param rootDir
+   * @param filePath
+   */
+  public replaceRootDirInPath(
+    rootDir: Config.Path,
+    filePath: Config.Path
+  ): string {
+    if (!/^<rootDir>/.test(filePath)) {
+      return filePath;
+    }
+
+    return path.resolve(
+      rootDir,
+      path.normalize("./" + filePath.substr("<rootDir>".length))
+    );
+  }
+
+  /**
    * Method for logging to the terminal
    * @param type
    * @param message
    * @param ignoreConsole
    */
-  private logMessage(
+  public logMessage(
     type: "default" | "success" | "error" = "default",
     message: string
   ) {
     const logTypes = {
       default: "\x1b[37m%s\x1b[0m",
       success: "\x1b[32m%s\x1b[0m",
-      error: "\x1b[31m%s\x1b[0m"
+      error: "\x1b[31m%s\x1b[0m",
     };
     const logColor = !logTypes[type] ? logTypes.default : logTypes[type];
     const logMsg = `jest-html-reporter >> ${message}`;

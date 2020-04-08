@@ -4,7 +4,7 @@ import { Circus, Config } from "@jest/types";
 import htmlreporter from "./htmlreporter";
 import {
   IJestHTMLReporterConfigOptions,
-  IJestHTMLReporterConsole
+  IJestHTMLReporterConsole,
 } from "./types";
 
 /**
@@ -13,11 +13,13 @@ import {
 const setupAndRun = (
   testResults: AggregatedResult,
   options: Config.DefaultOptions,
+  jestConfig: Config.GlobalConfig,
   logs?: IJestHTMLReporterConsole[]
 ) => {
   const reporter = new htmlreporter(
     testResults,
     options as IJestHTMLReporterConfigOptions,
+    jestConfig,
     logs
   );
   return reporter.generate();
@@ -40,7 +42,7 @@ function JestHtmlReporter(
    */
   if (Object.prototype.hasOwnProperty.call(globalConfig, "testResults")) {
     // @ts-ignore
-    setupAndRun(globalConfig.testResults, options);
+    setupAndRun(globalConfig.testResults, options, globalConfig);
     // Return the results as required by Jest
     return globalConfig;
   }
@@ -56,13 +58,13 @@ function JestHtmlReporter(
     if (result.console) {
       consoleLogs.push({
         filePath: result.testFilePath,
-        logs: result.console
+        logs: result.console,
       });
     }
   };
 
   this.onRunComplete = (contexts: any, testResult: AggregatedResult) =>
-    setupAndRun(testResult, options, consoleLogs);
+    setupAndRun(testResult, options, globalConfig, consoleLogs);
 }
 
 export default JestHtmlReporter;

@@ -1,5 +1,5 @@
 <p align="center">
-	<p align="center" style="font-size: 3rem;margin: 0;">📜</p>
+	<p align="center">📜</p>
 	<h3 align="center">jest-html-reporter</h3>
 	<p align="center">
 		A <a href="https://github.com/facebook/jest">Jest</a> test results processor for generating a summary in HTML.
@@ -12,7 +12,7 @@
 		<img src="https://img.shields.io/travis/com/hargne/jest-html-reporter?style=flat-square">
 		<br />
 		<br />
-		Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
+		<small>Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a></small>
 		<br />
 		<br />
 		<div style="text-align:center">
