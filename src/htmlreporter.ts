@@ -43,9 +43,9 @@ class HTMLReporter {
 
       await mkdirp(path.dirname(outputPath));
       if (this.getConfigValue("append") as boolean) {
-        await this.appendToFile(outputPath, report);
+        await this.appendToFile(outputPath, report.toString());
       } else {
-        await fs.writeFileSync(outputPath, report);
+        await fs.writeFileSync(outputPath, report.toString());
       }
 
       this.logMessage("success", `Report generated (${outputPath})`);
