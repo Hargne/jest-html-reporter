@@ -55,7 +55,7 @@
     "xmlbuilder": "15.0.0"
   },
   "peerDependencies": {
-    "jest": "19.x - 25.x"
+    "jest": "19.x - 26.x"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^7.1.1",
