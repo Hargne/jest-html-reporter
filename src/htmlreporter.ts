@@ -318,7 +318,9 @@ class HTMLReporter {
               testInfo.ele(
                 "div",
                 { class: "test-suitename" },
-                test.ancestorTitles.join(" > ")
+                test.ancestorTitles && test.ancestorTitles.length > 0
+                  ? test.ancestorTitles.join(" > ")
+                  : " "
               );
               // Test Title
               testInfo.ele("div", { class: "test-title" }, test.title);
