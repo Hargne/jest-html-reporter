@@ -1,4 +1,4 @@
-import { AggregatedResult } from "@jest/test-result";
+import { AggregatedResult, TestResult } from "@jest/test-result";
 import { Config } from "@jest/types";
 import dateformat from "dateformat";
 import fs from "fs";
@@ -121,6 +121,58 @@ class HTMLReporter {
       );
     }
     return report;
+  }
+
+  public renderTestSuiteInfo(parent: XMLElement, suite: TestResult) {
+    const suiteInfo2 = parent.ele("div", { class: "suite-info" });
+    // Suite Path
+    suiteInfo2.ele("div", { class: "suite-path" }, suite.testFilePath);
+    // Suite execution time
+    const executionTime2 = (suite.perfStats.end - suite.perfStats.start) / 1000;
+    suiteInfo2.ele(
+      "div",
+      {
+        class: `suite-time${
+          executionTime2 >
+          (this.getConfigValue("executionTimeWarningThreshold") as number)
+            ? " warn"
+            : ""
+        }`,
+      },
+      `${executionTime2}s`
+    );
+  }
+
+  public renderSuiteFailure(parent: XMLElement, suite: TestResult, i: number) {
+    const suiteContainer = parent.ele("div", {
+      id: `suite-${i + 1}`,
+      class: "suite-container",
+    });
+
+    // Suite Information
+    this.renderTestSuiteInfo(suiteContainer, suite);
+
+    // Test Container
+    const suiteTests = suiteContainer.ele("div", {
+      class: "suite-tests",
+    });
+
+    const testResult = suiteTests.ele("div", {
+      class: "test-result failed",
+    });
+
+    const failureMsgDiv = testResult.ele(
+      "div",
+      {
+        class: "failureMessages suiteFailure",
+      },
+      " "
+    );
+    failureMsgDiv.ele(
+      "pre",
+      { class: "failureMsg" },
+      stripAnsi(suite.failureMessage)
+    );
   }
 
   public async renderTestReportContent() {
@@ -270,6 +322,12 @@ class HTMLReporter {
         sortedTestResults.map((suite, i) => {
           // Ignore this suite if there are no results
           if (!suite.testResults || suite.testResults.length <= 0) {
+            if (
+              suite.failureMessage &&
+              this.getConfigValue("includeSuiteFailure")
+            ) {
+              this.renderSuiteFailure(reportBody, suite, i);
+            }
             return;
           }
 
@@ -279,24 +337,7 @@ class HTMLReporter {
           });
 
           // Suite Information
-          const suiteInfo = suiteContainer.ele("div", { class: "suite-info" });
-          // Suite Path
-          suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
-          // Suite execution time
-          const executionTime =
-            (suite.perfStats.end - suite.perfStats.start) / 1000;
-          suiteInfo.ele(
-            "div",
-            {
-              class: `suite-time${
-                executionTime >
-                (this.getConfigValue("executionTimeWarningThreshold") as number)
-                  ? " warn"
-                  : ""
-              }`,
-            },
-            `${executionTime}s`
-          );
+          this.renderTestSuiteInfo(suiteContainer, suite);
 
           // Test Container
           const suiteTests = suiteContainer.ele("div", {
@@ -420,6 +461,7 @@ class HTMLReporter {
       logo,
       includeConsoleLog,
       includeFailureMsg,
+      includeSuiteFailure,
       outputPath,
       pageTitle,
       theme,
@@ -465,6 +507,11 @@ class HTMLReporter {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG",
         configValue: includeFailureMsg,
+      },
+      includeSuiteFailure: {
+        defaultValue: false,
+        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_SUITE_FAILURE",
+        configValue: includeSuiteFailure,
       },
       includeConsoleLog: {
         defaultValue: false,

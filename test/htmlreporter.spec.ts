@@ -191,6 +191,25 @@ describe("HTMLReporter", () => {
       });
     });
 
+    describe("includeSuiteFailure", () => {
+      it("should include suite failure message", async () => {
+        const reporter = new HTMLReporter(
+          mockedJestResponseMultipleTestResult,
+          {
+            includeSuiteFailure: true,
+          },
+          null
+        );
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
+
+        expect(
+          reportContent.indexOf('<div class="failureMessages suiteFailure">')
+        ).toBeGreaterThan(-1);
+      });
+    });
+
     describe("logo", () => {
       it("should add a logo to the report", async () => {
         const reporter = new HTMLReporter(

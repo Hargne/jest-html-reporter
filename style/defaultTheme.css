@@ -134,6 +134,9 @@ header {
   margin-top: 1rem;
   border-top: 1px dashed #d8000c;
 }
+.failureMessages.suiteFailure {
+  border-top: none;
+}
 .failureMsg {
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
