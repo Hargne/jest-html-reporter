@@ -124,22 +124,22 @@ class HTMLReporter {
   }
 
   public renderTestSuiteInfo(parent: XMLElement, suite: TestResult) {
-    const suiteInfo2 = parent.ele("div", { class: "suite-info" });
+    const suiteInfo = parent.ele("div", { class: "suite-info" });
     // Suite Path
-    suiteInfo2.ele("div", { class: "suite-path" }, suite.testFilePath);
+    suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
     // Suite execution time
-    const executionTime2 = (suite.perfStats.end - suite.perfStats.start) / 1000;
-    suiteInfo2.ele(
+    const executionTime = (suite.perfStats.end - suite.perfStats.start) / 1000;
+    suiteInfo.ele(
       "div",
       {
         class: `suite-time${
-          executionTime2 >
+          executionTime >
           (this.getConfigValue("executionTimeWarningThreshold") as number)
             ? " warn"
             : ""
         }`,
       },
-      `${executionTime2}s`
+      `${executionTime}s`
     );
   }
 
