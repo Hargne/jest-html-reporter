@@ -27,13 +27,13 @@ const mockedJestResponseBase: AggregatedResult = {
     unchecked: 0,
     uncheckedKeysByFile: [],
     unmatched: 0,
-    updated: 0
+    updated: 0,
   },
   startTime: 1584892601719,
   success: false,
   testResults: [],
   wasInterrupted: false,
-  coverageMap: null
+  coverageMap: null,
 };
 
 export const mockedJestResponseSingleTestResult: AggregatedResult = {
@@ -48,7 +48,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
       numTodoTests: 0,
       perfStats: {
         start: 1498476492,
-        end: 1498476650
+        end: 1498476650,
       },
       snapshot: undefined,
       testFilePath: "/mocked/path/to/test.ts",
@@ -67,7 +67,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 1
+          duration: 1,
         },
         {
           title: "title",
@@ -77,7 +77,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 2
+          duration: 2,
         },
         {
           title: "title",
@@ -87,11 +87,11 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
-        }
-      ]
-    }
-  ]
+          duration: 3,
+        },
+      ],
+    },
+  ],
 };
 
 export const mockedJestResponseMultipleTestResult: AggregatedResult = {
@@ -120,7 +120,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
+          duration: 3,
         },
         {
           title: "title c",
@@ -130,7 +130,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
+          duration: 3,
         },
         {
           title: "title a",
@@ -140,14 +140,14 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
-        }
+          duration: 3,
+        },
       ],
       perfStats: {
         start: 1498476492,
-        end: 1498476640
+        end: 1498476640,
       },
-      testFilePath: "index-a.js"
+      testFilePath: "index-a.js",
     },
     {
       numFailingTests: 1,
@@ -172,7 +172,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
+          duration: 3,
         },
         {
           title: "title c",
@@ -182,7 +182,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
+          duration: 3,
         },
         {
           title: "title a",
@@ -192,14 +192,14 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
-        }
+          duration: 3,
+        },
       ],
       perfStats: {
         start: 1498476492,
-        end: 1498476639
+        end: 1498476639,
       },
-      testFilePath: "index-b.js"
+      testFilePath: "index-b.js",
     },
     {
       numFailingTests: 1,
@@ -224,7 +224,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
+          duration: 3,
         },
         {
           title: "title c",
@@ -234,7 +234,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
+          duration: 3,
         },
         {
           title: "title b",
@@ -244,16 +244,38 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
-          duration: 3
-        }
+          duration: 3,
+        },
       ],
       perfStats: {
         start: 1498476492,
-        end: 1498476650
+        end: 1498476650,
       },
-      testFilePath: "index-c.js"
-    }
-  ]
+      testFilePath: "index-c.js",
+    },
+    {
+      numFailingTests: 0,
+      numPassingTests: 0,
+      numPendingTests: 0,
+      console: undefined,
+      failureMessage:
+        "  \u001b[1m● \u001b[22mTest suite failed to run\n\n    SyntaxError",
+      numTodoTests: 0,
+      snapshot: undefined,
+      skipped: false,
+      displayName: undefined,
+      leaks: false,
+      sourceMaps: undefined,
+      coverage: undefined,
+      openHandles: [],
+      testResults: [],
+      perfStats: {
+        start: 0,
+        end: 0,
+      },
+      testFilePath: "index-d.js",
+    },
+  ],
 };
 
 export const mockedFullReportOutput = `<html><head><meta charset="utf-8"/><title>Test Report</title></head><body>A Test!</body></html>`;
@@ -270,7 +292,7 @@ export const mockedJestGlobalConfig: Config.GlobalConfig = {
   coverageDirectory: "/path",
   coverageReporters: ["json", "html", "text", "text-summary"],
   coverageThreshold: {
-    global: { branches: 50, functions: 50, lines: 50, statements: 50 }
+    global: { branches: 50, functions: 50, lines: 50, statements: 50 },
   },
   detectLeaks: false,
   detectOpenHandles: false,
@@ -316,5 +338,5 @@ export const mockedJestGlobalConfig: Config.GlobalConfig = {
   watch: false,
   watchAll: undefined,
   watchPlugins: undefined,
-  watchman: true
+  watchman: true,
 };

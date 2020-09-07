@@ -8,6 +8,7 @@ export interface IJestHTMLReporterConfigOptions {
   executionTimeWarningThreshold?: number;
   includeConsoleLog?: boolean;
   includeFailureMsg?: boolean;
+  includeSuiteFailure?: boolean;
   logo?: string;
   outputPath?: string;
   pageTitle?: string;
@@ -45,6 +46,9 @@ export interface IJestHTMLReporterConfig {
   >;
   includeFailureMsg: IJestHTMLReporterConfigOption<
     IJestHTMLReporterConfigOptions["includeFailureMsg"]
+  >;
+  includeSuiteFailure: IJestHTMLReporterConfigOption<
+    IJestHTMLReporterConfigOptions["includeSuiteFailure"]
   >;
   logo: IJestHTMLReporterConfigOption<IJestHTMLReporterConfigOptions["logo"]>;
   outputPath: IJestHTMLReporterConfigOption<

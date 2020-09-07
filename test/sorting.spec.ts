@@ -104,9 +104,10 @@ describe("sorting", () => {
       const { testResults } = mockedJestResponseMultipleTestResult;
       const sortedTestResults = sorting(testResults, "executionasc");
 
-      expect(sortedTestResults[0].testFilePath).toEqual("index-b.js");
-      expect(sortedTestResults[1].testFilePath).toEqual("index-a.js");
-      expect(sortedTestResults[2].testFilePath).toEqual("index-c.js");
+      expect(sortedTestResults[0].testFilePath).toEqual("index-d.js");
+      expect(sortedTestResults[1].testFilePath).toEqual("index-b.js");
+      expect(sortedTestResults[2].testFilePath).toEqual("index-a.js");
+      expect(sortedTestResults[3].testFilePath).toEqual("index-c.js");
     });
   });
 
@@ -115,18 +116,9 @@ describe("sorting", () => {
       const { testResults } = mockedJestResponseMultipleTestResult;
       const sortedTestResults = sorting(testResults, "titledesc");
 
-      expect(sortedTestResults[0].testFilePath).toEqual("index-c.js");
-      expect(sortedTestResults[0].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor c"
-      );
-      expect(sortedTestResults[0].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor b"
-      );
-      expect(sortedTestResults[0].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor a"
-      );
+      expect(sortedTestResults[0].testFilePath).toEqual("index-d.js");
 
-      expect(sortedTestResults[1].testFilePath).toEqual("index-b.js");
+      expect(sortedTestResults[1].testFilePath).toEqual("index-c.js");
       expect(sortedTestResults[1].testResults[0].ancestorTitles[0]).toEqual(
         "ancestor c"
       );
@@ -137,7 +129,7 @@ describe("sorting", () => {
         "ancestor a"
       );
 
-      expect(sortedTestResults[2].testFilePath).toEqual("index-a.js");
+      expect(sortedTestResults[2].testFilePath).toEqual("index-b.js");
       expect(sortedTestResults[2].testResults[0].ancestorTitles[0]).toEqual(
         "ancestor c"
       );
@@ -145,6 +137,17 @@ describe("sorting", () => {
         "ancestor b"
       );
       expect(sortedTestResults[2].testResults[2].ancestorTitles[0]).toEqual(
+        "ancestor a"
+      );
+
+      expect(sortedTestResults[3].testFilePath).toEqual("index-a.js");
+      expect(sortedTestResults[3].testResults[0].ancestorTitles[0]).toEqual(
+        "ancestor c"
+      );
+      expect(sortedTestResults[3].testResults[1].ancestorTitles[0]).toEqual(
+        "ancestor b"
+      );
+      expect(sortedTestResults[3].testResults[2].ancestorTitles[0]).toEqual(
         "ancestor a"
       );
     });
