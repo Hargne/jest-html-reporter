@@ -9,6 +9,7 @@ export interface IJestHTMLReporterConfigOptions {
   includeConsoleLog?: boolean;
   includeFailureMsg?: boolean;
   includeSuiteFailure?: boolean;
+  includeObsoleteSnapshots?: boolean;
   logo?: string;
   outputPath?: string;
   pageTitle?: string;
@@ -49,6 +50,9 @@ export interface IJestHTMLReporterConfig {
   >;
   includeSuiteFailure: IJestHTMLReporterConfigOption<
     IJestHTMLReporterConfigOptions["includeSuiteFailure"]
+  >;
+  includeObsoleteSnapshots: IJestHTMLReporterConfigOption<
+    IJestHTMLReporterConfigOptions["includeObsoleteSnapshots"]
   >;
   logo: IJestHTMLReporterConfigOption<IJestHTMLReporterConfigOptions["logo"]>;
   outputPath: IJestHTMLReporterConfigOption<
