@@ -69,7 +69,8 @@ header {
   border-left: 0.4rem solid #4f8a10;
   padding-left: 0.5rem;
 }
-.summary-failed {
+.summary-failed,
+.summary-obsolete-snapshots {
   color: #d8000c;
   border-left: 0.4rem solid #d8000c;
   padding-left: 0.5rem;
@@ -174,7 +175,7 @@ header {
 
 /* CONSOLE LOGS */
 .suite-consolelog {
-  margin-bottom: 2rem;
+  margin-bottom: 0.25rem;
   padding: 1rem;
   background-color: #efefef;
 }
@@ -197,6 +198,33 @@ header {
   font-weight: bold;
 }
 .suite-consolelog-item-message {
+  color: #000;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+/* OBSOLETE SNAPSHOTS */
+.suite-obsolete-snapshots {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: #ffbaba;
+  color: #d8000c;
+}
+.suite-obsolete-snapshots-header {
+  font-weight: bold;
+}
+.suite-obsolete-snapshots-item {
+  padding: 0.5rem;
+}
+.suite-obsolete-snapshots-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-obsolete-snapshots-item-message {
   color: #000;
   font-size: 1rem;
   padding: 0 0.5rem;

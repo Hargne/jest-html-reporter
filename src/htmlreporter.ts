@@ -258,6 +258,18 @@ class HTMLReporter {
         `${this.testData.numPendingTestSuites} pending`
       );
 
+      if (
+        this.testData.snapshot.unchecked > 0 &&
+        this.getConfigValue("includeObsoleteSnapshots")
+      ) {
+        suiteSummary.ele(
+          "div",
+          {
+            class: "summary-obsolete-snapshots",
+          },
+          `${this.testData.snapshot.unchecked} obsolete snapshots`
+        );
+      }
       // Test Summary
       const testSummary = summaryContainer.ele("div", { id: "test-summary" });
       testSummary.ele(
@@ -403,38 +415,14 @@ class HTMLReporter {
             this.consoleLogList.length > 0 &&
             this.getConfigValue("includeConsoleLog")
           ) {
-            // Filter out the logs for this test file path
-            const filteredConsoleLogs = this.consoleLogList.find(
-              (logs) => logs.filePath === suite.testFilePath
-            );
-            if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
-              // Console Log Container
-              const consoleLogContainer = suiteContainer.ele("div", {
-                class: "suite-consolelog",
-              });
-              // Console Log Header
-              consoleLogContainer.ele(
-                "div",
-                { class: "suite-consolelog-header" },
-                "Console Log"
-              );
-              // Apply the logs to the body
-              filteredConsoleLogs.logs.forEach((log) => {
-                const logElement = consoleLogContainer.ele("div", {
-                  class: "suite-consolelog-item",
-                });
-                logElement.ele(
-                  "pre",
-                  { class: "suite-consolelog-item-origin" },
-                  stripAnsi(log.origin)
-                );
-                logElement.ele(
-                  "pre",
-                  { class: "suite-consolelog-item-message" },
-                  stripAnsi(log.message)
-                );
-              });
-            }
+            this.renderSuiteConsoleLogs(suite, suiteContainer);
+          }
+
+          if (
+            suite.snapshot.unchecked > 0 &&
+            this.getConfigValue("includeObsoleteSnapshots")
+          ) {
+            this.renderSuiteObsoleteSnapshots(suiteContainer, suite);
           }
         });
       }
@@ -443,6 +431,68 @@ class HTMLReporter {
     } catch (e) {
       this.logMessage("error", e);
     }
+  }
+
+  public renderSuiteConsoleLogs(
+    suite: TestResult,
+    suiteContainer: xmlbuilder.XMLElement
+  ) {
+    // Filter out the logs for this test file path
+    const filteredConsoleLogs = this.consoleLogList.find(
+      (logs) => logs.filePath === suite.testFilePath
+    );
+    if (filteredConsoleLogs && filteredConsoleLogs.logs.length > 0) {
+      // Console Log Container
+      const consoleLogContainer = suiteContainer.ele("div", {
+        class: "suite-consolelog",
+      });
+      // Console Log Header
+      consoleLogContainer.ele(
+        "div",
+        { class: "suite-consolelog-header" },
+        "Console Log"
+      );
+      // Apply the logs to the body
+      filteredConsoleLogs.logs.forEach((log) => {
+        const logElement = consoleLogContainer.ele("div", {
+          class: "suite-consolelog-item",
+        });
+        logElement.ele(
+          "pre",
+          { class: "suite-consolelog-item-origin" },
+          stripAnsi(log.origin)
+        );
+        logElement.ele(
+          "pre",
+          { class: "suite-consolelog-item-message" },
+          stripAnsi(log.message)
+        );
+      });
+    }
+  }
+
+  public renderSuiteObsoleteSnapshots(
+    suiteContainer: xmlbuilder.XMLElement,
+    suite: TestResult
+  ) {
+    // Obsolete snapshots Container
+    const snapshotContainer = suiteContainer.ele("div", {
+      class: "suite-obsolete-snapshots",
+    });
+    // Obsolete snapshots Header
+    snapshotContainer.ele(
+      "div",
+      { class: "suite-obsolete-snapshots-header" },
+      "Obsolete snapshots"
+    );
+    const keysElement = snapshotContainer.ele("div", {
+      class: "suite-obsolete-snapshots-item",
+    });
+    keysElement.ele(
+      "pre",
+      { class: "suite-obsolete-snapshots-item-message" },
+      suite.snapshot.uncheckedKeys.join("\n")
+    );
   }
 
   /**
@@ -462,6 +512,7 @@ class HTMLReporter {
       includeConsoleLog,
       includeFailureMsg,
       includeSuiteFailure,
+      includeObsoleteSnapshots,
       outputPath,
       pageTitle,
       theme,
@@ -512,6 +563,11 @@ class HTMLReporter {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_SUITE_FAILURE",
         configValue: includeSuiteFailure,
+      },
+      includeObsoleteSnapshots: {
+        defaultValue: false,
+        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_OBSOLETE_SNAPSHOTS",
+        configValue: includeObsoleteSnapshots,
       },
       includeConsoleLog: {
         defaultValue: false,

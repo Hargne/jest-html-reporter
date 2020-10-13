@@ -210,6 +210,28 @@ describe("HTMLReporter", () => {
       });
     });
 
+    describe("includeObsoleteSnapshots", () => {
+      it("should include obsolete snapshots", async () => {
+        const reporter = new HTMLReporter(
+          mockedJestResponseMultipleTestResult,
+          {
+            includeObsoleteSnapshots: true,
+          },
+          null
+        );
+        const reportContent = (
+          await reporter.renderTestReportContent()
+        ).toString();
+
+        expect(
+          reportContent.indexOf('<div class="summary-obsolete-snapshots">')
+        ).toBeGreaterThan(-1);
+        expect(
+          reportContent.indexOf('<div class="suite-obsolete-snapshots">')
+        ).toBeGreaterThan(-1);
+      });
+    });
+
     describe("logo", () => {
       it("should add a logo to the report", async () => {
         const reporter = new HTMLReporter(

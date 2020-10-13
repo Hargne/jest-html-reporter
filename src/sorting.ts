@@ -33,12 +33,12 @@ const sortByStatus = (testResults: AggregatedResult["testResults"]) => {
   const failingSuites: AggregatedResult["testResults"] = [];
   const passingSuites: AggregatedResult["testResults"] = [];
 
-  testResults.forEach(result => {
+  testResults.forEach((result) => {
     const pending: AssertionResult[] = [];
     const failed: AssertionResult[] = [];
     const passed: AssertionResult[] = [];
 
-    result.testResults.forEach(x => {
+    result.testResults.forEach((x) => {
       if (x.status === "pending") {
         pending.push(x);
       } else if (x.status === "failed") {
@@ -51,19 +51,19 @@ const sortByStatus = (testResults: AggregatedResult["testResults"]) => {
     if (pending.length > 0) {
       pendingSuites.push({
         ...result,
-        testResults: pending
+        testResults: pending,
       });
     }
     if (failed.length > 0) {
       failingSuites.push({
         ...result,
-        testResults: failed
+        testResults: failed,
       });
     }
     if (passed.length > 0) {
       passingSuites.push({
         ...result,
-        testResults: passed
+        testResults: passed,
       });
     }
   });
@@ -111,7 +111,7 @@ const sortByTitleDesc = (testResults: AggregatedResult["testResults"]) => {
       sortAlphabetically(a.testFilePath, b.testFilePath, true)
     );
     // Sort Suite testResults
-    sorted.forEach(suite => {
+    sorted.forEach((suite) => {
       // By Ancestor Titles
       suite.testResults.sort((a, b) =>
         sortAlphabetically(
@@ -140,7 +140,7 @@ const sortByTitleAsc = (testResults: AggregatedResult["testResults"]) => {
       sortAlphabetically(a.testFilePath, b.testFilePath)
     );
     // Sort Suite testResults
-    sorted.forEach(suite => {
+    sorted.forEach((suite) => {
       // By Ancestor Titles
       suite.testResults.sort((a, b) =>
         sortAlphabetically(
