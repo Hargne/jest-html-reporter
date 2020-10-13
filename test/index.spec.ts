@@ -5,7 +5,7 @@ import JestHTMLReporter from "../src";
 import {
   mockedFullReportOutput,
   mockedJestGlobalConfig,
-  mockedJestResponseSingleTestResult
+  mockedJestResponseSingleTestResult,
 } from "./mockdata";
 
 describe("index", () => {
@@ -21,7 +21,7 @@ describe("index", () => {
   it("should return the jest global config if used as a testResultsProcessor", async () => {
     const input = {
       ...mockedJestGlobalConfig,
-      testResults: mockedJestResponseSingleTestResult
+      testResults: mockedJestResponseSingleTestResult,
     };
 
     // Trigger the reporter as a testResultsProcessor
