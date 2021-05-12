@@ -325,12 +325,9 @@ describe("HTMLReporter", () => {
           null
         );
         const report = (await reporter.renderTestReport()).toString();
-        const now = new Date();
 
         expect(
-          report.indexOf(
-            `<div id="timestamp">Started: ${now.getFullYear()}</div>`
-          )
+          report.indexOf(`<div id="timestamp">Started: 2020</div>`)
         ).toBeGreaterThan(-1);
       });
     });
