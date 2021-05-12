@@ -1,6 +1,15 @@
 import { ConsoleBuffer } from "@jest/console";
+import { Config } from "@jest/types";
+import { AggregatedResult } from "@jest/test-result";
 
-export interface IJestHTMLReporterConfigOptions {
+export interface JestHTMLReporterProps {
+  testData: AggregatedResult;
+  options: IJestHTMLReporterConfigOptions;
+  jestConfig?: Config.GlobalConfig;
+  consoleLogs?: IJestHTMLReporterConsole[];
+}
+
+export type IJestHTMLReporterConfigOptions = {
   append?: boolean;
   boilerplate?: string;
   customScriptPath?: string;
@@ -18,7 +27,7 @@ export interface IJestHTMLReporterConfigOptions {
   styleOverridePath?: string;
   theme?: string;
   useCssFile?: boolean;
-}
+};
 
 export interface IJestHTMLReporterConfigOption<T> {
   environmentVariable: string;
