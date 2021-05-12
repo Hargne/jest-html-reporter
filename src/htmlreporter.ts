@@ -259,6 +259,7 @@ class HTMLReporter {
       );
 
       if (
+        this.testData.snapshot &&
         this.testData.snapshot.unchecked > 0 &&
         this.getConfigValue("includeObsoleteSnapshots")
       ) {
@@ -419,6 +420,7 @@ class HTMLReporter {
           }
 
           if (
+            suite.snapshot &&
             suite.snapshot.unchecked > 0 &&
             this.getConfigValue("includeObsoleteSnapshots")
           ) {
