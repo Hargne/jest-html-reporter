@@ -8,6 +8,7 @@ import {
   IJestHTMLReporterConfig,
   IJestHTMLReporterConfigOptions,
   IJestHTMLReporterConsole,
+  JestHTMLReporterProps,
   JestHTMLReporterSortType,
 } from "src/types";
 import stripAnsi from "strip-ansi";
@@ -21,16 +22,11 @@ class HTMLReporter {
   public jestConfig: Config.GlobalConfig;
   public config: IJestHTMLReporterConfig;
 
-  constructor(
-    testData: AggregatedResult,
-    options: IJestHTMLReporterConfigOptions,
-    jestConfig: Config.GlobalConfig,
-    consoleLogs?: IJestHTMLReporterConsole[]
-  ) {
-    this.testData = testData;
-    this.jestConfig = jestConfig;
-    this.consoleLogList = consoleLogs;
-    this.setupConfig(options);
+  constructor(data: JestHTMLReporterProps) {
+    this.testData = data.testData;
+    this.jestConfig = data.jestConfig;
+    this.consoleLogList = data.consoleLogs;
+    this.setupConfig(data.options);
   }
 
   public async generate() {

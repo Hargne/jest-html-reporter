@@ -12,11 +12,10 @@ describe("HTMLReporter", () => {
       const mockedFS = jest.spyOn(fs, "writeFileSync");
       mockedFS.mockImplementation();
 
-      const reporter = new HTMLReporter(
-        mockedJestResponseSingleTestResult,
-        {},
-        null
-      );
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
       const report = await reporter.generate();
 
       expect(report.toString().substring(0, 6)).toEqual("<html>");
@@ -36,11 +35,10 @@ describe("HTMLReporter", () => {
   describe("getConfigValue", () => {
     it("should return configured environment variable", async () => {
       process.env.JEST_HTML_REPORTER_LOGO = "logoFromEnv.png";
-      const reporter = new HTMLReporter(
-        mockedJestResponseSingleTestResult,
-        {},
-        null
-      );
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
       const reportContent = (
         await reporter.renderTestReportContent()
       ).toString();
@@ -75,13 +73,12 @@ describe("HTMLReporter", () => {
 
     describe("styleOverridePath", () => {
       it("should insert a link to the overriding stylesheet path", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             styleOverridePath: "path/to/style.css",
           },
-          null
-        );
+        });
         const report = await reporter.renderTestReport();
         expect(
           report
@@ -95,13 +92,12 @@ describe("HTMLReporter", () => {
 
     describe("includeConsoleLog", () => {
       it("should add found console.logs to the report if includeConsoleLog is set", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             includeConsoleLog: true,
           },
-          null,
-          [
+          consoleLogs: [
             {
               filePath:
                 mockedJestResponseSingleTestResult.testResults[0].testFilePath,
@@ -113,8 +109,8 @@ describe("HTMLReporter", () => {
                 },
               ],
             },
-          ]
-        );
+          ],
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -126,11 +122,10 @@ describe("HTMLReporter", () => {
       });
 
       it("should not add any console.logs to the report if includeConsoleLog is false", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {},
-          null,
-          [
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {},
+          consoleLogs: [
             {
               filePath:
                 mockedJestResponseSingleTestResult.testResults[0].testFilePath,
@@ -142,8 +137,8 @@ describe("HTMLReporter", () => {
                 },
               ],
             },
-          ]
-        );
+          ],
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -157,13 +152,12 @@ describe("HTMLReporter", () => {
 
     describe("statusIgnoreFilter", () => {
       it("should remove tests with the specified status", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseMultipleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseMultipleTestResult,
+          options: {
             statusIgnoreFilter: "passed",
           },
-          null
-        );
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -174,13 +168,12 @@ describe("HTMLReporter", () => {
 
     describe("includeFailureMsg", () => {
       it("should include failure messages", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseMultipleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseMultipleTestResult,
+          options: {
             includeFailureMsg: true,
           },
-          null
-        );
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -193,13 +186,12 @@ describe("HTMLReporter", () => {
 
     describe("includeSuiteFailure", () => {
       it("should include suite failure message", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseMultipleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseMultipleTestResult,
+          options: {
             includeSuiteFailure: true,
           },
-          null
-        );
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -212,13 +204,12 @@ describe("HTMLReporter", () => {
 
     describe("includeObsoleteSnapshots", () => {
       it("should include obsolete snapshots", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseMultipleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseMultipleTestResult,
+          options: {
             includeObsoleteSnapshots: true,
           },
-          null
-        );
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -234,13 +225,12 @@ describe("HTMLReporter", () => {
 
     describe("logo", () => {
       it("should add a logo to the report", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             logo: "logo.png",
           },
-          null
-        );
+        });
         const reportContent = (
           await reporter.renderTestReportContent()
         ).toString();
@@ -253,13 +243,12 @@ describe("HTMLReporter", () => {
 
     describe("customScriptPath", () => {
       it("should add assigned custom script path to the report", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             customScriptPath: "path/to/script.js",
           },
-          null
-        );
+        });
         const report = (await reporter.renderTestReport()).toString();
 
         expect(
@@ -270,43 +259,29 @@ describe("HTMLReporter", () => {
 
     describe("pageTitle", () => {
       it("should add the given string as a title tag", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             pageTitle: "My Report",
           },
-          null
-        );
+        });
         const report = (await reporter.renderTestReport()).toString();
 
         expect(report.indexOf('<h1 id="title">My Report</h1>')).toBeGreaterThan(
           -1
         );
-      });
-
-      it("should add the given string as a header", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
-            pageTitle: "My Report",
-          },
-          null
-        );
-        const report = (await reporter.renderTestReport()).toString();
-
         expect(report.indexOf("<title>My Report</title>")).toBeGreaterThan(-1);
       });
     });
 
     describe("executionTimeWarningThreshold", () => {
       it("should mark tests that have surpassed the threshold", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             executionTimeWarningThreshold: 0.00001,
           },
-          null
-        );
+        });
         const report = (await reporter.renderTestReport()).toString();
 
         expect(report.indexOf('<div class="suite-time warn">')).toBeGreaterThan(
@@ -317,13 +292,12 @@ describe("HTMLReporter", () => {
 
     describe("dateFormat", () => {
       it("should format the date in the given format", async () => {
-        const reporter = new HTMLReporter(
-          mockedJestResponseSingleTestResult,
-          {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
             dateFormat: "yyyy",
           },
-          null
-        );
+        });
         const report = (await reporter.renderTestReport()).toString();
 
         expect(
@@ -335,11 +309,10 @@ describe("HTMLReporter", () => {
 
   describe("setupConfig", () => {
     it("should return default value if no options were provided", async () => {
-      const reporter = new HTMLReporter(
-        mockedJestResponseSingleTestResult,
-        null,
-        null
-      );
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
       expect(reporter.config).toBeDefined();
       expect(reporter.config.append.configValue).not.toBeDefined();
       expect(reporter.getConfigValue("append")).toEqual(false);
@@ -348,11 +321,10 @@ describe("HTMLReporter", () => {
 
   describe("replaceRootDirInPath", () => {
     it("should replace <rootDir> in the given path", () => {
-      const reporter = new HTMLReporter(
-        mockedJestResponseSingleTestResult,
-        {},
-        null
-      );
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
       const result = reporter.replaceRootDirInPath(
         "mockedRoot",
         "<rootDir>/test/reporter.html"
@@ -363,11 +335,10 @@ describe("HTMLReporter", () => {
     });
 
     it("should simply return the file path if no <rootDir> is present", () => {
-      const reporter = new HTMLReporter(
-        mockedJestResponseSingleTestResult,
-        {},
-        null
-      );
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
       const result = reporter.replaceRootDirInPath(
         "mockedRoot",
         "test/reporter.html"
@@ -377,11 +348,10 @@ describe("HTMLReporter", () => {
     });
 
     it("should be able to handle cases where root is not defined", () => {
-      const reporter = new HTMLReporter(
-        mockedJestResponseSingleTestResult,
-        {},
-        null
-      );
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
       const result = reporter.replaceRootDirInPath(null, "test/reporter.html");
 
       expect(result).toBe("test/reporter.html");

@@ -42,7 +42,7 @@
     "@babel/preset-typescript": "^7.8.3",
     "@jest/console": "^25.1.0",
     "@jest/test-result": "^25.1.0",
-    "@jest/types": "^25.1.0",
+    "@jest/types": "^26.0.23",
     "@types/dateformat": "^3.0.1",
     "@types/jest": "^25.1.4",
     "@types/mkdirp": "^1.0.0",

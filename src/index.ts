@@ -5,23 +5,14 @@ import htmlreporter from "./htmlreporter";
 import {
   IJestHTMLReporterConfigOptions,
   IJestHTMLReporterConsole,
+  JestHTMLReporterProps,
 } from "./types";
 
 /**
  * Setup Jest HTML Reporter and generate a report with the given data
  */
-const setupAndRun = (
-  testResults: AggregatedResult,
-  options: Config.DefaultOptions,
-  jestConfig: Config.GlobalConfig,
-  logs?: IJestHTMLReporterConsole[]
-) => {
-  const reporter = new htmlreporter(
-    testResults,
-    options as IJestHTMLReporterConfigOptions,
-    jestConfig,
-    logs
-  );
+const setupAndRun = (data: JestHTMLReporterProps) => {
+  const reporter = new htmlreporter(data);
   return reporter.generate();
 };
 
@@ -29,9 +20,9 @@ const setupAndRun = (
  * The test runner function passed to Jest
  */
 function JestHtmlReporter(
-  globalConfig: Config.GlobalConfig,
-  options: Config.DefaultOptions
-): Promise<Circus.TestResult> | Config.GlobalConfig {
+  globalConfig: Config.GlobalConfig | AggregatedResult,
+  options: IJestHTMLReporterConfigOptions
+): Promise<Circus.TestResult> | Config.GlobalConfig | AggregatedResult {
   const consoleLogs: IJestHTMLReporterConsole[] = [];
 
   /**
@@ -41,10 +32,13 @@ function JestHtmlReporter(
    * https://facebook.github.io/jest/docs/en/configuration.html#testresultsprocessor-string
    */
   if (Object.prototype.hasOwnProperty.call(globalConfig, "testResults")) {
-    // @ts-ignore
-    setupAndRun(globalConfig.testResults, options, globalConfig);
+    const testData = globalConfig as AggregatedResult;
+    setupAndRun({
+      testData,
+      options,
+    });
     // Return the results as required by Jest
-    return globalConfig;
+    return testData;
   }
 
   /**
@@ -63,8 +57,13 @@ function JestHtmlReporter(
     }
   };
 
-  this.onRunComplete = (contexts: any, testResult: AggregatedResult) =>
-    setupAndRun(testResult, options, globalConfig, consoleLogs);
+  this.onRunComplete = (contexts: any, testData: AggregatedResult) =>
+    setupAndRun({
+      testData,
+      options,
+      jestConfig: globalConfig as Config.GlobalConfig,
+      consoleLogs,
+    });
 }
 
 export default JestHtmlReporter;
