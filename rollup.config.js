@@ -1,4 +1,4 @@
-import babel from "rollup-plugin-babel";
+import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
@@ -9,20 +9,22 @@ const config = {
   output: [
     {
       dir: "dist",
-      format: "cjs"
-    }
+      format: "cjs",
+      exports: "default",
+    },
   ],
   external: ["xmlbuilder", "fs", "path", "dateformat", "mkdirp", "strip-ansi"],
   plugins: [
     resolve({
       jsnext: true,
-      extensions
+      extensions,
     }),
     babel({
-      extensions
+      extensions,
+      babelHelpers: "bundled",
     }),
-    terser()
-  ]
+    terser(),
+  ],
 };
 
 export default config;
