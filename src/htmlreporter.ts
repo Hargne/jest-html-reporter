@@ -167,7 +167,7 @@ class HTMLReporter {
     failureMsgDiv.ele(
       "pre",
       { class: "failureMsg" },
-      stripAnsi(suite.failureMessage)
+      this.sanitizeOutput(suite.failureMessage)
     );
   }
 
@@ -400,7 +400,7 @@ class HTMLReporter {
                   failureMsgDiv.ele(
                     "pre",
                     { class: "failureMsg" },
-                    stripAnsi(failureMsg)
+                    this.sanitizeOutput(failureMsg)
                   );
                 });
               }
@@ -458,12 +458,12 @@ class HTMLReporter {
         logElement.ele(
           "pre",
           { class: "suite-consolelog-item-origin" },
-          stripAnsi(log.origin)
+          this.sanitizeOutput(log.origin)
         );
         logElement.ele(
           "pre",
           { class: "suite-consolelog-item-message" },
-          stripAnsi(log.message)
+          this.sanitizeOutput(log.message)
         );
       });
     }
@@ -738,6 +738,18 @@ class HTMLReporter {
       console.log(logColor, logMsg);
     }
     return { logColor, logMsg }; // Return for testing purposes
+  }
+
+  /**
+   * Helper method to santize output from invalid characters
+   */
+  private sanitizeOutput(input: string) {
+    return stripAnsi(
+      input.replace(
+        /([^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFC\u{10000}-\u{10FFFF}])/gu,
+        ""
+      )
+    );
   }
 }
 
