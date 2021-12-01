@@ -51,7 +51,7 @@
     "dateformat": "3.0.2",
     "mkdirp": "^1.0.3",
     "sinon": "^9.0.1",
-    "strip-ansi": "6.0.0",
+    "strip-ansi": "6.0.1",
     "xmlbuilder": "15.0.0"
   },
   "peerDependencies": {
