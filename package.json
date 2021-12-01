@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "3.4.1",
+  "version": "3.4.2",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/index.js",
   "unpkg": "dist/index.js",
@@ -51,7 +51,7 @@
     "dateformat": "3.0.2",
     "mkdirp": "^1.0.3",
     "sinon": "^9.0.1",
-    "strip-ansi": "6.0.0",
+    "strip-ansi": "6.0.1",
     "xmlbuilder": "15.0.0"
   },
   "peerDependencies": {
