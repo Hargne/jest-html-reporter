@@ -59,10 +59,12 @@ class HTMLReporter {
 
     // Boilerplate Option
     if (!!this.getConfigValue("boilerplate")) {
-      const boilerplateContent = await fs.readFileSync(
-        this.getConfigValue("boilerplate") as string,
-        "utf8"
+      const boilerplatePath = this.replaceRootDirInPath(
+        this.jestConfig ? this.jestConfig.rootDir : "",
+        this.getConfigValue("boilerplate") as string
       );
+
+      const boilerplateContent = await fs.readFileSync(boilerplatePath, "utf8");
       return boilerplateContent.replace(
         "{jesthtmlreporter-content}",
         reportContent && reportContent.toString()
