@@ -649,7 +649,7 @@ class HTMLReporter {
   }
 
   /**
-   * Returns the configurated value from the config in the following priority order:
+   * Returns the configured value from the config in the following priority order:
    * Environment Variable > JSON configured value > Default value
    * @param key
    */
@@ -673,7 +673,7 @@ class HTMLReporter {
     let parsedContent = content;
     // Check if the file exists or not
     const fileToAppend = await fs.readFileSync(filePath, "utf8");
-    // The file exists - we need to strip all unecessary html
+    // The file exists - we need to strip all unnecessary html
     if (fileToAppend) {
       const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
       if (contentSearch) {
@@ -741,7 +741,7 @@ class HTMLReporter {
   }
 
   /**
-   * Helper method to santize output from invalid characters
+   * Helper method to sanitize output from invalid characters
    */
   private sanitizeOutput(input: string) {
     return stripAnsi(
