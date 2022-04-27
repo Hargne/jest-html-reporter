@@ -41,7 +41,7 @@ class HTMLReporter {
       if (this.getConfigValue("append") as boolean) {
         await this.appendToFile(outputPath, report.toString());
       } else {
-        await fs.writeFileSync(outputPath, report.toString());
+        fs.writeFileSync(outputPath, report.toString());
       }
 
       this.logMessage("success", `Report generated (${outputPath})`);
@@ -64,7 +64,7 @@ class HTMLReporter {
         this.getConfigValue("boilerplate") as string
       );
 
-      const boilerplateContent = await fs.readFileSync(boilerplatePath, "utf8");
+      const boilerplateContent = fs.readFileSync(boilerplatePath, "utf8");
       return boilerplateContent.replace(
         "{jesthtmlreporter-content}",
         reportContent && reportContent.toString()
@@ -94,10 +94,7 @@ class HTMLReporter {
       !!!this.getConfigValue("styleOverridePath");
 
     if (inlineCSS) {
-      const stylesheetContent = await fs.readFileSync(
-        stylesheetFilePath,
-        "utf8"
-      );
+      const stylesheetContent = fs.readFileSync(stylesheetFilePath, "utf8");
       headTag.raw(`<style type="text/css">${stylesheetContent}</style>`);
     } else {
       headTag.ele("link", {
@@ -330,7 +327,7 @@ class HTMLReporter {
        * Test Suites
        */
       if (sortedTestResults) {
-        sortedTestResults.map((suite, i) => {
+        sortedTestResults.forEach((suite, i) => {
           // Ignore this suite if there are no results
           if (!suite.testResults || suite.testResults.length <= 0) {
             if (
@@ -674,10 +671,10 @@ class HTMLReporter {
   public async appendToFile(filePath: string, content: any) {
     let parsedContent = content;
     // Check if the file exists or not
-    const fileExists = fs.existsSync(filePath)
+    const fileExists = fs.existsSync(filePath);
     // The file exists - we need to strip all unnecessary html
     if (fileExists) {
-      const fileToAppend = await fs.readFileSync(filePath, "utf8");
+      const fileToAppend = fs.readFileSync(filePath, "utf8");
       const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
       if (contentSearch) {
         const [strippedContent] = contentSearch;
@@ -715,7 +712,7 @@ class HTMLReporter {
 
     return path.resolve(
       rootDir,
-      path.normalize("./" + filePath.substr("<rootDir>".length))
+      path.normalize("./" + filePath.substring("<rootDir>".length))
     );
   }
 
@@ -725,10 +722,7 @@ class HTMLReporter {
    * @param message
    * @param ignoreConsole
    */
-  public logMessage(
-    type: "default" | "success" | "error" = "default",
-    message: string
-  ) {
+  public logMessage(type: "default" | "success" | "error", message: string) {
     const logTypes = {
       default: "\x1b[37m%s\x1b[0m",
       success: "\x1b[32m%s\x1b[0m",
