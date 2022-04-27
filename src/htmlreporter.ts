@@ -674,9 +674,10 @@ class HTMLReporter {
   public async appendToFile(filePath: string, content: any) {
     let parsedContent = content;
     // Check if the file exists or not
-    const fileToAppend = await fs.readFileSync(filePath, "utf8");
+    const fileExists = fs.existsSync(filePath)
     // The file exists - we need to strip all unnecessary html
-    if (fileToAppend) {
+    if (fileExists) {
+      const fileToAppend = await fs.readFileSync(filePath, "utf8");
       const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
       if (contentSearch) {
         const [strippedContent] = contentSearch;
