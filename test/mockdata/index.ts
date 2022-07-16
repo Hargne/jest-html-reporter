@@ -54,6 +54,8 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
       perfStats: {
         start: 1498476492,
         end: 1498476650,
+        runtime: 158,
+        slow: false
       },
       snapshot: {
         added: 0,
@@ -68,7 +70,6 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
       skipped: false,
       displayName: undefined,
       leaks: false,
-      sourceMaps: undefined,
       coverage: undefined,
       openHandles: [],
       testResults: [
@@ -77,6 +78,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           status: "passed",
           ancestorTitles: ["ancestor"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -87,6 +89,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           status: "failed",
           ancestorTitles: ["ancestor"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -97,6 +100,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           status: "pending",
           ancestorTitles: ["ancestor"],
           failureMessages: ["failure"],
+          failureDetails: ["detailed failure"],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -129,7 +133,6 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       skipped: false,
       displayName: undefined,
       leaks: false,
-      sourceMaps: undefined,
       coverage: undefined,
       openHandles: [],
       testResults: [
@@ -138,6 +141,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "passed",
           ancestorTitles: ["ancestor b"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -148,6 +152,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "passed",
           ancestorTitles: ["ancestor c"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -158,6 +163,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "passed",
           ancestorTitles: ["ancestor a"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -167,6 +173,8 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       perfStats: {
         start: 1498476492,
         end: 1498476640,
+        runtime: 148,
+        slow: false
       },
       testFilePath: "index-a.js",
     },
@@ -189,7 +197,6 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       skipped: false,
       displayName: undefined,
       leaks: false,
-      sourceMaps: undefined,
       coverage: undefined,
       openHandles: [],
       testResults: [
@@ -198,6 +205,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "pending",
           ancestorTitles: ["ancestor b"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -208,6 +216,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "failed",
           ancestorTitles: ["ancestor c", "ancestor child"],
           failureMessages: ["failure"],
+          failureDetails: ["detailed failure"],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -218,6 +227,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "passed",
           ancestorTitles: ["ancestor a"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -227,6 +237,8 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       perfStats: {
         start: 1498476492,
         end: 1498476639,
+        runtime: 147,
+        slow: false
       },
       testFilePath: "index-b.js",
     },
@@ -249,7 +261,6 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       skipped: false,
       displayName: undefined,
       leaks: false,
-      sourceMaps: undefined,
       coverage: undefined,
       openHandles: [],
       testResults: [
@@ -258,6 +269,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "pending",
           ancestorTitles: ["ancestor a"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -268,6 +280,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "failed",
           ancestorTitles: ["ancestor c"],
           failureMessages: ["failure"],
+          failureDetails: ["detailed failure"],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -278,6 +291,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           status: "passed",
           ancestorTitles: ["ancestor b"],
           failureMessages: [],
+          failureDetails: [],
           numPassingAsserts: 0,
           fullName: undefined,
           location: null,
@@ -287,6 +301,8 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       perfStats: {
         start: 1498476492,
         end: 1498476650,
+        runtime: 158,
+        slow: false
       },
       testFilePath: "index-c.js",
     },
@@ -310,13 +326,14 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
       skipped: false,
       displayName: undefined,
       leaks: false,
-      sourceMaps: undefined,
       coverage: undefined,
       openHandles: [],
       testResults: [],
       perfStats: {
         start: 0,
         end: 0,
+        runtime: 0,
+        slow: false
       },
       testFilePath: "index-d.js",
     },
@@ -328,6 +345,8 @@ export const mockedSingleTestResultReportHTML = `<div id="jesthtml-content"><hea
 
 export const mockedJestGlobalConfig: Config.GlobalConfig = {
   bail: 0,
+  ci: false,
+  snapshotFormat: {},
   changedFilesWithAncestor: false,
   changedSince: undefined,
   coverageProvider: "v8",
@@ -341,7 +360,6 @@ export const mockedJestGlobalConfig: Config.GlobalConfig = {
   },
   detectLeaks: false,
   detectOpenHandles: false,
-  enabledTestsMap: undefined,
   errorOnDeprecated: false,
   expand: false,
   filter: null,

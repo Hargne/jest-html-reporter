@@ -703,8 +703,8 @@ class HTMLReporter {
    * @param filePath
    */
   public replaceRootDirInPath(
-    rootDir: Config.Path,
-    filePath: Config.Path
+    rootDir: Config.GlobalConfig['rootDir'],
+    filePath: Config.GlobalConfig['testPathPattern']
   ): string {
     if (!/^<rootDir>/.test(filePath)) {
       return filePath;
