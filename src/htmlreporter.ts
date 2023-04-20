@@ -36,42 +36,48 @@ class HTMLReporter {
         this.jestConfig ? this.jestConfig.rootDir : "",
         this.getConfigValue("outputPath") as string
       );
-
       await mkdirp(path.dirname(outputPath));
+
+      let writeFullReport = true;
       if (this.getConfigValue("append") as boolean) {
-        await this.appendToFile(outputPath, report.toString());
-      } else {
-        fs.writeFileSync(outputPath, report.toString());
+        const fileExists = fs.existsSync(outputPath);
+        if (fileExists) {
+          await this.appendToFile(outputPath, report.content.toString());
+          writeFullReport = false;
+        }
+      }
+      if (writeFullReport) {
+        fs.writeFileSync(outputPath, report.fullHtml.toString());
       }
 
       this.logMessage("success", `Report generated (${outputPath})`);
-      return report;
+      return report.fullHtml;
     } catch (e) {
       this.logMessage("error", e);
     }
   }
 
-  public async renderTestReport() {
-    // Generate the content of the test report
+  public async renderTestReport(): Promise<{
+    fullHtml: string;
+    content: string;
+  }> {
     const reportContent = await this.renderTestReportContent();
 
-    // --
-
     // Boilerplate Option
-    if (!!this.getConfigValue("boilerplate")) {
+    if (this.getConfigValue("boilerplate")) {
       const boilerplatePath = this.replaceRootDirInPath(
         this.jestConfig ? this.jestConfig.rootDir : "",
         this.getConfigValue("boilerplate") as string
       );
-
       const boilerplateContent = fs.readFileSync(boilerplatePath, "utf8");
-      return boilerplateContent.replace(
-        "{jesthtmlreporter-content}",
-        reportContent && reportContent.toString()
-      );
+      return {
+        content: reportContent.toString(),
+        fullHtml: boilerplateContent.replace(
+          "{jesthtmlreporter-content}",
+          reportContent && reportContent.toString()
+        ),
+      };
     }
-
-    // --
 
     // Create HTML and apply reporter content
     const report = xmlbuilder.create({ html: {} });
@@ -115,7 +121,10 @@ class HTMLReporter {
         `<script src="${this.getConfigValue("customScriptPath")}"></script>`
       );
     }
-    return report;
+    return {
+      fullHtml: report.toString(),
+      content: reportContent.toString(),
+    };
   }
 
   public renderTestSuiteInfo(parent: XMLElement, suite: TestResult) {
@@ -178,7 +187,7 @@ class HTMLReporter {
 
       // HTML Body
       const reportBody: XMLElement = xmlbuilder.begin().element("div", {
-        id: "jesthtml-content",
+        class: "jesthtml-content",
       });
 
       /**
@@ -668,32 +677,26 @@ class HTMLReporter {
    * @param filePath
    * @param content
    */
-  public async appendToFile(filePath: string, content: any) {
+  public async appendToFile(filePath: string, content: string) {
     let parsedContent = content;
-    // Check if the file exists or not
-    const fileExists = fs.existsSync(filePath);
-    // The file exists - we need to strip all unnecessary html
-    if (fileExists) {
-      const fileToAppend = fs.readFileSync(filePath, "utf8");
-      const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
-      if (contentSearch) {
-        const [strippedContent] = contentSearch;
-        parsedContent = strippedContent;
-      }
-      // Then we need to add the stripped content just before the </body> tag
-      let newContent = fileToAppend;
-      const closingBodyTag = /<\/body>/gm.exec(fileToAppend);
-      const indexOfClosingBodyTag = closingBodyTag ? closingBodyTag.index : 0;
-
-      newContent = [
-        fileToAppend.slice(0, indexOfClosingBodyTag),
-        parsedContent,
-        fileToAppend.slice(indexOfClosingBodyTag),
-      ].join("");
-
-      return fs.writeFileSync(filePath, newContent);
+    const fileToAppend = fs.readFileSync(filePath, "utf8");
+    const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
+    if (contentSearch) {
+      const [strippedContent] = contentSearch;
+      parsedContent = strippedContent;
     }
-    return fs.appendFileSync(filePath, parsedContent);
+    // Then we need to add the stripped content just before the </body> tag
+    let newContent = fileToAppend;
+    const closingBodyTag = /<\/body>/gm.exec(fileToAppend);
+    const indexOfClosingBodyTag = closingBodyTag ? closingBodyTag.index : 0;
+
+    newContent = [
+      fileToAppend.slice(0, indexOfClosingBodyTag),
+      parsedContent,
+      fileToAppend.slice(indexOfClosingBodyTag),
+    ].join("");
+
+    return fs.writeFileSync(filePath, newContent);
   }
 
   /**
@@ -703,8 +706,8 @@ class HTMLReporter {
    * @param filePath
    */
   public replaceRootDirInPath(
-    rootDir: Config.GlobalConfig['rootDir'],
-    filePath: Config.GlobalConfig['testPathPattern']
+    rootDir: Config.GlobalConfig["rootDir"],
+    filePath: Config.GlobalConfig["testPathPattern"]
   ): string {
     if (!/^<rootDir>/.test(filePath)) {
       return filePath;

@@ -10,7 +10,7 @@ body {
   padding: 2rem 1rem;
   font-size: 0.85rem;
 }
-#jesthtml-content {
+.jesthtml-content {
   margin: 0 auto;
   max-width: 70rem;
 }
