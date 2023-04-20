@@ -55,7 +55,7 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
         start: 1498476492,
         end: 1498476650,
         runtime: 158,
-        slow: false
+        slow: false,
       },
       snapshot: {
         added: 0,
@@ -174,7 +174,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
         start: 1498476492,
         end: 1498476640,
         runtime: 148,
-        slow: false
+        slow: false,
       },
       testFilePath: "index-a.js",
     },
@@ -238,7 +238,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
         start: 1498476492,
         end: 1498476639,
         runtime: 147,
-        slow: false
+        slow: false,
       },
       testFilePath: "index-b.js",
     },
@@ -302,7 +302,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
         start: 1498476492,
         end: 1498476650,
         runtime: 158,
-        slow: false
+        slow: false,
       },
       testFilePath: "index-c.js",
     },
@@ -333,7 +333,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
         start: 0,
         end: 0,
         runtime: 0,
-        slow: false
+        slow: false,
       },
       testFilePath: "index-d.js",
     },
@@ -341,7 +341,7 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
 };
 
 export const mockedFullReportOutput = `<html><head><meta charset="utf-8"/><title>Test Report</title></head><body>A Test!</body></html>`;
-export const mockedSingleTestResultReportHTML = `<div id="jesthtml-content"><header><h1 id="title">Test Report</h1></header><div id="metadata-container"><div id="timestamp">Started: 2020-03-22 16:56:41</div><div id="summary"><div id="suite-summary"><div class="summary-total">Suites (1)</div><div class="summary-passed summary-empty">0 passed</div><div class="summary-failed">1 failed</div><div class="summary-pending summary-empty">0 pending</div></div><div id="test-summary"><div class="summary-total">Tests (1)</div><div class="summary-passed summary-empty">0 passed</div><div class="summary-failed">1 failed</div><div class="summary-pending summary-empty">0 pending</div></div></div></div><div id="suite-1" class="suite-container"><div class="suite-info"><div class="suite-path">/mocked/path/to/test.ts</div><div class="suite-time">0.158s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">ancestor</div><div class="test-title">title</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">ancestor</div><div class="test-title">title</div><div class="test-status">failed</div><div class="test-duration">0.002s</div></div></div><div class="test-result pending"><div class="test-info"><div class="test-suitename">ancestor</div><div class="test-title">title</div><div class="test-status">pending</div><div class="test-duration">0.003s</div></div></div></div></div></div>`;
+export const mockedSingleTestResultReportHTML = `<div class="jesthtml-content"><header><h1 id="title">Test Report</h1></header><div id="metadata-container"><div id="timestamp">Started: 2020-03-22 16:56:41</div><div id="summary"><div id="suite-summary"><div class="summary-total">Suites (1)</div><div class="summary-passed summary-empty">0 passed</div><div class="summary-failed">1 failed</div><div class="summary-pending summary-empty">0 pending</div></div><div id="test-summary"><div class="summary-total">Tests (1)</div><div class="summary-passed summary-empty">0 passed</div><div class="summary-failed">1 failed</div><div class="summary-pending summary-empty">0 pending</div></div></div></div><div id="suite-1" class="suite-container"><div class="suite-info"><div class="suite-path">/mocked/path/to/test.ts</div><div class="suite-time">0.158s</div></div><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">ancestor</div><div class="test-title">title</div><div class="test-status">passed</div><div class="test-duration">0.001s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">ancestor</div><div class="test-title">title</div><div class="test-status">failed</div><div class="test-duration">0.002s</div></div></div><div class="test-result pending"><div class="test-info"><div class="test-suitename">ancestor</div><div class="test-title">title</div><div class="test-status">pending</div><div class="test-duration">0.003s</div></div></div></div></div></div>`;
 
 export const mockedJestGlobalConfig: Config.GlobalConfig = {
   bail: 0,
@@ -379,6 +379,7 @@ export const mockedJestGlobalConfig: Config.GlobalConfig = {
   notifyMode: "failure-change",
   onlyChanged: false,
   onlyFailures: false,
+  openHandlesTimeout: 5000,
   outputFile: undefined,
   passWithNoTests: false,
   projects: [],
@@ -386,6 +387,7 @@ export const mockedJestGlobalConfig: Config.GlobalConfig = {
   reporters: [["default", {}]],
   rootDir: "/path",
   runTestsByPath: false,
+  seed: 123,
   silent: undefined,
   skipFilter: false,
   testFailureExitCode: 1,

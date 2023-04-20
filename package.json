@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "3.7.1",
+  "version": "3.8.0",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/index.js",
   "unpkg": "dist/index.js",
@@ -57,7 +57,7 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@types/dateformat": "^3.0.X",
-    "@types/jest": "29.0.0",
+    "@types/jest": "^29.0.0",
     "@types/mkdirp": "1.0.2",
     "@types/node": "12.20.12",
     "@types/sinon": "9.0.11",

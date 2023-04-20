@@ -17,8 +17,8 @@ describe("HTMLReporter", () => {
         options: {},
       });
       const report = await reporter.generate();
-
-      expect(report.toString().substring(0, 6)).toEqual("<html>");
+      expect(report).toBeDefined();
+      expect(report!.toString().substring(0, 6)).toEqual("<html>");
       mockedFS.mockRestore();
     });
   });
@@ -39,12 +39,12 @@ describe("HTMLReporter", () => {
         testData: mockedJestResponseSingleTestResult,
         options: {},
       });
-      const reportContent = (
-        await reporter.renderTestReportContent()
-      ).toString();
-
+      const reportContent = await reporter.renderTestReportContent();
+      expect(reportContent).toBeDefined();
       expect(
-        reportContent.indexOf('<img id="logo" src="logoFromEnv.png"/>')
+        reportContent!
+          .toString()
+          .indexOf('<img id="logo" src="logoFromEnv.png"/>')
       ).toBeGreaterThan(-1);
       delete process.env.JEST_HTML_REPORTER_LOGO;
     });
@@ -81,11 +81,9 @@ describe("HTMLReporter", () => {
         });
         const report = await reporter.renderTestReport();
         expect(
-          report
-            .toString()
-            .indexOf(
-              '<link rel="stylesheet" type="text/css" href="path/to/style.css"/>'
-            ) !== -1
+          report.fullHtml.indexOf(
+            '<link rel="stylesheet" type="text/css" href="path/to/style.css"/>'
+          ) !== -1
         ).toBeTruthy();
       });
     });
@@ -111,13 +109,14 @@ describe("HTMLReporter", () => {
             },
           ],
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
         expect(
-          reportContent.indexOf(
-            '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
-          )
+          reportContent!
+            .toString()
+            .indexOf(
+              '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
+            )
         ).toBeGreaterThan(-1);
       });
 
@@ -139,13 +138,14 @@ describe("HTMLReporter", () => {
             },
           ],
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
         expect(
-          reportContent.indexOf(
-            '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
-          )
+          reportContent!
+            .toString()
+            .indexOf(
+              '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
+            )
         ).toBe(-1);
       });
     });
@@ -158,11 +158,11 @@ describe("HTMLReporter", () => {
             statusIgnoreFilter: "passed",
           },
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
-
-        expect(reportContent.indexOf('<tr class="passed">')).toBe(-1);
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
+        expect(reportContent!.toString().indexOf('<tr class="passed">')).toBe(
+          -1
+        );
       });
     });
 
@@ -174,12 +174,10 @@ describe("HTMLReporter", () => {
             includeFailureMsg: true,
           },
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
-
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
         expect(
-          reportContent.indexOf('<div class="failureMessages">')
+          reportContent!.toString().indexOf('<div class="failureMessages">')
         ).toBeGreaterThan(-1);
       });
     });
@@ -192,12 +190,12 @@ describe("HTMLReporter", () => {
             includeSuiteFailure: true,
           },
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
-
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
         expect(
-          reportContent.indexOf('<div class="failureMessages suiteFailure">')
+          reportContent!
+            .toString()
+            .indexOf('<div class="failureMessages suiteFailure">')
         ).toBeGreaterThan(-1);
       });
     });
@@ -210,15 +208,17 @@ describe("HTMLReporter", () => {
             includeObsoleteSnapshots: true,
           },
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
-
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
         expect(
-          reportContent.indexOf('<div class="summary-obsolete-snapshots">')
+          reportContent!
+            .toString()
+            .indexOf('<div class="summary-obsolete-snapshots">')
         ).toBeGreaterThan(-1);
         expect(
-          reportContent.indexOf('<div class="suite-obsolete-snapshots">')
+          reportContent!
+            .toString()
+            .indexOf('<div class="suite-obsolete-snapshots">')
         ).toBeGreaterThan(-1);
       });
     });
@@ -231,12 +231,10 @@ describe("HTMLReporter", () => {
             logo: "logo.png",
           },
         });
-        const reportContent = (
-          await reporter.renderTestReportContent()
-        ).toString();
+        const reportContent = await reporter.renderTestReportContent();
 
         expect(
-          reportContent.indexOf('<img id="logo" src="logo.png"/>')
+          reportContent!.toString().indexOf('<img id="logo" src="logo.png"/>')
         ).toBeGreaterThan(-1);
       });
     });
@@ -249,10 +247,10 @@ describe("HTMLReporter", () => {
             customScriptPath: "path/to/script.js",
           },
         });
-        const report = (await reporter.renderTestReport()).toString();
+        const report = await reporter.renderTestReport();
 
         expect(
-          report.indexOf('<script src="path/to/script.js"></script>')
+          report.fullHtml.indexOf('<script src="path/to/script.js"></script>')
         ).toBeGreaterThan(-1);
       });
     });
@@ -265,12 +263,14 @@ describe("HTMLReporter", () => {
             pageTitle: "My Report",
           },
         });
-        const report = (await reporter.renderTestReport()).toString();
+        const report = await reporter.renderTestReport();
 
-        expect(report.indexOf('<h1 id="title">My Report</h1>')).toBeGreaterThan(
-          -1
-        );
-        expect(report.indexOf("<title>My Report</title>")).toBeGreaterThan(-1);
+        expect(
+          report.fullHtml.indexOf('<h1 id="title">My Report</h1>')
+        ).toBeGreaterThan(-1);
+        expect(
+          report.fullHtml.indexOf("<title>My Report</title>")
+        ).toBeGreaterThan(-1);
       });
     });
 
@@ -282,11 +282,11 @@ describe("HTMLReporter", () => {
             executionTimeWarningThreshold: 0.00001,
           },
         });
-        const report = (await reporter.renderTestReport()).toString();
+        const report = await reporter.renderTestReport();
 
-        expect(report.indexOf('<div class="suite-time warn">')).toBeGreaterThan(
-          -1
-        );
+        expect(
+          report.fullHtml.indexOf('<div class="suite-time warn">')
+        ).toBeGreaterThan(-1);
       });
     });
 
@@ -298,10 +298,10 @@ describe("HTMLReporter", () => {
             dateFormat: "yyyy",
           },
         });
-        const report = (await reporter.renderTestReport()).toString();
+        const report = await reporter.renderTestReport();
 
         expect(
-          report.indexOf(`<div id="timestamp">Started: 2020</div>`)
+          report.fullHtml.indexOf(`<div id="timestamp">Started: 2020</div>`)
         ).toBeGreaterThan(-1);
       });
     });
@@ -352,6 +352,7 @@ describe("HTMLReporter", () => {
         testData: mockedJestResponseSingleTestResult,
         options: {},
       });
+      // @ts-ignore
       const result = reporter.replaceRootDirInPath(null, "test/reporter.html");
 
       expect(result).toBe("test/reporter.html");
