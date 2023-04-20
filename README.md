@@ -9,7 +9,7 @@
 		<br />
 		<img src="https://img.shields.io/npm/v/jest-html-reporter?style=flat-square">
 		<img src="https://img.shields.io/npm/dm/jest-html-reporter?style=flat-square">
-		<img src="https://img.shields.io/travis/com/hargne/jest-html-reporter?style=flat-square">
+		<img src="https://img.shields.io/github/actions/workflow/status/Hargne/jest-html-reporter/main.yml?branch=master&style=flat-square">
 		<br />
 		<br />
 		<small>Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a></small>
