@@ -195,7 +195,7 @@ describe("HTMLReporter", () => {
         expect(reportContent).toBeDefined();
         expect(reportContent!.toString().indexOf("at stack trace")).toBe(-1);
       });
-      it.only("should keep stack trace in failure messages if set to true", async () => {
+      it("should keep stack trace in failure messages if set to true", async () => {
         const reporter = new HTMLReporter({
           testData: mockedJestResponseSingleTestResult,
           options: {
@@ -209,7 +209,7 @@ describe("HTMLReporter", () => {
           reportContent!.toString().indexOf("at stack trace")
         ).toBeGreaterThan(-1);
       });
-      it.only("should keep stack trace in failure messages if undefined", async () => {
+      it("should keep stack trace in failure messages if undefined", async () => {
         const reporter = new HTMLReporter({
           testData: mockedJestResponseSingleTestResult,
           options: {
