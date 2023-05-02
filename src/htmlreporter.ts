@@ -97,7 +97,7 @@ class HTMLReporter {
     // Decide whether to inline the CSS or not
     const inlineCSS: boolean =
       !this.getConfigValue("useCssFile") &&
-      !!!this.getConfigValue("styleOverridePath");
+      !this.getConfigValue("styleOverridePath");
 
     if (inlineCSS) {
       const stylesheetContent = fs.readFileSync(stylesheetFilePath, "utf8");
@@ -116,7 +116,7 @@ class HTMLReporter {
       reportBody.raw(reportContent.toString());
     }
     // Add any given custom script to the end of the body
-    if (!!this.getConfigValue("customScriptPath")) {
+    if (this.getConfigValue("customScriptPath")) {
       reportBody.raw(
         `<script src="${this.getConfigValue("customScriptPath")}"></script>`
       );
@@ -405,10 +405,13 @@ class HTMLReporter {
                   " "
                 );
                 test.failureMessages.forEach((failureMsg) => {
+                  const error = !this.getConfigValue("includeStackTrace")
+                    ? failureMsg.split("at")[0].trim().replace(/\n+$/, "")
+                    : failureMsg;
                   failureMsgDiv.ele(
                     "pre",
                     { class: "failureMsg" },
-                    this.sanitizeOutput(failureMsg)
+                    this.sanitizeOutput(error)
                   );
                 });
               }
@@ -517,6 +520,7 @@ class HTMLReporter {
       logo,
       includeConsoleLog,
       includeFailureMsg,
+      includeStackTrace,
       includeSuiteFailure,
       includeObsoleteSnapshots,
       outputPath,
@@ -564,6 +568,11 @@ class HTMLReporter {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG",
         configValue: includeFailureMsg,
+      },
+      includeStackTrace: {
+        defaultValue: true,
+        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_STACK_TRACE",
+        configValue: includeStackTrace,
       },
       includeSuiteFailure: {
         defaultValue: false,
@@ -625,7 +634,7 @@ class HTMLReporter {
       if (jesthtmlreporterconfig) {
         const parsedConfig = JSON.parse(jesthtmlreporterconfig);
         for (const key of Object.keys(parsedConfig)) {
-          if (this.config[key as keyof IJestHTMLReporterConfig]) {
+          if (key in this.config) {
             this.config[key as keyof IJestHTMLReporterConfig].configValue =
               parsedConfig[key];
           }
@@ -644,7 +653,7 @@ class HTMLReporter {
       if (packageJson) {
         const parsedConfig = JSON.parse(packageJson)["jest-html-reporter"];
         for (const key of Object.keys(parsedConfig)) {
-          if (this.config[key as keyof IJestHTMLReporterConfig]) {
+          if (key in this.config) {
             this.config[key as keyof IJestHTMLReporterConfig].configValue =
               parsedConfig[key];
           }

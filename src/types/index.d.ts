@@ -17,6 +17,7 @@ export type IJestHTMLReporterConfigOptions = {
   executionTimeWarningThreshold?: number;
   includeConsoleLog?: boolean;
   includeFailureMsg?: boolean;
+  includeStackTrace?: boolean;
   includeSuiteFailure?: boolean;
   includeObsoleteSnapshots?: boolean;
   logo?: string;
@@ -35,53 +36,11 @@ export interface IJestHTMLReporterConfigOption<T> {
   defaultValue: T;
 }
 
-export interface IJestHTMLReporterConfig {
-  append: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["append"]
+export type IJestHTMLReporterConfig = {
+  [key in keyof IJestHTMLReporterConfigOptions]: IJestHTMLReporterConfigOption<
+    IJestHTMLReporterConfigOptions[key]
   >;
-  boilerplate: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["boilerplate"]
-  >;
-  customScriptPath: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["customScriptPath"]
-  >;
-  dateFormat: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["dateFormat"]
-  >;
-  executionTimeWarningThreshold: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["executionTimeWarningThreshold"]
-  >;
-  includeConsoleLog: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["includeConsoleLog"]
-  >;
-  includeFailureMsg: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["includeFailureMsg"]
-  >;
-  includeSuiteFailure: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["includeSuiteFailure"]
-  >;
-  includeObsoleteSnapshots: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["includeObsoleteSnapshots"]
-  >;
-  logo: IJestHTMLReporterConfigOption<IJestHTMLReporterConfigOptions["logo"]>;
-  outputPath: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["outputPath"]
-  >;
-  pageTitle: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["pageTitle"]
-  >;
-  sort: IJestHTMLReporterConfigOption<IJestHTMLReporterConfigOptions["sort"]>;
-  statusIgnoreFilter: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["statusIgnoreFilter"]
-  >;
-  styleOverridePath: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["styleOverridePath"]
-  >;
-  theme: IJestHTMLReporterConfigOption<IJestHTMLReporterConfigOptions["theme"]>;
-  useCssFile: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions["useCssFile"]
-  >;
-}
+};
 
 export interface IJestHTMLReporterConsole {
   filePath: string;
