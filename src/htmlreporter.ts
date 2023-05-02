@@ -681,7 +681,7 @@ class HTMLReporter {
     if (process.env[option.environmentVariable]) {
       return process.env[option.environmentVariable];
     }
-    return option.configValue || option.defaultValue;
+    return option.configValue ?? option.defaultValue;
   }
 
   /**
