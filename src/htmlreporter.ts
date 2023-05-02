@@ -404,16 +404,19 @@ class HTMLReporter {
                   },
                   " "
                 );
-                test.failureMessages.forEach((failureMsg) => {
-                  const error = !this.getConfigValue("includeStackTrace")
-                    ? failureMsg.split("at")[0].trim().replace(/\n+$/, "")
-                    : failureMsg;
-                  failureMsgDiv.ele(
-                    "pre",
-                    { class: "failureMsg" },
-                    this.sanitizeOutput(error)
-                  );
-                });
+                test.failureMessages
+                  .map((failureMsg) =>
+                    !this.getConfigValue("includeStackTrace")
+                      ? failureMsg.split("at")[0].trim().replace(/\n+$/, "")
+                      : failureMsg
+                  )
+                  .forEach((failureMsg) => {
+                    failureMsgDiv.ele(
+                      "pre",
+                      { class: "failureMsg" },
+                      this.sanitizeOutput(failureMsg)
+                    );
+                  });
               }
             });
 
