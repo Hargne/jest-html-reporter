@@ -182,6 +182,54 @@ describe("HTMLReporter", () => {
       });
     });
 
+    describe("includeStackTrace", () => {
+      it("should remove stack traces in failure messages if set to false", async () => {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
+            includeFailureMsg: true,
+            includeStackTrace: false,
+          },
+        });
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
+        expect(
+          reportContent!
+            .toString()
+            .indexOf(
+              '<pre class="failureMsg">Error: failures that happened</pre>'
+            )
+        ).not.toBe(-1);
+      });
+      it("should keep stack trace in failure messages if set to true", async () => {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
+            includeFailureMsg: true,
+            includeStackTrace: true,
+          },
+        });
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
+        expect(
+          reportContent!.toString().indexOf("at stack trace")
+        ).toBeGreaterThan(-1);
+      });
+      it("should keep stack trace in failure messages if undefined", async () => {
+        const reporter = new HTMLReporter({
+          testData: mockedJestResponseSingleTestResult,
+          options: {
+            includeFailureMsg: true,
+          },
+        });
+        const reportContent = await reporter.renderTestReportContent();
+        expect(reportContent).toBeDefined();
+        expect(
+          reportContent!.toString().indexOf("at stack trace")
+        ).toBeGreaterThan(-1);
+      });
+    });
+
     describe("includeSuiteFailure", () => {
       it("should include suite failure message", async () => {
         const reporter = new HTMLReporter({
