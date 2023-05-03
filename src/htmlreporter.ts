@@ -407,7 +407,10 @@ class HTMLReporter {
                 test.failureMessages
                   .map((failureMsg) =>
                     !this.getConfigValue("includeStackTrace")
-                      ? failureMsg.split("at")[0].trim().replace(/\n+$/, "")
+                      ? failureMsg
+                          .split(/\n\s+at/)[0]
+                          .trim()
+                          .replace(/\n+$/, "")
                       : failureMsg
                   )
                   .forEach((failureMsg) => {

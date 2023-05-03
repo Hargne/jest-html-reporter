@@ -99,7 +99,9 @@ export const mockedJestResponseSingleTestResult: AggregatedResult = {
           title: "title",
           status: "pending",
           ancestorTitles: ["ancestor"],
-          failureMessages: ["Error: failure\n" + "\n" + "  at stack trace"],
+          failureMessages: [
+            "Error: failures that happened\n" + "\n" + "  at stack trace",
+          ],
           failureDetails: ["detailed failure"],
           numPassingAsserts: 0,
           fullName: "pending",
@@ -215,7 +217,9 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           title: "title c",
           status: "failed",
           ancestorTitles: ["ancestor c", "ancestor child"],
-          failureMessages: ["Error: failure\n" + "\n" + "  at stack trace"],
+          failureMessages: [
+            "Error: failures that happened\n" + "\n" + "  at stack trace",
+          ],
           failureDetails: ["detailed failure"],
           numPassingAsserts: 0,
           fullName: "failed",
@@ -279,7 +283,9 @@ export const mockedJestResponseMultipleTestResult: AggregatedResult = {
           title: "title c",
           status: "failed",
           ancestorTitles: ["ancestor c"],
-          failureMessages: ["Error: failure\n" + "\n" + "  at stack trace"],
+          failureMessages: [
+            "Error: failures that happened\n" + "\n" + "  at stack trace",
+          ],
           failureDetails: ["detailed failure"],
           numPassingAsserts: 0,
           fullName: "failed",

@@ -193,7 +193,13 @@ describe("HTMLReporter", () => {
         });
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
-        expect(reportContent!.toString().indexOf("at stack trace")).toBe(-1);
+        expect(
+          reportContent!
+            .toString()
+            .indexOf(
+              '<pre class="failureMsg">Error: failures that happened</pre>'
+            )
+        ).not.toBe(-1);
       });
       it("should keep stack trace in failure messages if set to true", async () => {
         const reporter = new HTMLReporter({
