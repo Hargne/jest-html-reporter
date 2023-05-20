@@ -760,10 +760,12 @@ class HTMLReporter {
    */
   private sanitizeOutput(input: string) {
     return stripAnsi(
-      input.replace(
-        /([^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFC\u{10000}-\u{10FFFF}])/gu,
-        ""
-      )
+      input
+        .replace(/(\x1b\[\d*m)/g, "")
+        .replace(
+          /([^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFC\u{10000}-\u{10FFFF}])/gu,
+          ""
+        )
     );
   }
 }
