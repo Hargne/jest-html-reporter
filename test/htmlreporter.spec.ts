@@ -51,26 +51,6 @@ describe("HTMLReporter", () => {
   });
 
   describe("config options", () => {
-    /* TODO: The following test runs locally, but fails in Travis CI
-    describe("boilerplate", () => {
-      it("should insert the test report HTML into the given file", async () => {
-        const mockedFS = jest.spyOn(fs, "readFileSync");
-        mockedFS.mockImplementation(
-          () => "<div>{jesthtmlreporter-content}</div>"
-        );
-        const reporter = new HTMLReporter(mockedJestResponseSingleTestResult, {
-          boilerplate: path.join(process.cwd(), "/path/to/boilerplate.html")
-        });
-
-        const report = await reporter.renderTestReport();
-        expect(report).toEqual(
-          `<div>${mockedSingleTestResultReportHTML}</div>`
-        );
-        mockedFS.mockRestore();
-      });
-    });
-    */
-
     describe("styleOverridePath", () => {
       it("should insert a link to the overriding stylesheet path", async () => {
         const reporter = new HTMLReporter({
@@ -404,6 +384,33 @@ describe("HTMLReporter", () => {
       const result = reporter.replaceRootDirInPath(null, "test/reporter.html");
 
       expect(result).toBe("test/reporter.html");
+    });
+  });
+
+  describe("collapseSuitsByDefault", () => {
+    it("should show the contents of test suites by default", async () => {
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {},
+      });
+      const report = await reporter.renderTestReport();
+      console.log(report.fullHtml);
+      expect(
+        report.fullHtml.indexOf('class="toggle" checked="checked"')
+      ).toBeGreaterThan(-1);
+    });
+
+    it("should hide the contents of test suites", async () => {
+      const reporter = new HTMLReporter({
+        testData: mockedJestResponseSingleTestResult,
+        options: {
+          collapseSuitsByDefault: true,
+        },
+      });
+      const report = await reporter.renderTestReport();
+      expect(report.fullHtml.indexOf('class="toggle" checked="checked"')).toBe(
+        -1
+      );
     });
   });
 });
