@@ -387,7 +387,7 @@ describe("HTMLReporter", () => {
     });
   });
 
-  describe("collapseSuitsByDefault", () => {
+  describe("collapseSuitesByDefault", () => {
     it("should show the contents of test suites by default", async () => {
       const reporter = new HTMLReporter({
         testData: mockedJestResponseSingleTestResult,
@@ -404,7 +404,7 @@ describe("HTMLReporter", () => {
       const reporter = new HTMLReporter({
         testData: mockedJestResponseSingleTestResult,
         options: {
-          collapseSuitsByDefault: true,
+          collapseSuitesByDefault: true,
         },
       });
       const report = await reporter.renderTestReport();

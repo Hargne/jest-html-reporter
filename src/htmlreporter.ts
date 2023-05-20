@@ -137,7 +137,7 @@ class HTMLReporter {
       id: collapsibleBtnId,
       type: "checkbox",
       class: "toggle",
-      checked: !this.getConfigValue("collapseSuitsByDefault")
+      checked: !this.getConfigValue("collapseSuitesByDefault")
         ? "checked"
         : null,
     });
@@ -514,7 +514,7 @@ class HTMLReporter {
     const {
       append,
       boilerplate,
-      collapseSuitsByDefault,
+      collapseSuitesByDefault,
       customScriptPath,
       dateFormat,
       executionTimeWarningThreshold,
@@ -544,10 +544,10 @@ class HTMLReporter {
         environmentVariable: "JEST_HTML_REPORTER_BOILERPLATE",
         configValue: boilerplate,
       },
-      collapseSuitsByDefault: {
+      collapseSuitesByDefault: {
         defaultValue: false,
         environmentVariable: "JEST_HTML_REPORTER_COLLAPSE_SUITES_BY_DEFAULT",
-        configValue: collapseSuitsByDefault,
+        configValue: collapseSuitesByDefault,
       },
       customScriptPath: {
         defaultValue: null,
