@@ -127,36 +127,39 @@ class HTMLReporter {
     };
   }
 
-  public renderTestSuiteInfo(
+  public renderTestSuiteHeader(
     parent: XMLElement,
     suite: TestResult,
     suiteIndex: number
   ) {
-    const collapsibleId = `collapsible-${suiteIndex}`;
+    const collapsibleBtnId = `collapsible-${suiteIndex}`;
     parent.ele("input", {
-      id: collapsibleId,
+      id: collapsibleBtnId,
       type: "checkbox",
       class: "toggle",
       checked: !this.getConfigValue("collapseSuitsByDefault")
         ? "checked"
         : null,
     });
-    const collapsibleLabel = parent.ele("label", { for: collapsibleId });
-    const suiteInfo = collapsibleLabel.ele("div", {
+    const collapsibleBtnContainer = parent.ele("label", {
+      for: collapsibleBtnId,
+    });
+
+    const suiteInfo = collapsibleBtnContainer.ele("div", {
       class: "suite-info",
     });
     suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
     const executionTime = (suite.perfStats.end - suite.perfStats.start) / 1000;
+    const suiteExecutionTimeClass = ["suite-time"];
+    if (
+      executionTime >
+      (this.getConfigValue("executionTimeWarningThreshold") as number)
+    ) {
+      suiteExecutionTimeClass.push("warn");
+    }
     suiteInfo.ele(
       "div",
-      {
-        class: `suite-time${
-          executionTime >
-          (this.getConfigValue("executionTimeWarningThreshold") as number)
-            ? " warn"
-            : ""
-        }`,
-      },
+      { class: suiteExecutionTimeClass.join(" ") },
       `${executionTime}s`
     );
   }
@@ -320,7 +323,7 @@ class HTMLReporter {
             class: "suite-container",
           });
           // Suite Information
-          this.renderTestSuiteInfo(suiteContainer, suite, suiteIndex);
+          this.renderTestSuiteHeader(suiteContainer, suite, suiteIndex);
           // Test Container
           const suiteTests = suiteContainer.ele("div", {
             class: "suite-tests",
