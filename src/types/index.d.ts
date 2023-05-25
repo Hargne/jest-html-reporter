@@ -12,6 +12,7 @@ export interface JestHTMLReporterProps {
 export type IJestHTMLReporterConfigOptions = {
   append?: boolean;
   boilerplate?: string;
+  collapseSuitesByDefault?: boolean;
   customScriptPath?: string;
   dateFormat?: string;
   executionTimeWarningThreshold?: number;
