@@ -149,6 +149,21 @@ header {
 .suite-container {
   margin-bottom: 2rem;
 }
+.suite-container > input[type="checkbox"] {
+  position: absolute;
+  left: -100vw;
+}
+.suite-container label {
+  display: block;
+}
+.suite-container .suite-tests {
+  overflow-y: hidden;
+  height: 0;
+}
+.suite-container > input[type="checkbox"]:checked ~ .suite-tests {
+  height: auto;
+  overflow: visible;
+}
 .suite-info {
   padding: 1rem;
   background-color: #eee;
@@ -156,6 +171,10 @@ header {
   display: flex;
   align-items: center;
   margin-bottom: 0.25rem;
+}
+.suite-info:hover {
+  background-color: #ddd;
+  cursor: pointer;
 }
 .suite-info .suite-path {
   word-break: break-all;
@@ -171,6 +190,15 @@ header {
 .suite-info .suite-time.warn {
   background-color: #d8000c;
   color: #fff;
+}
+.suite-info:before {
+  content: "\2303";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transform: rotate(0deg);
+}
+.suite-container > input[type="checkbox"]:checked ~ label .suite-info:before {
+  transform: rotate(180deg);
 }
 
 /* CONSOLE LOGS */
