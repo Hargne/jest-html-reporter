@@ -25,15 +25,18 @@
 
 ## Installation
 
-If using yarn:
+**npm:**:
+
+```
+$ npm install jest-html-reporter --save-dev
+```
+
+**yarn:**
+
 ```
 $ yarn add jest-html-reporter --dev
 ```
 
-If using npm:
-```
-$ npm install jest-html-reporter --save-dev
-```
 ## Usage
 
 Configure Jest to process the test results by adding the following entry to the Jest config (jest.config.json):
