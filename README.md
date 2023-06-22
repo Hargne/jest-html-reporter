@@ -25,7 +25,7 @@
 
 ## Installation
 
-**npm:**:
+**npm:**
 
 ```
 $ npm install jest-html-reporter --save-dev
