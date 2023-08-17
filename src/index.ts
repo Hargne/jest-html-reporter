@@ -1,5 +1,5 @@
-import { AggregatedResult, TestResult } from "@jest/test-result";
-import { Circus, Config } from "@jest/types";
+import type { AggregatedResult, TestResult } from "@jest/test-result";
+import type { Circus, Config } from "@jest/types";
 
 import htmlreporter from "./htmlreporter";
 import {
