@@ -1,10 +1,10 @@
-import { AggregatedResult, TestResult } from "@jest/test-result";
-import { Config } from "@jest/types";
+import type { AggregatedResult, TestResult } from "@jest/test-result";
+import type { Config } from "@jest/types";
 import dateformat from "dateformat";
 import fs from "fs";
 import mkdirp from "mkdirp";
 import path from "path";
-import {
+import type {
   IJestHTMLReporterConfig,
   IJestHTMLReporterConfigOptions,
   IJestHTMLReporterConsole,

@@ -25,7 +25,15 @@
 
 ## Installation
 
-```shell
+**npm:**
+
+```
+$ npm install jest-html-reporter --save-dev
+```
+
+**yarn:**
+
+```
 $ yarn add jest-html-reporter --dev
 ```
 

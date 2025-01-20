@@ -1,6 +1,6 @@
 {
   "name": "jest-html-reporter",
-  "version": "3.10.0",
+  "version": "3.10.2",
   "description": "Jest test results processor for generating a summary in HTML",
   "main": "dist/index.js",
   "unpkg": "dist/index.js",
@@ -37,23 +37,22 @@
     "node": ">=4.8.3"
   },
   "dependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/preset-typescript": "^7.8.3",
-    "@jest/console": "^29.0.2",
-    "@jest/test-result": "^29.0.2",
-    "@jest/types": "^29.0.2",
-    "dateformat": "3.0.2",
     "mkdirp": "^1.0.3",
-    "sinon": "^9.0.1",
+    "dateformat": "3.0.2",
     "strip-ansi": "6.0.1",
-    "xmlbuilder": "15.0.0"
+    "xmlbuilder": "15.0.0",
+    "@jest/test-result": "^29.0.2",
+    "@jest/types": "^29.0.2"
   },
   "peerDependencies": {
     "jest": "19.x - 29.x",
     "typescript": "^3.7.x || ^4.3.x || ^5.x"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-typescript": "^7.8.3",
+    "@jest/console": "^29.0.2",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@types/dateformat": "^3.0.X",
@@ -65,6 +64,7 @@
     "jest": "^29.0.2",
     "rollup": "2.47.0",
     "rollup-plugin-terser": "7.0.2",
+    "sinon": "^9.0.1",
     "ts-jest": "^29.0.0",
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.18.0",
@@ -72,5 +72,6 @@
   },
   "browserslist": [
     "since 2017-06"
-  ]
+  ],
+  "packageManager": "yarn@1.22.19"
 }
