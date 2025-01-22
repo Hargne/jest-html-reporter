@@ -19,13 +19,14 @@ import sorting from "./sorting";
 class HTMLReporter {
   public testData: AggregatedResult;
   public consoleLogList: IJestHTMLReporterConsole[];
-  public jestConfig: Config.GlobalConfig;
+  public jestConfig: Config.GlobalConfig | undefined;
   public config: IJestHTMLReporterConfig;
 
   constructor(data: JestHTMLReporterProps) {
     this.testData = data.testData;
     this.jestConfig = data.jestConfig;
-    this.consoleLogList = data.consoleLogs;
+    this.consoleLogList = data.consoleLogs || [];
+    this.config = {};
     this.setupConfig(data.options);
   }
 
@@ -52,8 +53,8 @@ class HTMLReporter {
 
       this.logMessage("success", `Report generated (${outputPath})`);
       return report.fullHtml;
-    } catch (e) {
-      this.logMessage("error", e);
+    } catch (error) {
+      this.logError(error);
     }
   }
 
@@ -70,11 +71,12 @@ class HTMLReporter {
         this.getConfigValue("boilerplate") as string
       );
       const boilerplateContent = fs.readFileSync(boilerplatePath, "utf8");
+      const content = reportContent ? reportContent.toString() : "";
       return {
-        content: reportContent.toString(),
+        content,
         fullHtml: boilerplateContent.replace(
           "{jesthtmlreporter-content}",
-          reportContent && reportContent.toString()
+          content
         ),
       };
     }
@@ -123,7 +125,7 @@ class HTMLReporter {
     }
     return {
       fullHtml: report.toString(),
-      content: reportContent.toString(),
+      content: reportContent ? reportContent.toString() : "",
     };
   }
 
@@ -382,7 +384,7 @@ class HTMLReporter {
               testInfo.ele(
                 "div",
                 { class: "test-duration" },
-                `${test.duration / 1000}s`
+                test.duration ? `${test.duration / 1000}s` : " "
               );
 
               // Test Failure Messages
@@ -437,8 +439,8 @@ class HTMLReporter {
       }
 
       return reportBody;
-    } catch (e) {
-      this.logMessage("error", e);
+    } catch (error) {
+      this.logError(error);
     }
   }
 
@@ -540,7 +542,7 @@ class HTMLReporter {
         configValue: append,
       },
       boilerplate: {
-        defaultValue: null,
+        defaultValue: undefined,
         environmentVariable: "JEST_HTML_REPORTER_BOILERPLATE",
         configValue: boilerplate,
       },
@@ -550,7 +552,7 @@ class HTMLReporter {
         configValue: collapseSuitesByDefault,
       },
       customScriptPath: {
-        defaultValue: null,
+        defaultValue: undefined,
         environmentVariable: "JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH",
         configValue: customScriptPath,
       },
@@ -566,7 +568,7 @@ class HTMLReporter {
         configValue: executionTimeWarningThreshold,
       },
       logo: {
-        defaultValue: null,
+        defaultValue: undefined,
         environmentVariable: "JEST_HTML_REPORTER_LOGO",
         configValue: logo,
       },
@@ -611,17 +613,17 @@ class HTMLReporter {
         configValue: theme,
       },
       sort: {
-        defaultValue: null,
+        defaultValue: undefined,
         environmentVariable: "JEST_HTML_REPORTER_SORT",
         configValue: sort,
       },
       statusIgnoreFilter: {
-        defaultValue: null,
+        defaultValue: undefined,
         environmentVariable: "JEST_HTML_REPORTER_STATUS_FILTER",
         configValue: statusIgnoreFilter,
       },
       styleOverridePath: {
-        defaultValue: null,
+        defaultValue: undefined,
         environmentVariable: "JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH",
         configValue: styleOverridePath,
       },
@@ -640,8 +642,11 @@ class HTMLReporter {
       if (jesthtmlreporterconfig) {
         const parsedConfig = JSON.parse(jesthtmlreporterconfig);
         for (const key of Object.keys(parsedConfig)) {
-          if (key in this.config) {
-            this.config[key as keyof IJestHTMLReporterConfig].configValue =
+          if (
+            key in this.config &&
+            this.config[key as keyof IJestHTMLReporterConfig] !== undefined
+          ) {
+            this.config[key as keyof IJestHTMLReporterConfig]!.configValue =
               parsedConfig[key];
           }
         }
@@ -659,8 +664,11 @@ class HTMLReporter {
       if (packageJson) {
         const parsedConfig = JSON.parse(packageJson)["jest-html-reporter"];
         for (const key of Object.keys(parsedConfig)) {
-          if (key in this.config) {
-            this.config[key as keyof IJestHTMLReporterConfig].configValue =
+          if (
+            key in this.config &&
+            this.config[key as keyof IJestHTMLReporterConfig] !== undefined
+          ) {
+            this.config[key as keyof IJestHTMLReporterConfig]!.configValue =
               parsedConfig[key];
           }
         }
@@ -669,6 +677,7 @@ class HTMLReporter {
     } catch (e) {
       /** do nothing */
     }
+    return this.config;
   }
 
   /**
@@ -753,6 +762,12 @@ class HTMLReporter {
       console.log(logColor, logMsg);
     }
     return { logColor, logMsg }; // Return for testing purposes
+  }
+
+  public logError(error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "An error occurred";
+    return this.logMessage("error", message);
   }
 
   /**

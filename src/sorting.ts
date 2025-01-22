@@ -68,7 +68,12 @@ const sortByStatus = (testResults: AggregatedResult["testResults"]) => {
     }
   });
 
-  return [].concat(pendingSuites, failingSuites, passingSuites);
+  // Explicitly annotate the return type
+  return [
+    ...pendingSuites,
+    ...failingSuites,
+    ...passingSuites,
+  ] as AggregatedResult["testResults"];
 };
 
 /**

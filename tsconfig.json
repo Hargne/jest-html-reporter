@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "esnext",
+    "module": "ESNext",
+    "target": "ESNext",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -11,7 +11,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "preserveSymlinks": true
+    "preserveSymlinks": true,
+    "strict": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules/**"]
