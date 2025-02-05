@@ -392,6 +392,7 @@ export const mockedJestGlobalConfig: Config.GlobalConfig = {
   replname: undefined,
   reporters: [["default", {}]],
   rootDir: "/path",
+  runInBand: false,
   runTestsByPath: false,
   seed: 123,
   silent: undefined,
