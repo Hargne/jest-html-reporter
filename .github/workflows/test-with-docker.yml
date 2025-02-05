@@ -10,7 +10,7 @@ on:
         type: string
 
 jobs:
-  test-docker:
+  test-flow:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,7 +20,7 @@ jobs:
       - name: Build Docker Image (Node ${{ inputs.node_version }})
         run: |
           docker build --build-arg NODE_VERSION=${{ inputs.node_version }} --build-arg JEST_VERSIONS="${{ inputs.jest_versions }}" -t node${{ inputs.node_version }}-image .
-      - name: Run Docker Image
+      - name: Run Docker Image (Test against Jest versions ${{ inputs.node_version }})
         run: |
           docker run --name node${{ inputs.node_version }}-container node${{ inputs.node_version }}-image
       - name: Cleanup Docker Container & Image
