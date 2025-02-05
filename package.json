@@ -12,7 +12,7 @@
     "tsc": "tsc",
     "lint": "eslint src/",
     "jest": "jest --no-cache --config=jest.config.json",
-    "test": "npm run lint && npm run bundle && npm run jest",
+    "test": "npm run lint && npm run jest",
     "test:watch": "npm run jest -- --watch --no-coverage",
     "bundle": "rollup -c",
     "build": "npm run test && npm run bundle"
