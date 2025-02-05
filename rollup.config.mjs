@@ -1,27 +1,26 @@
-import babel from "@rollup/plugin-babel";
+import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 
 const extensions = [".ts", ".js"];
 
 const config = {
   input: "src/index.ts",
-  output: [
-    {
-      dir: "dist",
-      format: "cjs",
-      exports: "default",
-    },
-  ],
+  output: {
+    dir: "dist",
+    format: "cjs",
+    exports: "default",
+    sourcemap: false,
+  },
   external: ["xmlbuilder", "fs", "path", "dateformat", "mkdirp", "strip-ansi"],
   plugins: [
     resolve({
       jsnext: true,
       extensions,
     }),
-    babel({
-      extensions,
-      babelHelpers: "bundled",
+    typescript({
+      tsconfig: "tsconfig.json",
+      sourceMap: false,
     }),
     terser(),
   ],

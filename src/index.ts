@@ -1,10 +1,14 @@
-import type { AggregatedResult, TestResult } from "@jest/test-result";
+import type {
+  AggregatedResult,
+  Test,
+  TestContext,
+  TestResult,
+} from "@jest/test-result";
 import type { Circus, Config } from "@jest/types";
-
 import htmlreporter from "./htmlreporter";
 import {
-  IJestHTMLReporterConfigOptions,
-  IJestHTMLReporterConsole,
+  JestHTMLReporterConsoleLogList,
+  JestHTMLReporterConfiguration,
   JestHTMLReporterProps,
 } from "./types";
 
@@ -20,10 +24,21 @@ const setupAndRun = (data: JestHTMLReporterProps) => {
  * The test runner function passed to Jest
  */
 function JestHtmlReporter(
+  this: {
+    onTestResult?: (unusedTest: Test, result: TestResult) => void;
+    onRunComplete?: (
+      unusedContexts: Set<TestContext>,
+      testData: AggregatedResult
+    ) => Promise<string | undefined>;
+  },
   globalConfig: Config.GlobalConfig | AggregatedResult,
-  options: IJestHTMLReporterConfigOptions
-): Promise<Circus.TestResult> | Config.GlobalConfig | AggregatedResult {
-  const consoleLogs: IJestHTMLReporterConsole[] = [];
+  options: JestHTMLReporterConfiguration
+):
+  | Promise<Circus.TestResult>
+  | Config.GlobalConfig
+  | AggregatedResult
+  | undefined {
+  const consoleLogs: JestHTMLReporterConsoleLogList[] = [];
 
   /**
    * If the first parameter has a property named 'testResults',
@@ -46,7 +61,7 @@ function JestHtmlReporter(
    * https://facebook.github.io/jest/docs/en/configuration.html#reporters-array-modulename-modulename-options
    */
 
-  this.onTestResult = (data: any, result: TestResult) => {
+  this.onTestResult = (unusedTest: Test, result: TestResult) => {
     // Catch console logs per test
     // TestResult will only contain console logs if Jest is run with verbose=false
     if (result.console) {
@@ -57,7 +72,10 @@ function JestHtmlReporter(
     }
   };
 
-  this.onRunComplete = (contexts: any, testData: AggregatedResult) =>
+  this.onRunComplete = (
+    unusedContexts: Set<TestContext>,
+    testData: AggregatedResult
+  ) =>
     setupAndRun({
       testData,
       options,

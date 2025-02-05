@@ -1,25 +1,32 @@
-name: Run tests
-
+name: Build & Test
 on:
   push:
-    branches: [ master, dev ]
+    branches: [master, dev]
   pull_request:
-    branches: [ master, dev ]
-
+    branches: [master, dev]
 jobs:
-  build:
-
+  jest-tests:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x]
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: yarn install
-      - run: yarn test
+          node-version: "22"
+      - name: Install dependencies
+        run: |
+          yarn install
+      - name: Run Jest tests locally
+        run: |
+          yarn test
+  node14-tests:
+    uses: ./.github/workflows/test-with-docker.yml
+    with:
+      node_version: "14"
+      jest_versions: "19 20 21 22 23 24 25 26 27 28 29"
+  node16-tests:
+    uses: ./.github/workflows/test-with-docker.yml
+    with:
+      node_version: "16"
+      jest_versions: "19"

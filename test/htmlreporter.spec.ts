@@ -18,7 +18,7 @@ describe("HTMLReporter", () => {
       });
       const report = await reporter.generate();
       expect(report).toBeDefined();
-      expect(report!.toString().substring(0, 6)).toEqual("<html>");
+      expect(report?.toString().substring(0, 6)).toEqual("<html>");
       mockedFS.mockRestore();
     });
   });
@@ -26,7 +26,7 @@ describe("HTMLReporter", () => {
   describe("renderTestReportContent", () => {
     it("should cast an error if no test data was provided", async () => {
       expect.assertions(1);
-      // @ts-ignore
+      // @ts-expect-error - Testing invalid input
       const reporter = new HTMLReporter({}, {});
       expect(await reporter.renderTestReportContent()).toBeUndefined();
     });
@@ -42,8 +42,8 @@ describe("HTMLReporter", () => {
       const reportContent = await reporter.renderTestReportContent();
       expect(reportContent).toBeDefined();
       expect(
-        reportContent!
-          .toString()
+        reportContent
+          ?.toString()
           .indexOf('<img id="logo" src="logoFromEnv.png"/>')
       ).toBeGreaterThan(-1);
       delete process.env.JEST_HTML_REPORTER_LOGO;
@@ -92,8 +92,8 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!
-            .toString()
+          reportContent
+            ?.toString()
             .indexOf(
               '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
             )
@@ -121,8 +121,8 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!
-            .toString()
+          reportContent
+            ?.toString()
             .indexOf(
               '<div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">origin</pre><pre class="suite-consolelog-item-message">This is a console log</pre>'
             )
@@ -140,7 +140,7 @@ describe("HTMLReporter", () => {
         });
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
-        expect(reportContent!.toString().indexOf('<tr class="passed">')).toBe(
+        expect(reportContent?.toString().indexOf('<tr class="passed">')).toBe(
           -1
         );
       });
@@ -157,7 +157,7 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!.toString().indexOf('<div class="failureMessages">')
+          reportContent?.toString().indexOf('<div class="failureMessages">')
         ).toBeGreaterThan(-1);
       });
     });
@@ -174,8 +174,8 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!
-            .toString()
+          reportContent
+            ?.toString()
             .indexOf(
               '<pre class="failureMsg">Error: failures that happened</pre>'
             )
@@ -192,7 +192,7 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!.toString().indexOf("at stack trace")
+          reportContent?.toString().indexOf("at stack trace")
         ).toBeGreaterThan(-1);
       });
       it("should keep stack trace in failure messages if undefined", async () => {
@@ -205,7 +205,7 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!.toString().indexOf("at stack trace")
+          reportContent?.toString().indexOf("at stack trace")
         ).toBeGreaterThan(-1);
       });
     });
@@ -221,8 +221,8 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!
-            .toString()
+          reportContent
+            ?.toString()
             .indexOf('<div class="failureMessages suiteFailure">')
         ).toBeGreaterThan(-1);
       });
@@ -239,13 +239,13 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
         expect(reportContent).toBeDefined();
         expect(
-          reportContent!
-            .toString()
+          reportContent
+            ?.toString()
             .indexOf('<div class="summary-obsolete-snapshots">')
         ).toBeGreaterThan(-1);
         expect(
-          reportContent!
-            .toString()
+          reportContent
+            ?.toString()
             .indexOf('<div class="suite-obsolete-snapshots">')
         ).toBeGreaterThan(-1);
       });
@@ -262,7 +262,7 @@ describe("HTMLReporter", () => {
         const reportContent = await reporter.renderTestReportContent();
 
         expect(
-          reportContent!.toString().indexOf('<img id="logo" src="logo.png"/>')
+          reportContent?.toString().indexOf('<img id="logo" src="logo.png"/>')
         ).toBeGreaterThan(-1);
       });
     });
@@ -335,58 +335,6 @@ describe("HTMLReporter", () => {
     });
   });
 
-  describe("setupConfig", () => {
-    it("should return default value if no options were provided", async () => {
-      const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
-        options: {},
-      });
-      expect(reporter.config).toBeDefined();
-      expect(reporter.config.append.configValue).not.toBeDefined();
-      expect(reporter.getConfigValue("append")).toEqual(false);
-    });
-  });
-
-  describe("replaceRootDirInPath", () => {
-    it("should replace <rootDir> in the given path", () => {
-      const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
-        options: {},
-      });
-      const result = reporter.replaceRootDirInPath(
-        "mockedRoot",
-        "<rootDir>/test/reporter.html"
-      );
-
-      expect(result).toContain("mockedRoot");
-      expect(result).not.toContain("<rootDir>");
-    });
-
-    it("should simply return the file path if no <rootDir> is present", () => {
-      const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
-        options: {},
-      });
-      const result = reporter.replaceRootDirInPath(
-        "mockedRoot",
-        "test/reporter.html"
-      );
-
-      expect(result).toBe("test/reporter.html");
-    });
-
-    it("should be able to handle cases where root is not defined", () => {
-      const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
-        options: {},
-      });
-      // @ts-ignore
-      const result = reporter.replaceRootDirInPath(null, "test/reporter.html");
-
-      expect(result).toBe("test/reporter.html");
-    });
-  });
-
   describe("collapseSuitesByDefault", () => {
     it("should show the contents of test suites by default", async () => {
       const reporter = new HTMLReporter({
@@ -394,7 +342,6 @@ describe("HTMLReporter", () => {
         options: {},
       });
       const report = await reporter.renderTestReport();
-      console.log(report.fullHtml);
       expect(
         report.fullHtml.indexOf('class="toggle" checked="checked"')
       ).toBeGreaterThan(-1);

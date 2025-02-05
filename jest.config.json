@@ -1,18 +1,11 @@
 {
   "roots": ["<rootDir>"],
   "preset": "ts-jest",
-  "transform": {
-    "^.+\\.tsx?$": [
-      "ts-jest",
-      {
-        "babelConfig": true
-      }
-    ]
-  },
   "collectCoverage": true,
   "collectCoverageFrom": [
     "./src/**/*.{ts,tsx}",
     "!src/style.ts",
+    "!**/**/*.d.ts",
     "!**/test/*.{ts,tsx}",
     "!**/node_modules/**",
     "!**/coverage/**",
@@ -28,20 +21,5 @@
       "statements": 50
     }
   },
-  "verbose": true,
-  "reporters": [
-    "default",
-    [
-      "./dist",
-      {
-        "pageTitle": "Test Suite Reporter",
-        "outputPath": "<rootDir>/testResultsProcessorResult.html",
-        "includeFailureMsg": true,
-        "includeConsoleLog": true,
-        "useCssFile": true,
-        "sort": "titleAsc",
-        "append": false
-      }
-    ]
-  ]
+  "verbose": true
 }
