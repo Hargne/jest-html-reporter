@@ -37,7 +37,7 @@ WORKDIR /app
 COPY /e2e/test-project /app
 
 # As a test results processor
-RUN echo "{\"testResultsProcessor\": \"<rootDir>/jest-html-reporter\"}" > /app/jest.config.json
+RUN echo "{\"testEnvironment\": \"node\", \"testResultsProcessor\": \"<rootDir>/jest-html-reporter\"}" > /app/jest.config.json
 RUN echo "{\"pageTitle\": \"A Testresult Processor Title\", \"outputPath\": \"<rootDir>/testResultsProcessor.html\"}" > /app/jesthtmlreporter.config.json
 RUN npm install
 
