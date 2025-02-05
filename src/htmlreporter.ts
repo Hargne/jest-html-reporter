@@ -5,35 +5,34 @@ import fs from "fs";
 import mkdirp from "mkdirp";
 import path from "path";
 import type {
-  IJestHTMLReporterConfig,
-  IJestHTMLReporterConfigOptions,
-  IJestHTMLReporterConsole,
+  JestHTMLReporterConsoleLogList,
+  JestHTMLReporterConfiguration,
   JestHTMLReporterProps,
   JestHTMLReporterSortType,
 } from "src/types";
-import stripAnsi from "strip-ansi";
 import xmlbuilder, { XMLElement } from "xmlbuilder";
 
 import sorting from "./sorting";
+import * as utils from "./utils";
+import extractConfiguration from "./extractConfiguration";
 
 class HTMLReporter {
   public testData: AggregatedResult;
-  public consoleLogList: IJestHTMLReporterConsole[];
+  public consoleLogList: JestHTMLReporterConsoleLogList[];
   public jestConfig: Config.GlobalConfig | undefined;
-  public config: IJestHTMLReporterConfig;
+  public config: JestHTMLReporterConfiguration;
 
   constructor(data: JestHTMLReporterProps) {
     this.testData = data.testData;
     this.jestConfig = data.jestConfig;
     this.consoleLogList = data.consoleLogs || [];
-    this.config = {};
-    this.setupConfig(data.options);
+    this.config = extractConfiguration(data.options);
   }
 
   public async generate() {
     try {
       const report = await this.renderTestReport();
-      const outputPath = this.replaceRootDirInPath(
+      const outputPath = utils.replaceRootDirInPath(
         this.jestConfig ? this.jestConfig.rootDir : "",
         this.getConfigValue("outputPath") as string
       );
@@ -43,7 +42,7 @@ class HTMLReporter {
       if (this.getConfigValue("append") as boolean) {
         const fileExists = fs.existsSync(outputPath);
         if (fileExists) {
-          await this.appendToFile(outputPath, report.content.toString());
+          await utils.appendToHTML(outputPath, report.content.toString());
           writeFullReport = false;
         }
       }
@@ -51,10 +50,10 @@ class HTMLReporter {
         fs.writeFileSync(outputPath, report.fullHtml.toString());
       }
 
-      this.logMessage("success", `Report generated (${outputPath})`);
+      utils.logMessage("success", `Report generated (${outputPath})`);
       return report.fullHtml;
     } catch (error) {
-      this.logError(error);
+      utils.logError(error);
     }
   }
 
@@ -66,7 +65,7 @@ class HTMLReporter {
 
     // Boilerplate Option
     if (this.getConfigValue("boilerplate")) {
-      const boilerplatePath = this.replaceRootDirInPath(
+      const boilerplatePath = utils.replaceRootDirInPath(
         this.jestConfig ? this.jestConfig.rootDir : "",
         this.getConfigValue("boilerplate") as string
       );
@@ -351,7 +350,7 @@ class HTMLReporter {
               failureMsgDiv.ele(
                 "pre",
                 { class: "failureMsg" },
-                this.sanitizeOutput(suite.failureMessage)
+                utils.sanitizeOutput(suite.failureMessage)
               );
             }
             return;
@@ -413,7 +412,7 @@ class HTMLReporter {
                     failureMsgDiv.ele(
                       "pre",
                       { class: "failureMsg" },
-                      this.sanitizeOutput(failureMsg)
+                      utils.sanitizeOutput(failureMsg)
                     );
                   });
               }
@@ -440,7 +439,7 @@ class HTMLReporter {
 
       return reportBody;
     } catch (error) {
-      this.logError(error);
+      utils.logError(error);
     }
   }
 
@@ -471,12 +470,12 @@ class HTMLReporter {
         logElement.ele(
           "pre",
           { class: "suite-consolelog-item-origin" },
-          this.sanitizeOutput(log.origin)
+          utils.sanitizeOutput(log.origin)
         );
         logElement.ele(
           "pre",
           { class: "suite-consolelog-item-message" },
-          this.sanitizeOutput(log.message)
+          utils.sanitizeOutput(log.message)
         );
       });
     }
@@ -507,281 +506,12 @@ class HTMLReporter {
   }
 
   /**
-   * Fetch and setup configuration
-   */
-  public setupConfig(
-    options: IJestHTMLReporterConfigOptions
-  ): IJestHTMLReporterConfig {
-    // Extract config values and make sure that the config object actually exist
-    const {
-      append,
-      boilerplate,
-      collapseSuitesByDefault,
-      customScriptPath,
-      dateFormat,
-      executionTimeWarningThreshold,
-      logo,
-      includeConsoleLog,
-      includeFailureMsg,
-      includeStackTrace,
-      includeSuiteFailure,
-      includeObsoleteSnapshots,
-      outputPath,
-      pageTitle,
-      theme,
-      sort,
-      statusIgnoreFilter,
-      styleOverridePath,
-      useCssFile,
-    } = options || {};
-
-    this.config = {
-      append: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_APPEND",
-        configValue: append,
-      },
-      boilerplate: {
-        defaultValue: undefined,
-        environmentVariable: "JEST_HTML_REPORTER_BOILERPLATE",
-        configValue: boilerplate,
-      },
-      collapseSuitesByDefault: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_COLLAPSE_SUITES_BY_DEFAULT",
-        configValue: collapseSuitesByDefault,
-      },
-      customScriptPath: {
-        defaultValue: undefined,
-        environmentVariable: "JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH",
-        configValue: customScriptPath,
-      },
-      dateFormat: {
-        defaultValue: "yyyy-mm-dd HH:MM:ss",
-        environmentVariable: "JEST_HTML_REPORTER_DATE_FORMAT",
-        configValue: dateFormat,
-      },
-      executionTimeWarningThreshold: {
-        defaultValue: 5,
-        environmentVariable:
-          "JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD",
-        configValue: executionTimeWarningThreshold,
-      },
-      logo: {
-        defaultValue: undefined,
-        environmentVariable: "JEST_HTML_REPORTER_LOGO",
-        configValue: logo,
-      },
-      includeFailureMsg: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG",
-        configValue: includeFailureMsg,
-      },
-      includeStackTrace: {
-        defaultValue: true,
-        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_STACK_TRACE",
-        configValue: includeStackTrace,
-      },
-      includeSuiteFailure: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_SUITE_FAILURE",
-        configValue: includeSuiteFailure,
-      },
-      includeObsoleteSnapshots: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_OBSOLETE_SNAPSHOTS",
-        configValue: includeObsoleteSnapshots,
-      },
-      includeConsoleLog: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_INCLUDE_CONSOLE_LOG",
-        configValue: includeConsoleLog,
-      },
-      outputPath: {
-        defaultValue: path.join(process.cwd(), "test-report.html"),
-        environmentVariable: "JEST_HTML_REPORTER_OUTPUT_PATH",
-        configValue: outputPath,
-      },
-      pageTitle: {
-        defaultValue: "Test Report",
-        environmentVariable: "JEST_HTML_REPORTER_PAGE_TITLE",
-        configValue: pageTitle,
-      },
-      theme: {
-        defaultValue: "defaultTheme",
-        environmentVariable: "JEST_HTML_REPORTER_THEME",
-        configValue: theme,
-      },
-      sort: {
-        defaultValue: undefined,
-        environmentVariable: "JEST_HTML_REPORTER_SORT",
-        configValue: sort,
-      },
-      statusIgnoreFilter: {
-        defaultValue: undefined,
-        environmentVariable: "JEST_HTML_REPORTER_STATUS_FILTER",
-        configValue: statusIgnoreFilter,
-      },
-      styleOverridePath: {
-        defaultValue: undefined,
-        environmentVariable: "JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH",
-        configValue: styleOverridePath,
-      },
-      useCssFile: {
-        defaultValue: false,
-        environmentVariable: "JEST_HTML_REPORTER_USE_CSS_FILE",
-        configValue: useCssFile,
-      },
-    };
-    // Attempt to collect and assign config settings from jesthtmlreporter.config.json
-    try {
-      const jesthtmlreporterconfig = fs.readFileSync(
-        path.join(process.cwd(), "jesthtmlreporter.config.json"),
-        "utf8"
-      );
-      if (jesthtmlreporterconfig) {
-        const parsedConfig = JSON.parse(jesthtmlreporterconfig);
-        for (const key of Object.keys(parsedConfig)) {
-          if (
-            key in this.config &&
-            this.config[key as keyof IJestHTMLReporterConfig] !== undefined
-          ) {
-            this.config[key as keyof IJestHTMLReporterConfig]!.configValue =
-              parsedConfig[key];
-          }
-        }
-        return this.config;
-      }
-    } catch (e) {
-      /** do nothing */
-    }
-    // If above method did not work we attempt to check package.json
-    try {
-      const packageJson = fs.readFileSync(
-        path.join(process.cwd(), "package.json"),
-        "utf8"
-      );
-      if (packageJson) {
-        const parsedConfig = JSON.parse(packageJson)["jest-html-reporter"];
-        for (const key of Object.keys(parsedConfig)) {
-          if (
-            key in this.config &&
-            this.config[key as keyof IJestHTMLReporterConfig] !== undefined
-          ) {
-            this.config[key as keyof IJestHTMLReporterConfig]!.configValue =
-              parsedConfig[key];
-          }
-        }
-        return this.config;
-      }
-    } catch (e) {
-      /** do nothing */
-    }
-    return this.config;
-  }
-
-  /**
    * Returns the configured value from the config in the following priority order:
    * Environment Variable > JSON configured value > Default value
    * @param key
    */
-  public getConfigValue(key: keyof IJestHTMLReporterConfig) {
-    const option = this.config[key];
-    if (!option) {
-      return;
-    }
-    if (process.env[option.environmentVariable]) {
-      return process.env[option.environmentVariable];
-    }
-    return option.configValue ?? option.defaultValue;
-  }
-
-  /**
-   * Appends the report to the given file and attempts to integrate the report into any existing HTML.
-   * @param filePath
-   * @param content
-   */
-  public async appendToFile(filePath: string, content: string) {
-    let parsedContent = content;
-    const fileToAppend = fs.readFileSync(filePath, "utf8");
-    const contentSearch = /<body>(.*?)<\/body>/gm.exec(content);
-    if (contentSearch) {
-      const [strippedContent] = contentSearch;
-      parsedContent = strippedContent;
-    }
-    // Then we need to add the stripped content just before the </body> tag
-    let newContent = fileToAppend;
-    const closingBodyTag = /<\/body>/gm.exec(fileToAppend);
-    const indexOfClosingBodyTag = closingBodyTag ? closingBodyTag.index : 0;
-
-    newContent = [
-      fileToAppend.slice(0, indexOfClosingBodyTag),
-      parsedContent,
-      fileToAppend.slice(indexOfClosingBodyTag),
-    ].join("");
-
-    return fs.writeFileSync(filePath, newContent);
-  }
-
-  /**
-   * Replaces <rootDir> in the file path with the actual path, as performed within Jest
-   * Copy+paste from https://github.com/facebook/jest/blob/master/packages/jest-config/src/utils.ts
-   * @param rootDir
-   * @param filePath
-   */
-  public replaceRootDirInPath(
-    rootDir: Config.GlobalConfig["rootDir"],
-    filePath: Config.GlobalConfig["testPathPattern"]
-  ): string {
-    if (!/^<rootDir>/.test(filePath)) {
-      return filePath;
-    }
-
-    return path.resolve(
-      rootDir,
-      path.normalize("./" + filePath.substring("<rootDir>".length))
-    );
-  }
-
-  /**
-   * Method for logging to the terminal
-   * @param type
-   * @param message
-   * @param ignoreConsole
-   */
-  public logMessage(type: "default" | "success" | "error", message: string) {
-    const logTypes = {
-      default: "\x1b[37m%s\x1b[0m",
-      success: "\x1b[32m%s\x1b[0m",
-      error: "\x1b[31m%s\x1b[0m",
-    };
-    const logColor = !logTypes[type] ? logTypes.default : logTypes[type];
-    const logMsg = `jest-html-reporter >> ${message}`;
-    // Let's log messages to the terminal only if we aren't testing this very module
-    if (process.env.JEST_WORKER_ID === undefined) {
-      console.log(logColor, logMsg);
-    }
-    return { logColor, logMsg }; // Return for testing purposes
-  }
-
-  public logError(error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "An error occurred";
-    return this.logMessage("error", message);
-  }
-
-  /**
-   * Helper method to sanitize output from invalid characters
-   */
-  private sanitizeOutput(input: string) {
-    return stripAnsi(
-      input
-        .replace(/(\x1b\[\d*m)/g, "")
-        .replace(
-          /([^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFC\u{10000}-\u{10FFFF}])/gu,
-          ""
-        )
-    );
+  public getConfigValue(key: keyof JestHTMLReporterConfiguration) {
+    return this.config[key];
   }
 }
 

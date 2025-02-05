@@ -4,46 +4,34 @@ import { AggregatedResult } from "@jest/test-result";
 
 export interface JestHTMLReporterProps {
   testData: AggregatedResult;
-  options: IJestHTMLReporterConfigOptions;
+  options: Partial<JestHTMLReporterConfiguration>;
   jestConfig?: Config.GlobalConfig;
-  consoleLogs?: IJestHTMLReporterConsole[];
+  consoleLogs?: JestHTMLReporterConsoleLogList[];
 }
 
-export type IJestHTMLReporterConfigOptions = {
-  append?: boolean;
+export interface JestHTMLReporterConfiguration {
+  append: boolean;
   boilerplate?: string;
-  collapseSuitesByDefault?: boolean;
+  collapseSuitesByDefault: boolean;
   customScriptPath?: string;
-  dateFormat?: string;
-  executionTimeWarningThreshold?: number;
-  includeConsoleLog?: boolean;
-  includeFailureMsg?: boolean;
-  includeStackTrace?: boolean;
-  includeSuiteFailure?: boolean;
-  includeObsoleteSnapshots?: boolean;
+  dateFormat: string;
+  executionTimeWarningThreshold: number;
+  includeConsoleLog: boolean;
+  includeFailureMsg: boolean;
+  includeStackTrace: boolean;
+  includeSuiteFailure: boolean;
+  includeObsoleteSnapshots: boolean;
   logo?: string;
-  outputPath?: string;
+  outputPath: string;
   pageTitle?: string;
   sort?: JestHTMLReporterSortType;
   statusIgnoreFilter?: string;
   styleOverridePath?: string;
   theme?: string;
-  useCssFile?: boolean;
-};
-
-export interface IJestHTMLReporterConfigOption<T> {
-  environmentVariable: string;
-  configValue?: T;
-  defaultValue: T;
+  useCssFile: boolean;
 }
 
-export type IJestHTMLReporterConfig = {
-  [key in keyof IJestHTMLReporterConfigOptions]: IJestHTMLReporterConfigOption<
-    IJestHTMLReporterConfigOptions[key]
-  >;
-};
-
-export interface IJestHTMLReporterConsole {
+export interface JestHTMLReporterConsoleLogList {
   filePath: string;
   logs: ConsoleBuffer;
 }
