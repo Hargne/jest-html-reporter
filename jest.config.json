@@ -1,18 +1,11 @@
 {
   "roots": ["<rootDir>"],
   "preset": "ts-jest",
-  "transform": {
-    "^.+\\.tsx?$": [
-      "ts-jest",
-      {
-        "babelConfig": true
-      }
-    ]
-  },
   "collectCoverage": true,
   "collectCoverageFrom": [
     "./src/**/*.{ts,tsx}",
     "!src/style.ts",
+    "!**/**/*.d.ts",
     "!**/test/*.{ts,tsx}",
     "!**/node_modules/**",
     "!**/coverage/**",

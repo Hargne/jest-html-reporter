@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/Hargne/jest-html-reporter#readme",
   "engines": {
-    "node": ">=4.8.3"
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "@jest/reporters": "^29.7.0",
@@ -53,17 +53,18 @@
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "@jest/console": "^29.7.0",
-    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
     "@types/dateformat": "^3.0.X",
     "@types/jest": "^29.5.14",
     "@types/mkdirp": "1.0.2",
-    "@types/node": "12.20.12",
+    "@types/node": "^22.13.0",
     "@types/sinon": "9.0.11",
     "eslint": "^9.19.0",
     "jest": "^29.7.0",
-    "rollup": "2.79.2",
+    "rollup": "^4.34.1",
     "sinon": "^9.0.1",
     "ts-jest": "^29.0.0",
     "tslib": "^2.8.1",
