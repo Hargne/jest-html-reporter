@@ -1,0 +1,30 @@
+name: Test With Docker
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        required: true
+        type: string
+      jest_versions:
+        required: true
+        type: string
+
+jobs:
+  test-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+      - name: Build Docker Image (Node ${{ inputs.node_version }})
+        run: |
+          docker build --build-arg NODE_VERSION=${{ inputs.node_version }} --build-arg JEST_VERSIONS="${{ inputs.jest_versions }}" -t node${{ inputs.node_version }}-image .
+      - name: Run Docker Image
+        run: |
+          docker run --name node${{ inputs.node_version }}-container node${{ inputs.node_version }}-image
+      - name: Cleanup Docker Container & Image
+        if: always()
+        run: |
+          docker rm -f node${{ inputs.node_version }}-container || true
+          docker rmi -f node${{ inputs.node_version }}-image || true

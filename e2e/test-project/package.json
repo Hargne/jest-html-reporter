@@ -1,0 +1,9 @@
+{
+  "name": "test-project",
+  "version": "1.0.0",
+  "description": "A simple project to test Jest HTML Reporter",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  }
+}
