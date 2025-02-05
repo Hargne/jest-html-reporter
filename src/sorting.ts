@@ -1,11 +1,12 @@
 import { AggregatedResult, AssertionResult } from "@jest/test-result";
 import { JestHTMLReporterSortType } from "src/types";
+import { sortAlphabetically } from "./utils";
 
 export default (
   testResults: AggregatedResult["testResults"],
   sortType?: JestHTMLReporterSortType
 ): AggregatedResult["testResults"] => {
-  const sortTypeLowercase = sortType && sortType.toLowerCase();
+  const sortTypeLowercase = sortType?.toLowerCase();
   switch (sortTypeLowercase) {
     case "status":
       return sortByStatus(testResults);
@@ -68,7 +69,12 @@ const sortByStatus = (testResults: AggregatedResult["testResults"]) => {
     }
   });
 
-  return [].concat(pendingSuites, failingSuites, passingSuites);
+  // Explicitly annotate the return type
+  return [
+    ...pendingSuites,
+    ...failingSuites,
+    ...passingSuites,
+  ] as AggregatedResult["testResults"];
 };
 
 /**
@@ -154,16 +160,4 @@ const sortByTitleAsc = (testResults: AggregatedResult["testResults"]) => {
     return sorted;
   }
   return testResults;
-};
-
-/**
- * Helper sorting method
- */
-const sortAlphabetically = (a: any, b: any, reversed: boolean = false) => {
-  if ((!reversed && a < b) || (reversed && a > b)) {
-    return -1;
-  } else if ((!reversed && a > b) || (reversed && a < b)) {
-    return 1;
-  }
-  return 0;
 };

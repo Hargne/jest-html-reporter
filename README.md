@@ -71,8 +71,6 @@ More information about this can be found in the [documentation](https://github.c
 
 <img src="https://img.shields.io/node/v/jest-html-reporter?style=flat-square">
 
-This plugin is compatible with Node version `^4.8.3`
-
 ## Configuration
 
 Please note that all configuration properties are optional.
