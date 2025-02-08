@@ -1,15 +1,25 @@
-import { AggregatedResult, AssertionResult } from "@jest/test-result";
+import { AggregatedResult, AssertionResult, Status } from "@jest/test-result";
 import { JestHTMLReporterSortType } from "src/types";
 import { sortAlphabetically } from "./utils";
 
+const validStatuses: Status[] = ["pending", "failed", "passed"];
+
 export default (
   testResults: AggregatedResult["testResults"],
-  sortType?: JestHTMLReporterSortType
+  sortTypeInput?: string
 ): AggregatedResult["testResults"] => {
-  const sortTypeLowercase = sortType?.toLowerCase();
-  switch (sortTypeLowercase) {
-    case "status":
-      return sortByStatus(testResults);
+  const { sortType, params } = parseSortType(sortTypeInput);
+  switch (sortType) {
+    case "status": {
+      // Attempt to grab an array of statuses out of the params
+      const statusOrder = params?.every((status) =>
+        validStatuses.includes(status as Status)
+      )
+        ? (params as Status[])
+        : undefined;
+
+      return sortByStatus(testResults, statusOrder);
+    }
     case "executiondesc":
       return sortByExecutionDesc(testResults);
     case "executionasc":
@@ -23,58 +33,116 @@ export default (
   }
 };
 
+// Parses an input string into a valid sort type and additional params
+function parseSortType(input?: string): {
+  sortType: JestHTMLReporterSortType | null;
+  params?: string[];
+} {
+  if (!input) return { sortType: null };
+  const [sortTypeStr, paramStr] = input.split(":").map((s) => s.trim());
+  const params = paramStr?.split(",").map((s) => s.trim());
+
+  if (
+    ![
+      "status",
+      "executiondesc",
+      "executionasc",
+      "titledesc",
+      "titleasc",
+    ].includes(sortTypeStr.toLowerCase())
+  ) {
+    return { sortType: null };
+  }
+
+  const sortType = sortTypeStr.toLowerCase() as JestHTMLReporterSortType;
+
+  return {
+    sortType,
+    params,
+  };
+}
+
 /**
- * Splits test suites apart based on individual test status and sorts by that status:
- * 1. Pending
- * 2. Failed
- * 3. Passed
+ * Sorts test results based on the order of the given statuses (default: pending -> failed -> passed)
+ * A test suite which contains multiple test statuses is then split
+ * and will appear in multiple locations in the response.
  */
-const sortByStatus = (testResults: AggregatedResult["testResults"]) => {
-  const pendingSuites: AggregatedResult["testResults"] = [];
-  const failingSuites: AggregatedResult["testResults"] = [];
-  const passingSuites: AggregatedResult["testResults"] = [];
+const sortByStatus = (
+  testResults: AggregatedResult["testResults"],
+  sortOrder?: Status[]
+) => {
+  const suites: Pick<
+    Record<Status, AggregatedResult["testResults"]>,
+    "pending" | "failed" | "passed"
+  > = {
+    pending: [],
+    failed: [],
+    passed: [],
+  };
+  const restSuites: AggregatedResult["testResults"] = [];
 
   testResults.forEach((result) => {
     const pending: AssertionResult[] = [];
     const failed: AssertionResult[] = [];
     const passed: AssertionResult[] = [];
+    const rest: AssertionResult[] = [];
 
-    result.testResults.forEach((x) => {
-      if (x.status === "pending") {
-        pending.push(x);
-      } else if (x.status === "failed") {
-        failed.push(x);
+    result.testResults.forEach((testResult) => {
+      if (testResult.status === "pending") {
+        pending.push(testResult);
+      } else if (testResult.status === "failed") {
+        failed.push(testResult);
+      } else if (testResult.status === "passed") {
+        passed.push(testResult);
       } else {
-        passed.push(x);
+        rest.push(testResult);
       }
     });
 
     if (pending.length > 0) {
-      pendingSuites.push({
+      suites.pending.push({
         ...result,
         testResults: pending,
       });
     }
     if (failed.length > 0) {
-      failingSuites.push({
+      suites.failed.push({
         ...result,
         testResults: failed,
       });
     }
     if (passed.length > 0) {
-      passingSuites.push({
+      suites.passed.push({
         ...result,
         testResults: passed,
       });
     }
+    if (rest.length > 0) {
+      restSuites.push({
+        ...result,
+        testResults: rest,
+      });
+    }
   });
 
-  // Explicitly annotate the return type
-  return [
-    ...pendingSuites,
-    ...failingSuites,
-    ...passingSuites,
-  ] as AggregatedResult["testResults"];
+  const defaultSortOrder: Status[] = ["pending", "failed", "passed"];
+  // Combines the provided sort order with the default,
+  // so that in case the user omits some statuses - it will always contains all
+  const combinedSortOrder = [
+    ...(sortOrder || []),
+    ...defaultSortOrder.filter((status) => !(sortOrder || []).includes(status)),
+  ];
+
+  const sortedSuites = Object.entries(suites)
+    .sort(([keyA], [keyB]) => {
+      return (
+        combinedSortOrder.indexOf(keyA as Status) -
+        combinedSortOrder.indexOf(keyB as Status)
+      );
+    })
+    .flatMap(([, testResults]) => testResults);
+
+  return [...sortedSuites, ...restSuites];
 };
 
 /**
