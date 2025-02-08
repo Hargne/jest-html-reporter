@@ -1,8 +1,13 @@
 {
-  "roots": ["<rootDir>/src", "<rootDir>/test"],
+  "roots": ["<rootDir>/src"],
   "preset": "ts-jest",
   "collectCoverage": true,
-  "collectCoverageFrom": ["./src/**/*.ts", "!**/**/*.d.ts"],
+  "collectCoverageFrom": [
+    "./src/**/*.ts",
+    "!**/**/*.d.ts",
+    "!**/**/*.types.ts",
+    "!./src/__mock__/**/*.ts"
+  ],
   "coverageDirectory": "./coverage",
   "coverageReporters": ["json", "html", "text", "text-summary"],
   "coverageThreshold": {

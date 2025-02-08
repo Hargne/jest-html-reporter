@@ -1,10 +1,8 @@
 import fs from "fs";
 
-import HTMLReporter from "../src/htmlreporter";
-import {
-  mockedJestResponseMultipleTestResult,
-  mockedJestResponseSingleTestResult,
-} from "./mockdata";
+import HTMLReporter from "./htmlreporter";
+import { mockAggregatedResultSingle } from "./__mock__/mockAggregatedResultSingle";
+import mockAggregatedResultMultiple from "./__mock__/mockAggregatedResultMultiple";
 
 describe("HTMLReporter", () => {
   describe("generate", () => {
@@ -13,7 +11,7 @@ describe("HTMLReporter", () => {
       mockedFS.mockImplementation();
 
       const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
+        testData: mockAggregatedResultSingle,
         options: {},
       });
       const report = await reporter.generate();
@@ -36,7 +34,7 @@ describe("HTMLReporter", () => {
     it("should return configured environment variable", async () => {
       process.env.JEST_HTML_REPORTER_LOGO = "logoFromEnv.png";
       const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
+        testData: mockAggregatedResultSingle,
         options: {},
       });
       const reportContent = await reporter.renderTestReportContent();
@@ -54,7 +52,7 @@ describe("HTMLReporter", () => {
     describe("styleOverridePath", () => {
       it("should insert a link to the overriding stylesheet path", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             styleOverridePath: "path/to/style.css",
           },
@@ -71,14 +69,13 @@ describe("HTMLReporter", () => {
     describe("includeConsoleLog", () => {
       it("should add found console.logs to the report if includeConsoleLog is set", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             includeConsoleLog: true,
           },
           consoleLogs: [
             {
-              filePath:
-                mockedJestResponseSingleTestResult.testResults[0].testFilePath,
+              filePath: mockAggregatedResultSingle.testResults[0].testFilePath,
               logs: [
                 {
                   message: "This is a console log",
@@ -102,12 +99,11 @@ describe("HTMLReporter", () => {
 
       it("should not add any console.logs to the report if includeConsoleLog is false", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {},
           consoleLogs: [
             {
-              filePath:
-                mockedJestResponseSingleTestResult.testResults[0].testFilePath,
+              filePath: mockAggregatedResultSingle.testResults[0].testFilePath,
               logs: [
                 {
                   message: "This is a console log",
@@ -133,7 +129,7 @@ describe("HTMLReporter", () => {
     describe("statusIgnoreFilter", () => {
       it("should remove tests with the specified status", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseMultipleTestResult,
+          testData: mockAggregatedResultMultiple,
           options: {
             statusIgnoreFilter: "passed",
           },
@@ -149,7 +145,7 @@ describe("HTMLReporter", () => {
     describe("includeFailureMsg", () => {
       it("should include failure messages", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseMultipleTestResult,
+          testData: mockAggregatedResultMultiple,
           options: {
             includeFailureMsg: true,
           },
@@ -165,7 +161,7 @@ describe("HTMLReporter", () => {
     describe("includeStackTrace", () => {
       it("should remove stack traces in failure messages if set to false", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             includeFailureMsg: true,
             includeStackTrace: false,
@@ -183,7 +179,7 @@ describe("HTMLReporter", () => {
       });
       it("should keep stack trace in failure messages if set to true", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             includeFailureMsg: true,
             includeStackTrace: true,
@@ -197,7 +193,7 @@ describe("HTMLReporter", () => {
       });
       it("should keep stack trace in failure messages if undefined", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             includeFailureMsg: true,
           },
@@ -213,7 +209,7 @@ describe("HTMLReporter", () => {
     describe("includeSuiteFailure", () => {
       it("should include suite failure message", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseMultipleTestResult,
+          testData: mockAggregatedResultMultiple,
           options: {
             includeSuiteFailure: true,
           },
@@ -231,7 +227,7 @@ describe("HTMLReporter", () => {
     describe("includeObsoleteSnapshots", () => {
       it("should include obsolete snapshots", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseMultipleTestResult,
+          testData: mockAggregatedResultMultiple,
           options: {
             includeObsoleteSnapshots: true,
           },
@@ -254,7 +250,7 @@ describe("HTMLReporter", () => {
     describe("logo", () => {
       it("should add a logo to the report", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             logo: "logo.png",
           },
@@ -270,7 +266,7 @@ describe("HTMLReporter", () => {
     describe("customScriptPath", () => {
       it("should add assigned custom script path to the report", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             customScriptPath: "path/to/script.js",
           },
@@ -286,7 +282,7 @@ describe("HTMLReporter", () => {
     describe("pageTitle", () => {
       it("should add the given string as a title tag", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             pageTitle: "My Report",
           },
@@ -305,7 +301,7 @@ describe("HTMLReporter", () => {
     describe("executionTimeWarningThreshold", () => {
       it("should mark tests that have surpassed the threshold", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             executionTimeWarningThreshold: 0.00001,
           },
@@ -321,7 +317,7 @@ describe("HTMLReporter", () => {
     describe("dateFormat", () => {
       it("should format the date in the given format", async () => {
         const reporter = new HTMLReporter({
-          testData: mockedJestResponseSingleTestResult,
+          testData: mockAggregatedResultSingle,
           options: {
             dateFormat: "yyyy",
           },
@@ -338,7 +334,7 @@ describe("HTMLReporter", () => {
   describe("collapseSuitesByDefault", () => {
     it("should show the contents of test suites by default", async () => {
       const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
+        testData: mockAggregatedResultSingle,
         options: {},
       });
       const report = await reporter.renderTestReport();
@@ -349,7 +345,7 @@ describe("HTMLReporter", () => {
 
     it("should hide the contents of test suites", async () => {
       const reporter = new HTMLReporter({
-        testData: mockedJestResponseSingleTestResult,
+        testData: mockAggregatedResultSingle,
         options: {
           collapseSuitesByDefault: true,
         },
