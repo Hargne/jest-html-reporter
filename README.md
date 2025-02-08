@@ -71,90 +71,28 @@ More information about this can be found in the [documentation](https://github.c
 
 <img src="https://img.shields.io/node/v/jest-html-reporter?style=flat-square">
 
-## Configuration
+## 📌 Configuration Options (All Optional)
 
-All configuration properties are optional.
-
-- `append` (boolean) - Default: `false`
-
-  Dictates whether or not the test results should be appended to the end of an existing test report.
-
-- `boilerplate` (string) - Default: `null`
-
-  The path to a boilerplate file (e.g HTML) that should be used to render the body of the test results into. The variable `{jesthtmlreporter-content}` within the boilerplate will be replaced with the actual test results.
-
-- `collapseSuitesByDefault` (boolean) - Default: `false`
-
-  Whether to collapse test suites (accordions) by default or not.
-
-- `customScriptPath` (string) - Default: `null`
-
-  Path to an external script file that should be injected into the body of the test report.
-
-- `dateFormat` (string) - Default: `yyyy-mm-dd HH:MM:ss`
-
-  The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables.
-
-- `executionTimeWarningThreshold` (number) - Default: `5`
-
-  Test suites that pass this threshold (execution time in seconds) will be rendered with a warning on the report page. _5 seconds is the default timeout in Jest._
-
-- `includeConsoleLog` (boolean) - Default: `false`
-
-  If set to true, this will render all console logs for each test suite into the report. Please note that you have to run Jest together with `--verbose=false` in order to have Jest catch any logs during the tests.
-
-- `includeFailureMsg` (boolean) - Default: `false`
-
-  Whether or not to render detailed (verbose) error messages for failed individual tests.
-
-- `includeStackTrace` (boolean) - Default: `true`
-
-  Whether or not to render stack traces for failed tests.
-
-- `includeSuiteFailure` (boolean) - Default: `false`
-
-  Whether or not to render detailed (verbose) error messages for entire failed test suites.
-
-- `includeObsoleteSnapshots` (boolean) - Default: `false`
-
-  Whether or not to render obsolete snapshot names.
-
-- `logo` (string) - Default: `null`
-
-  Path to an image file that will be rendered in the header of the report.
-
-- `outputPath` (string) - Default: `./test-report.html`
-
-  The full path (including file name) to where the rendered HTML report will be output. _The path must include the filename and end with .html_
-
-- `pageTitle` (string) - Default: `Test Report`
-
-  The title of the document. This string will also be rendered as a heading at the top of the page.
-
-- `sort` (string) - Default: `null`
-
-  Sorts the test results and suites using the given method. The default setting will render suites and tests as they arrive from Jest.
-
-  Available sort methods:
-
-  - _`status`_ - Sorts test results based on their statuses (pending -> failed -> passed). A test suite which contains multiple test statuses is then split and will appear in multiple locations in the response.
-  - _`status:{comma-separated list}`_ - Same sorting functionality as `status`, but with a custom order of statuses. Example usage: `"status:failed,passed,pending"`. By only passing in a single status, the other statuses will be sorted according to the default order.
-  - _`executionasc`_ - Sorts tests by execution time (ascending).
-  - _`executiondesc`_ - Sorts tests by execution time (descending).
-  - _`titleasc`_ - Sorts tests by suite filename and test name (ascending).
-  - _`titledesc`_ - Sorts tests by suite filename and test name (descending).
-
-- `statusIgnoreFilter` (string) - Default: `null`
-
-  A comma-separated string of the test result statuses that should **not** appear in the report. Available statuses are: `"passed"`, `"pending"`, `"failed"`
-
-- `styleOverridePath` (string) - Default: `null`
-
-  The path to a file containing CSS styles to override the default styling. The plugin will search for the given filename from the root directory and so there is no need to prepend the string with `./` or `../` - You can read more about theming in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
-
-- `useCssFile` (boolean) - Default: `false`
-
-  Whether to inline the contents of the active CSS file or simply to link to it.
+| Option                              | Type      | Default               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ----------------------------------- | --------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`append`**                        | `boolean` | `false`               | Append test results to an existing report.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **`boilerplate`**                   | `string`  | `null`                | Path to an HTML boilerplate file. The `{jesthtmlreporter-content}` variable will be replaced with test results.                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **`collapseSuitesByDefault`**       | `boolean` | `false`               | Collapse test suites (accordions) by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **`customScriptPath`**              | `string`  | `null`                | Path to an external script file injected into the report.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **`dateFormat`**                    | `string`  | `yyyy-mm-dd HH:MM:ss` | Date format for timestamps. See [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for available formats.                                                                                                                                                                                                                                                                                                                                                                                          |
+| **`executionTimeWarningThreshold`** | `number`  | `5`                   | Warn if a test suite exceeds this execution time (in seconds).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **`includeConsoleLog`**             | `boolean` | `false`               | Include `console.log` outputs in the report (**requires** `--verbose=false`).                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **`includeFailureMsg`**             | `boolean` | `false`               | Show detailed error messages for failed tests.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **`includeStackTrace`**             | `boolean` | `true`                | Show stack traces for failed tests.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **`includeSuiteFailure`**           | `boolean` | `false`               | Show detailed errors for entire failed test suites.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **`includeObsoleteSnapshots`**      | `boolean` | `false`               | Show obsolete snapshot names.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **`logo`**                          | `string`  | `null`                | Path to an image file to display in the report header.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **`outputPath`**                    | `string`  | `./test-report.html`  | Full path for the output report file (**must end in `.html`**).                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **`pageTitle`**                     | `string`  | `"Test Report"`       | Title of the document and top-level heading.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **`sort`**                          | `string`  | `null`                | Sort test results by a specific method. Available values:<br> ➤ **`status`** → Sorts by test status (**pending → failed → passed**).<br> ➤ **`status:{custom-order}`** → Custom status order (e.g., `"status:failed,passed,pending"`).<br> ➤ **`executionasc`** → Sorts by execution time **ascending**.<br> ➤ **`executiondesc`** → Sorts by execution time **descending**.<br> ➤ **`titleasc`** → Sorts by suite filename/test name **ascending**.<br> ➤ **`titledesc`** → Sorts by suite filename/test name **descending**. |
+| **`statusIgnoreFilter`**            | `string`  | `null`                | **Comma-separated** list of statuses to exclude: `"passed"`, `"pending"`, `"failed"`.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **`styleOverridePath`**             | `string`  | `null`                | Path to a CSS file to override default styles. See [themes documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).                                                                                                                                                                                                                                                                                                                                                                               |
+| **`useCssFile`**                    | `boolean` | `false`               | Link to the CSS file instead of inlining styles.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ## Continuous Integration
 
