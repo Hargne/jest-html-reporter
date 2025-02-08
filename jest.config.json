@@ -1,24 +1,16 @@
 {
-  "roots": ["<rootDir>"],
+  "roots": ["<rootDir>/src", "<rootDir>/test"],
   "preset": "ts-jest",
   "collectCoverage": true,
-  "collectCoverageFrom": [
-    "./src/**/*.{ts,tsx}",
-    "!src/style.ts",
-    "!**/**/*.d.ts",
-    "!**/test/*.{ts,tsx}",
-    "!**/node_modules/**",
-    "!**/coverage/**",
-    "!**/vendor/**"
-  ],
+  "collectCoverageFrom": ["./src/**/*.ts", "!**/**/*.d.ts"],
   "coverageDirectory": "./coverage",
   "coverageReporters": ["json", "html", "text", "text-summary"],
   "coverageThreshold": {
     "global": {
-      "branches": 50,
-      "functions": 50,
-      "lines": 50,
-      "statements": 50
+      "branches": 75,
+      "functions": 75,
+      "lines": 75,
+      "statements": 75
     }
   },
   "verbose": true
