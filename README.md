@@ -73,30 +73,88 @@ More information about this can be found in the [documentation](https://github.c
 
 ## Configuration
 
-Please note that all configuration properties are optional.
+All configuration properties are optional.
 
-| Property                        | Type      | Description                                                                                                                                                                                                      | Default                 |
-| ------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `append`                        | `BOOLEAN` | If set to true, new test results will be appended to the existing test report                                                                                                                                    | `false`                 |
-| `boilerplate`                   | `STRING`  | The path to a boilerplate file that should be used to render the body of the test results into. `{jesthtmlreporter-content}` within the boilerplate will be replaced with the test results                       | `null`                  |
-| `collapseSuitesByDefault`       | `BOOLEAN` | Whether to collapse test suites by default or not                                                                                                                                                                | `false`                 |
-| `customScriptPath`              | `STRING`  | Path to a javascript file that should be injected into the test report                                                                                                                                           | `null`                  |
-| `dateFormat`                    | `STRING`  | The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"` |
-| `executionTimeWarningThreshold` | `NUMBER`  | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest.                                                   | `5`                     |
-| `includeConsoleLog`             | `BOOLEAN` | If set to true, this will output all triggered console logs for each test suite. Please note that you have to run Jest together with `--verbose=false` in order to have Jest catch any logs during the tests.    | `false`                 |
-| `includeFailureMsg`             | `BOOLEAN` | If this setting is set to true, this will output the detailed failure message for each failed test.                                                                                                              | `false`                 |
-| `includeStackTrace`             | `BOOLEAN` | Turning this option off will cut the stack trace from the failure messages.                                                                                                                                      | `true`                  |
-| `includeSuiteFailure`           | `BOOLEAN` | If set to true, this will output the detailed failure message for complete suite failures.                                                                                                                       | `false`                 |
-| `includeObsoleteSnapshots`      | `BOOLEAN` | If set to true, this will output obsolete snapshot names.                                                                                                                                                        | `false`                 |
-| `logo`                          | `STRING`  | Path to a logo that will be included in the header of the report                                                                                                                                                 | `null`                  |
-| `outputPath`                    | `STRING`  | The path to where the plugin will output the HTML report. The path must include the filename and end with .html                                                                                                  | `"./test-report.html"`  |
-| `pageTitle`                     | `STRING`  | The title of the document. This string will also be outputted on the top of the page.                                                                                                                            | `"Test Suite"`          |
-| `sort`                          | `STRING`  | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods).                                 | `"default"`             |
-| `statusIgnoreFilter`            | `STRING`  | A comma-separated string of the test result statuses that should be ignored when rendering the report. Available statuses are: `"passed"`, `"pending"`, `"failed"`                                               | `null`                  |
-| `styleOverridePath`             | `STRING`  | The path to a file containing CSS styles that should override the default styling.\*                                                                                                                             | `null`                  |
-| `useCssFile`                    | `BOOLEAN` | If set to true, the CSS styles will link in the current theme's .css file instead of inlining its content on the page                                                                                            | `false`                 |
+- `append` (boolean) - Default: `false`
 
-> *The plugin will search for the *styleOverridePath\* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
+  Dictates whether or not the test results should be appended to the end of an existing test report.
+
+- `boilerplate` (string) - Default: `null`
+
+  The path to a boilerplate file (e.g HTML) that should be used to render the body of the test results into. The variable `{jesthtmlreporter-content}` within the boilerplate will be replaced with the actual test results.
+
+- `collapseSuitesByDefault` (boolean) - Default: `false`
+
+  Whether to collapse test suites (accordions) by default or not.
+
+- `customScriptPath` (string) - Default: `null`
+
+  Path to an external script file that should be injected into the body of the test report.
+
+- `dateFormat` (string) - Default: `yyyy-mm-dd HH:MM:ss`
+
+  The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables.
+
+- `executionTimeWarningThreshold` (number) - Default: `5`
+
+  Test suites that pass this threshold (execution time in seconds) will be rendered with a warning on the report page. _5 seconds is the default timeout in Jest._
+
+- `includeConsoleLog` (boolean) - Default: `false`
+
+  If set to true, this will render all console logs for each test suite into the report. Please note that you have to run Jest together with `--verbose=false` in order to have Jest catch any logs during the tests.
+
+- `includeFailureMsg` (boolean) - Default: `false`
+
+  Whether or not to render detailed (verbose) error messages for failed individual tests.
+
+- `includeStackTrace` (boolean) - Default: `true`
+
+  Whether or not to render stack traces for failed tests.
+
+- `includeSuiteFailure` (boolean) - Default: `false`
+
+  Whether or not to render detailed (verbose) error messages for entire failed test suites.
+
+- `includeObsoleteSnapshots` (boolean) - Default: `false`
+
+  Whether or not to render obsolete snapshot names.
+
+- `logo` (string) - Default: `null`
+
+  Path to an image file that will be rendered in the header of the report.
+
+- `outputPath` (string) - Default: `./test-report.html`
+
+  The full path (including file name) to where the rendered HTML report will be output. _The path must include the filename and end with .html_
+
+- `pageTitle` (string) - Default: `Test Report`
+
+  The title of the document. This string will also be rendered as a heading at the top of the page.
+
+- `sort` (string) - Default: `null`
+
+  Sorts the test results and suites using the given method. The default setting will render suites and tests as they arrive from Jest.
+
+  Available sort methods:
+
+  - _`status`_ - Sorts test results based on their statuses (pending -> failed -> passed). A test suite which contains multiple test statuses is then split and will appear in multiple locations in the response.
+  - _`status:{comma-separated list}`_ - Same sorting functionality as `status`, but with a custom order of statuses. Example usage: `"status:failed,passed,pending"`. By only passing in a single status, the other statuses will be sorted according to the default order.
+  - _`executionasc`_ - Sorts tests by execution time (ascending).
+  - _`executiondesc`_ - Sorts tests by execution time (descending).
+  - _`titleasc`_ - Sorts tests by suite filename and test name (ascending).
+  - _`titledesc`_ - Sorts tests by suite filename and test name (descending).
+
+- `statusIgnoreFilter` (string) - Default: `null`
+
+  A comma-separated string of the test result statuses that should **not** appear in the report. Available statuses are: `"passed"`, `"pending"`, `"failed"`
+
+- `styleOverridePath` (string) - Default: `null`
+
+  The path to a file containing CSS styles to override the default styling. The plugin will search for the given filename from the root directory and so there is no need to prepend the string with `./` or `../` - You can read more about theming in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
+
+- `useCssFile` (boolean) - Default: `false`
+
+  Whether to inline the contents of the active CSS file or simply to link to it.
 
 ## Continuous Integration
 
