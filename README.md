@@ -62,7 +62,7 @@ To run the reporter as a test results processor (after Jest is complete instead 
 }
 ```
 
-**\*Note:** When running as a testResultsProcessor, the configuration needs be placed within a new file named `jesthtmlreporter.config.json` residing in the root folder.\*
+***Note:** When running as a testResultsProcessor, the configuration needs be placed within a new file named `jesthtmlreporter.config.json` residing in the root folder.*
 
 ## 📌 Configuration Options (All Optional)
 
@@ -93,7 +93,7 @@ All the configuration options provided in the table above are available via envi
 
 **Example:** `customScriptPath` -> `JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH`
 
-**\*NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json\*
+***NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json*
 
 ### CI Example
 
