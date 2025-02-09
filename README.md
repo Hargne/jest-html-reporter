@@ -3,13 +3,11 @@
 	<h3 align="center">jest-html-reporter</h3>
 	<p align="center">
 		A <a href="https://github.com/facebook/jest">Jest</a> test results processor for generating a summary in HTML.
-		<br>
-		<a href="https://github.com/Hargne/jest-html-reporter/wiki"><strong>Documentation »</strong></a>
 		<br />
 		<br />
 		<img src="https://img.shields.io/npm/v/jest-html-reporter?style=flat-square">
+		<img src="https://img.shields.io/node/v/jest-html-reporter?style=flat-square">
 		<img src="https://img.shields.io/npm/dm/jest-html-reporter?style=flat-square">
-		<img src="https://img.shields.io/github/actions/workflow/status/Hargne/jest-html-reporter/main.yml?branch=master&style=flat-square">
 		<br />
 		<br />
 		<small>Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a></small>
@@ -52,7 +50,7 @@ Configure Jest to process the test results by adding the following entry to the 
 
 As you run Jest from within the terminal, a file called _test-report.html_ will be created within your root folder containing information about your tests.
 
-There are multiple configuration options available. To read more about these, please refer to the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
+There are multiple configuration options available. Read more about these further down in this document.
 
 #### Alternative Usage as a Test Results Processor
 
@@ -64,12 +62,7 @@ To run the reporter as a test results processor (after Jest is complete instead 
 }
 ```
 
-**Note:** When running as a testResultsProcessor, the configuration needs be placed within a new file named `jesthtmlreporter.config.json` residing in the root folder.
-More information about this can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
-
-### Node Compatibility
-
-<img src="https://img.shields.io/node/v/jest-html-reporter?style=flat-square">
+**\*Note:** When running as a testResultsProcessor, the configuration needs be placed within a new file named `jesthtmlreporter.config.json` residing in the root folder.\*
 
 ## 📌 Configuration Options (All Optional)
 
@@ -91,14 +84,18 @@ More information about this can be found in the [documentation](https://github.c
 | **`pageTitle`**                     | `string`  | `"Test Report"`       | Title of the document and top-level heading.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **`sort`**                          | `string`  | `null`                | Sort test results by a specific method. Available values:<br> ➤ **`status`** → Sorts by test status (**pending → failed → passed**).<br> ➤ **`status:{custom-order}`** → Custom status order (e.g., `"status:failed,passed,pending"`).<br> ➤ **`executionasc`** → Sorts by execution time **ascending**.<br> ➤ **`executiondesc`** → Sorts by execution time **descending**.<br> ➤ **`titleasc`** → Sorts by suite filename/test name **ascending**.<br> ➤ **`titledesc`** → Sorts by suite filename/test name **descending**. |
 | **`statusIgnoreFilter`**            | `string`  | `null`                | **Comma-separated** list of statuses to exclude: `"passed"`, `"pending"`, `"failed"`.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| **`styleOverridePath`**             | `string`  | `null`                | Path to a CSS file to override default styles. See [themes documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).                                                                                                                                                                                                                                                                                                                                                                               |
+| **`styleOverridePath`**             | `string`  | `null`                | Path to a CSS file to override default styles.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | **`useCssFile`**                    | `boolean` | `false`               | Link to the CSS file instead of inlining styles.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ## Continuous Integration
 
-Configuration may also be performed with environment variables for dynamic file saving paths in different environments. **\*NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json\*
+All the configuration options provided in the table above are available via environment variables and follows the pattern of snake case in uppercase prepended with _JEST*HTML_REPORTER*_
 
-#### Example
+**Example:** `customScriptPath` -> `JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH`
+
+**\*NOTE:** Environment variables will take precedence over configurations set in jesthtmlreporter.config.json and package.json\*
+
+### CI Example
 
 Here is an example of dynamically naming your output file and test report title to match your current branch that one might see in a automated deployment pipeline before running their tests.
 
@@ -107,7 +104,3 @@ export BRANCH_NAME=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3`
 export JEST_HTML_REPORTER_OUTPUT_PATH=/home/username/jest-test-output/test-reports/"$BRANCH_NAME".html
 export JEST_HTML_REPORTER_PAGE_TITLE="$BRANCH_NAME"\ Test\ Report
 ```
-
-#### Configuration Environment Variables
-
-The environment variables reflect the configuration options available in JSON format. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-environment-variables) for more information on these variables.
