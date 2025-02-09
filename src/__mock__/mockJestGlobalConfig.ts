@@ -62,3 +62,4 @@ export const mockJestGlobalConfig: Config.GlobalConfig = {
   watchPlugins: undefined,
   watchman: true,
 };
+export default mockJestGlobalConfig;
