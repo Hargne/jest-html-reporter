@@ -72,3 +72,4 @@ export const mockAggregatedResultSingle: AggregatedResult = {
     },
   ],
 };
+export default mockAggregatedResultSingle;

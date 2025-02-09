@@ -35,10 +35,6 @@ RUN npm install --ignore-engines
 # Copy and run the test-project directory into the container and run the tests with the Jest HTML Reporter
 WORKDIR /app
 COPY /e2e/test-project /app
-
-# As a test results processor
-RUN echo "{\"testEnvironment\": \"node\", \"testResultsProcessor\": \"<rootDir>/jest-html-reporter\"}" > /app/jest.config.json
-RUN echo "{\"pageTitle\": \"A Testresult Processor Title\", \"outputPath\": \"<rootDir>/testResultsProcessor.html\"}" > /app/jesthtmlreporter.config.json
 RUN npm install
 
 # Run the bash script containing the tests

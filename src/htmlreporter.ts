@@ -128,28 +128,12 @@ class HTMLReporter {
     };
   }
 
-  public renderTestSuiteHeader(
-    parent: XMLElement,
-    suite: TestResult,
-    suiteIndex: number
-  ) {
-    const collapsibleBtnId = `collapsible-${suiteIndex}`;
-    parent.ele("input", {
-      id: collapsibleBtnId,
-      type: "checkbox",
-      class: "toggle",
-      checked: !this.getConfigValue("collapseSuitesByDefault")
-        ? "checked"
-        : null,
-    });
-    const collapsibleBtnContainer = parent.ele("label", {
-      for: collapsibleBtnId,
-    });
-
-    const suiteInfo = collapsibleBtnContainer.ele("div", {
+  public renderTestSuiteHeader(parent: XMLElement, suite: TestResult) {
+    const accordionHeader = parent.ele("summary", {
       class: "suite-info",
     });
-    suiteInfo.ele("div", { class: "suite-path" }, suite.testFilePath);
+
+    accordionHeader.ele("div", { class: "suite-path" }, suite.testFilePath);
     const executionTime = (suite.perfStats.end - suite.perfStats.start) / 1000;
     const suiteExecutionTimeClass = ["suite-time"];
     if (
@@ -158,7 +142,7 @@ class HTMLReporter {
     ) {
       suiteExecutionTimeClass.push("warn");
     }
-    suiteInfo.ele(
+    accordionHeader.ele(
       "div",
       { class: suiteExecutionTimeClass.join(" ") },
       `${executionTime}s`
@@ -172,7 +156,7 @@ class HTMLReporter {
       }
 
       // HTML Body
-      const reportBody: XMLElement = xmlbuilder.begin().element("div", {
+      const reportBody: XMLElement = xmlbuilder.begin().element("main", {
         class: "jesthtml-content",
       });
 
@@ -192,7 +176,7 @@ class HTMLReporter {
       /**
        * Meta-Data
        */
-      const metaDataContainer = reportBody.ele("div", {
+      const metaDataContainer = reportBody.ele("section", {
         id: "metadata-container",
       });
       // Timestamp
@@ -319,12 +303,15 @@ class HTMLReporter {
        */
       if (sortedTestResults) {
         sortedTestResults.forEach((suite, suiteIndex) => {
-          const suiteContainer = reportBody.ele("div", {
+          const suiteContainer = reportBody.ele("details", {
             id: `suite-${suiteIndex + 1}`,
             class: "suite-container",
+            open: !this.getConfigValue("collapseSuitesByDefault")
+              ? ""
+              : undefined,
           });
           // Suite Information
-          this.renderTestSuiteHeader(suiteContainer, suite, suiteIndex);
+          this.renderTestSuiteHeader(suiteContainer, suite);
           // Test Container
           const suiteTests = suiteContainer.ele("div", {
             class: "suite-tests",
