@@ -15,8 +15,23 @@ cat <<EOF > jest.config.json || { echo "❌ Failed to create jest.config.json"; 
   "reporters": [
     "default",
     ["<rootDir>/jest-html-reporter", {
+      "append": false,
+      "boilerplate": null,
+      "collapseSuitesByDefault": true,
+      "customScriptPath": null,
+      "dateFormat": "yyyy-mm-dd (HH:MM:ss)",
+      "executionTimeWarningThreshold": 1,
+      "includeConsoleLog": true,
+      "includeFailureMsg": true,
+      "includeStackTrace": true,
+      "includeSuiteFailure": true,
+      "logo": "https://placehold.co/100x50/png?text=Test+Report&font=playfair-display",
       "outputPath": "<rootDir>/${FILENAME}.html",
       "pageTitle": "${PAGE_TITLE}",
+      "sort": "status",
+      "statusIgnoreFilter": null,
+      "styleOverridePath": "./style/defaultTheme.css",
+      "useCssFile": true
     }]
   ]
 }
