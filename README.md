@@ -89,7 +89,7 @@ To run the reporter as a test results processor (after Jest is complete instead 
 
 ## Continuous Integration
 
-All the configuration options provided in the table above are available via environment variables and follows the pattern of snake case in uppercase prepended with _JEST*HTML_REPORTER*_
+All the configuration options provided in the table above are available via environment variables and follows the pattern of snake case in uppercase prepended with `JEST_HTML_REPORTER_`
 
 **Example:** `customScriptPath` -> `JEST_HTML_REPORTER_CUSTOM_SCRIPT_PATH`
 
