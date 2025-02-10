@@ -1,14 +1,27 @@
+:root {
+  --text-primary: #111;
+  --text-secondary: #4F4F4F;
+  --success: #006633;
+  --success-bright: #80FFBF;
+  --danger: #CC071E;
+  --danger-bright: #FBDFE0;
+  --warning: #995C00;
+  --warning-bright: #FFEEA8;
+  --panel: #eee;
+  --border: #949494;
+  --disabled: #6B6B6B;
+}
+
 html,
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
+  font-size: 16px;
   margin: 0;
   padding: 0;
-  color: #333;
+  color: var(--text-primary);
 }
 body {
   padding: 2rem 1rem;
-  font-size: 0.85rem;
 }
 .jesthtml-content {
   margin: 0 auto;
@@ -26,21 +39,21 @@ header {
   height: 4rem;
 }
 #timestamp {
-  color: #777;
+  color: var(--text-secondary);
   margin-top: 0.5rem;
 }
 
 /** SUMMARY */
 #summary {
-  color: #333;
+  color: var(--text-primary);
   margin: 2rem 0;
   display: flex;
   font-family: monospace;
   font-size: 1rem;
 }
 #summary > div {
-  margin-right: 2rem;
-  background: #eee;
+  margin-right: 0.5rem;
+  background: var(--panel);
   padding: 1rem;
   min-width: 15rem;
 }
@@ -53,7 +66,7 @@ header {
   }
   #summary > div {
     margin-right: 0;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
   #summary > div:first-child {
     margin-top: 0;
@@ -65,24 +78,28 @@ header {
   margin-bottom: 0.5rem;
 }
 .summary-passed {
-  color: #4f8a10;
-  border-left: 0.4rem solid #4f8a10;
+  color: var(--success);
+  border-left: 0.4rem solid var(--success);
   padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
 }
 .summary-failed,
 .summary-obsolete-snapshots {
-  color: #d8000c;
-  border-left: 0.4rem solid #d8000c;
+  color: var(--danger);
+  border-left: 0.4rem solid var(--danger);
   padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
 }
 .summary-pending {
-  color: #9f6000;
-  border-left: 0.4rem solid #9f6000;
+  color: var(--warning);
+  border-left: 0.4rem solid var(--warning);
   padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
 }
 .summary-empty {
-  color: #999;
-  border-left: 0.4rem solid #999;
+  color: var(--disabled);
+  border-left: 0.4rem solid var(--disabled);
+  margin-bottom: 0.15rem;
 }
 
 .test-result {
@@ -93,16 +110,16 @@ header {
   border: 0;
 }
 .test-result.passed {
-  background-color: #dff2bf;
-  color: #4f8a10;
+  background-color: var(--success-bright);
+  color: var(--success);
 }
 .test-result.failed {
-  background-color: #ffbaba;
-  color: #d8000c;
+  background-color: var(--danger-bright);
+  color: var(--danger);
 }
 .test-result.pending {
-  background-color: #ffdf61;
-  color: #9f6000;
+  background-color: var(--warning-bright);
+  color: var(--warning);
 }
 
 .test-info {
@@ -127,13 +144,13 @@ header {
 .test-duration {
   width: 10%;
   text-align: right;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
 }
 
 .failureMessages {
   padding: 0 1rem;
   margin-top: 1rem;
-  border-top: 1px dashed #d8000c;
+  border-top: 1px dashed var(--danger);
 }
 .failureMessages.suiteFailure {
   border-top: none;
@@ -147,33 +164,20 @@ header {
 }
 
 .suite-container {
-  margin-bottom: 2rem;
-}
-.suite-container > input[type="checkbox"] {
-  position: absolute;
-  left: -100vw;
-}
-.suite-container label {
-  display: block;
-}
-.suite-container .suite-tests {
-  overflow-y: hidden;
-  height: 0;
-}
-.suite-container > input[type="checkbox"]:checked ~ .suite-tests {
-  height: auto;
-  overflow: visible;
+  margin-bottom: 1rem;
 }
 .suite-info {
   padding: 1rem;
-  background-color: #eee;
-  color: #777;
+  background-color: var(--panel);
+  color: var(--text-secondary);
+  border: 0.15rem solid;
+  border-color: var(--panel);
   display: flex;
   align-items: center;
   margin-bottom: 0.25rem;
 }
 .suite-info:hover {
-  background-color: #ddd;
+  border-color: var(--border);
   cursor: pointer;
 }
 .suite-info .suite-path {
@@ -183,29 +187,29 @@ header {
   font-size: 1rem;
 }
 .suite-info .suite-time {
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   padding: 0.2rem 0.3rem;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
 }
 .suite-info .suite-time.warn {
-  background-color: #d8000c;
+  background-color: var(--danger);
   color: #fff;
 }
 .suite-info:before {
   content: "\2303";
   display: inline-block;
-  margin-right: 0.5rem;
-  transform: rotate(0deg);
+  margin-right: 1rem;
+  transform: rotate(180deg) translateY(0.15rem);
 }
-.suite-container > input[type="checkbox"]:checked ~ label .suite-info:before {
-  transform: rotate(180deg);
+.suite-container[open] .suite-info:before {
+  transform: rotate(0deg) translateY(0.15rem);
 }
 
 /* CONSOLE LOGS */
 .suite-consolelog {
   margin-bottom: 0.25rem;
   padding: 1rem;
-  background-color: #efefef;
+  background-color: var(--panel);
 }
 .suite-consolelog-header {
   font-weight: bold;
@@ -222,11 +226,11 @@ header {
   word-wrap: break-word;
 }
 .suite-consolelog-item-origin {
-  color: #777;
+  color: var(--text-secondary);
   font-weight: bold;
 }
 .suite-consolelog-item-message {
-  color: #000;
+  color: var(--text-primary);
   font-size: 1rem;
   padding: 0 0.5rem;
 }
@@ -235,8 +239,8 @@ header {
 .suite-obsolete-snapshots {
   margin-bottom: 0.25rem;
   padding: 1rem;
-  background-color: #ffbaba;
-  color: #d8000c;
+  background-color: var(--danger-bright);
+  color: var(--danger);
 }
 .suite-obsolete-snapshots-header {
   font-weight: bold;
@@ -253,7 +257,7 @@ header {
   word-wrap: break-word;
 }
 .suite-obsolete-snapshots-item-message {
-  color: #000;
+  color: var(--text-primary);
   font-size: 1rem;
   padding: 0 0.5rem;
 }

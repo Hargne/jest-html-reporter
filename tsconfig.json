@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "esnext",
+    "module": "ESNext",
+    "target": "ESNext",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": "./",
-    "lib": ["es2019"],
+    "lib": ["dom", "es2019", "es2022"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "preserveSymlinks": true
+    "preserveSymlinks": true,
+    "strict": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules/**"]

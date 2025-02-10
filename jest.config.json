@@ -1,47 +1,23 @@
 {
-  "roots": ["<rootDir>"],
+  "roots": ["<rootDir>/src"],
   "preset": "ts-jest",
-  "transform": {
-    "^.+\\.tsx?$": [
-      "ts-jest",
-      {
-        "babelConfig": true
-      }
-    ]
-  },
   "collectCoverage": true,
   "collectCoverageFrom": [
-    "./src/**/*.{ts,tsx}",
-    "!src/style.ts",
-    "!**/test/*.{ts,tsx}",
-    "!**/node_modules/**",
-    "!**/coverage/**",
-    "!**/vendor/**"
+    "./src/**/*.ts",
+    "!**/**/*.d.ts",
+    "!**/**/*.types.ts",
+    "!./src/__mock__/**/*.ts"
   ],
   "coverageDirectory": "./coverage",
   "coverageReporters": ["json", "html", "text", "text-summary"],
   "coverageThreshold": {
     "global": {
-      "branches": 50,
-      "functions": 50,
-      "lines": 50,
-      "statements": 50
+      "branches": 75,
+      "functions": 75,
+      "lines": 75,
+      "statements": 75
     }
   },
-  "verbose": true,
-  "reporters": [
-    "default",
-    [
-      "./dist",
-      {
-        "pageTitle": "Test Suite Reporter",
-        "outputPath": "<rootDir>/testResultsProcessorResult.html",
-        "includeFailureMsg": true,
-        "includeConsoleLog": true,
-        "useCssFile": true,
-        "sort": "titleAsc",
-        "append": false
-      }
-    ]
-  ]
+  "testEnvironment": "jsdom",
+  "verbose": true
 }
