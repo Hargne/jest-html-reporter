@@ -111,7 +111,9 @@ export default function (cliConfig: unknown): JestHTMLReporterConfiguration {
     path.join(process.cwd(), "jesthtmlreporter.config.json")
   );
   const packageJsonConfig =
-    readJsonFile(path.join(process.cwd(), "package.json"))?.jest || {};
+    readJsonFile(path.join(process.cwd(), "package.json"))[
+      "jest-html-reporter"
+    ] || {};
 
   // Merge configurations in priority order (with sanitization)
   return {
