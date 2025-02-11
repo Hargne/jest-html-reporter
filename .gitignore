@@ -4,3 +4,4 @@ node_modules/
 test-report/
 dist/
 report.html
+test-report.html
