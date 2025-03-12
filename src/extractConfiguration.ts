@@ -1,9 +1,16 @@
 import path from "path";
 import fs from "fs";
 import { JestHTMLReporterConfiguration } from "./types";
-import { parseBoolean, parseNumber, parseString } from "./utils";
+import {
+  isAdditionalInformationEntry,
+  parseArray,
+  parseBoolean,
+  parseNumber,
+  parseString,
+} from "./utils";
 
 const defaultValues: JestHTMLReporterConfiguration = {
+  additionalInformation: [],
   append: false,
   boilerplate: undefined,
   collapseSuitesByDefault: false,
@@ -49,8 +56,9 @@ export function readJsonFile(filePath: string) {
 const typeParsers: {
   [key in keyof JestHTMLReporterConfiguration]: (
     value: unknown
-  ) => string | number | boolean | undefined;
+  ) => string | number | boolean | unknown[] | undefined;
 } = {
+  additionalInformation: parseArray(isAdditionalInformationEntry),
   append: parseBoolean,
   boilerplate: parseString,
   collapseSuitesByDefault: parseBoolean,

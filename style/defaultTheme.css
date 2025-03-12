@@ -1,15 +1,15 @@
 :root {
   --text-primary: #111;
-  --text-secondary: #4F4F4F;
+  --text-secondary: #4f4f4f;
   --success: #006633;
-  --success-bright: #80FFBF;
-  --danger: #CC071E;
-  --danger-bright: #FBDFE0;
-  --warning: #995C00;
-  --warning-bright: #FFEEA8;
+  --success-bright: #80ffbf;
+  --danger: #cc071e;
+  --danger-bright: #fbdfe0;
+  --warning: #995c00;
+  --warning-bright: #ffeea8;
   --panel: #eee;
   --border: #949494;
-  --disabled: #6B6B6B;
+  --disabled: #6b6b6b;
 }
 
 html,
@@ -43,10 +43,23 @@ header {
   margin-top: 0.5rem;
 }
 
+#metadata-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.additional-information-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
 /** SUMMARY */
 #summary {
   color: var(--text-primary);
-  margin: 2rem 0;
   display: flex;
   font-family: monospace;
   font-size: 1rem;
