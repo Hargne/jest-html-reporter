@@ -123,3 +123,23 @@ export function parseString(value: unknown): string | undefined {
   }
   return undefined;
 }
+
+export const parseArray =
+  <T>(isValidItem: (item: unknown) => item is T) =>
+  (value: unknown): T[] => {
+    if (Array.isArray(value)) {
+      return value.filter(isValidItem);
+    }
+    return [];
+  };
+
+export function isAdditionalInformationEntry(
+  item: unknown
+): item is { label: string; value: string } {
+  return (
+    typeof item === "object" &&
+    item !== null &&
+    typeof (item as { label: unknown }).label === "string" &&
+    typeof (item as { value: unknown }).value === "string"
+  );
+}

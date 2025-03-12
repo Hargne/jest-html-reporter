@@ -10,6 +10,10 @@ export interface JestHTMLReporterProps {
 }
 
 export interface JestHTMLReporterConfiguration {
+  additionalInformation?: {
+    label: string;
+    value: string;
+  }[];
   append: boolean;
   boilerplate?: string;
   collapseSuitesByDefault: boolean;

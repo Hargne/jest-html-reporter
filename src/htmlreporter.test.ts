@@ -342,4 +342,23 @@ describe("HTMLReporter", () => {
       });
     });
   });
+
+  describe("additionalInformation", () => {
+    it("should add additional information to the report", async () => {
+      await renderReportToDOM({
+        options: {
+          additionalInformation: [{ label: "Environment", value: "Test" }],
+        },
+      });
+
+      const additionalInfoElements = document.querySelectorAll(
+        ".additional-information"
+      );
+      expect(additionalInfoElements.length).toBe(1);
+
+      expect(additionalInfoElements[0].textContent).toContain(
+        "Environment: Test"
+      );
+    });
+  });
 });
