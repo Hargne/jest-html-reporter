@@ -195,6 +195,11 @@ class HTMLReporter {
         }
       }
 
+      /**
+       * Additional Information
+       */
+      this.renderAdditionalInformation(metaDataContainer);
+
       // Summary
       const summaryContainer = metaDataContainer.ele("div", { id: "summary" });
       // Suite Summary
@@ -490,6 +495,27 @@ class HTMLReporter {
       { class: "suite-obsolete-snapshots-item-message" },
       suite.snapshot.uncheckedKeys.join("\n")
     );
+  }
+
+  public renderAdditionalInformation(target: xmlbuilder.XMLElement) {
+    const additionalInformation = this.getConfigValue("additionalInformation");
+    if (
+      additionalInformation &&
+      Array.isArray(additionalInformation) &&
+      additionalInformation.length > 0
+    ) {
+      const container = target.ele("div", {
+        class: "additional-information-container",
+      });
+      for (const info of additionalInformation) {
+        container.ele(
+          "div",
+          { class: "additional-information" },
+          `${info.label}: ${info.value}`
+        );
+      }
+      return container;
+    }
   }
 
   /**
