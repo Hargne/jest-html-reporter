@@ -15,7 +15,8 @@
     "test": "npm run lint && npm run jest",
     "test:watch": "npm run jest -- --watch --no-coverage",
     "bundle": "rollup -c",
-    "build": "npm run test && npm run bundle"
+    "build": "npm run test && npm run bundle",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
