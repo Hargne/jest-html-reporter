@@ -28,11 +28,11 @@ function JestHtmlReporter(
     onTestResult?: (unusedTest: Test, result: TestResult) => void;
     onRunComplete?: (
       unusedContexts: Set<TestContext>,
-      testData: AggregatedResult,
+      testData: AggregatedResult
     ) => Promise<string | undefined>;
   },
   globalConfig: Config.GlobalConfig | AggregatedResult,
-  options: JestHTMLReporterConfiguration,
+  options: JestHTMLReporterConfiguration
 ):
   | Promise<Circus.TestResult>
   | Config.GlobalConfig
@@ -74,7 +74,7 @@ function JestHtmlReporter(
 
   this.onRunComplete = (
     unusedContexts: Set<TestContext>,
-    testData: AggregatedResult,
+    testData: AggregatedResult
   ) =>
     setupAndRun({
       testData,

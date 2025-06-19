@@ -4,7 +4,7 @@ import path from "path";
 
 export function logMessage(
   type: "default" | "success" | "error",
-  message: string,
+  message: string
 ) {
   const logTypes = {
     default: "\x1b[37m%s\x1b[0m",
@@ -28,7 +28,7 @@ export function logError(error: unknown) {
 // Attempts to append the given content to the end of the file's body tag
 export async function appendToHTML(
   filePath: string,
-  content: string,
+  content: string
 ): Promise<void> {
   try {
     await fs.access(filePath);
@@ -63,7 +63,7 @@ export function sanitizeOutput(input: string): string {
   }
   const sanitized = stripAnsi(input).replace(
     /[^\t\n\r\x20-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu,
-    "",
+    ""
   );
   return sanitized;
 }
@@ -72,7 +72,7 @@ export function sanitizeOutput(input: string): string {
 // Copy+paste from https://github.com/facebook/jest/blob/master/packages/jest-config/src/utils.ts
 export function replaceRootDirInPath(
   rootDir: string,
-  filePath: string,
+  filePath: string
 ): string {
   if (typeof rootDir !== "string" || typeof filePath !== "string") {
     throw new TypeError("Both rootDir and filePath must be strings.");
@@ -84,7 +84,7 @@ export function replaceRootDirInPath(
 
   return path.resolve(
     rootDir,
-    path.normalize(`./${filePath.slice("<rootDir>".length)}`),
+    path.normalize(`./${filePath.slice("<rootDir>".length)}`)
   );
 }
 
@@ -134,7 +134,7 @@ export const parseArray =
   };
 
 export function isAdditionalInformationEntry(
-  item: unknown,
+  item: unknown
 ): item is { label: string; value: string } {
   return (
     typeof item === "object" &&

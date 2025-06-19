@@ -56,7 +56,7 @@ export function readJsonFile(filePath: string) {
 // Type conversion functions
 const typeParsers: {
   [key in keyof JestHTMLReporterConfiguration]: (
-    value: unknown,
+    value: unknown
   ) => string | number | boolean | unknown[] | undefined;
 } = {
   additionalInformation: parseArray(isAdditionalInformationEntry),
@@ -84,7 +84,7 @@ const typeParsers: {
 
 // Function to clean & validate configuration input
 export function sanitizeConfig(
-  input: unknown,
+  input: unknown
 ): Partial<JestHTMLReporterConfiguration> {
   if (typeof input !== "object" || input === null) {
     return {};
@@ -118,7 +118,7 @@ export default function (cliConfig: unknown): JestHTMLReporterConfiguration {
 
   // Read from JSON files
   const customJsonConfig = readJsonFile(
-    path.join(process.cwd(), "jesthtmlreporter.config.json"),
+    path.join(process.cwd(), "jesthtmlreporter.config.json")
   );
   const packageJsonConfig =
     readJsonFile(path.join(process.cwd(), "package.json"))[

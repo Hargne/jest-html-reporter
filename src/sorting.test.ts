@@ -10,7 +10,7 @@ describe("sorting", () => {
 
     testResults.forEach((testResult, index) => {
       expect(sortedTestResults[index].testFilePath).toEqual(
-        testResult.testFilePath,
+        testResult.testFilePath
       );
     });
   });
@@ -23,7 +23,7 @@ describe("sorting", () => {
 
     testResults.forEach((testResult, index) => {
       expect(sortedTestResults[index].testFilePath).toEqual(
-        testResult.testFilePath,
+        testResult.testFilePath
       );
     });
   });
@@ -107,7 +107,7 @@ describe("sorting", () => {
       const { testResults } = mockAggregatedResultMultiple;
       const sortedTestResults = sorting(
         testResults,
-        "status:failed,passed,pending",
+        "status:failed,passed,pending"
       );
 
       const expectedResults = [
@@ -227,11 +227,11 @@ describe("sorting", () => {
       const sortedTestResults = sorting(testResults, "executiondesc");
 
       expect(sortedTestResults[0].testFilePath).toEqual(
-        "test3-pending-failed-passed-todo.js",
+        "test3-pending-failed-passed-todo.js"
       );
       expect(sortedTestResults[1].testFilePath).toEqual("test1-passed.js");
       expect(sortedTestResults[2].testFilePath).toEqual(
-        "test2-pending-failed-passed.js",
+        "test2-pending-failed-passed.js"
       );
     });
   });
@@ -243,11 +243,11 @@ describe("sorting", () => {
 
       expect(sortedTestResults[0].testFilePath).toEqual("test4-empty.js");
       expect(sortedTestResults[1].testFilePath).toEqual(
-        "test2-pending-failed-passed.js",
+        "test2-pending-failed-passed.js"
       );
       expect(sortedTestResults[2].testFilePath).toEqual("test1-passed.js");
       expect(sortedTestResults[3].testFilePath).toEqual(
-        "test3-pending-failed-passed-todo.js",
+        "test3-pending-failed-passed-todo.js"
       );
     });
   });
@@ -260,43 +260,43 @@ describe("sorting", () => {
       expect(sortedTestResults[0].testFilePath).toEqual("test4-empty.js");
 
       expect(sortedTestResults[1].testFilePath).toEqual(
-        "test3-pending-failed-passed-todo.js",
+        "test3-pending-failed-passed-todo.js"
       );
       expect(sortedTestResults[1].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor d",
+        "ancestor d"
       );
       expect(sortedTestResults[1].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor c",
+        "ancestor c"
       );
       expect(sortedTestResults[1].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor b",
+        "ancestor b"
       );
       expect(sortedTestResults[1].testResults[3].ancestorTitles[0]).toEqual(
-        "ancestor a",
+        "ancestor a"
       );
 
       expect(sortedTestResults[2].testFilePath).toEqual(
-        "test2-pending-failed-passed.js",
+        "test2-pending-failed-passed.js"
       );
       expect(sortedTestResults[2].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor c",
+        "ancestor c"
       );
       expect(sortedTestResults[2].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor b",
+        "ancestor b"
       );
       expect(sortedTestResults[2].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor a",
+        "ancestor a"
       );
 
       expect(sortedTestResults[3].testFilePath).toEqual("test1-passed.js");
       expect(sortedTestResults[3].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor c",
+        "ancestor c"
       );
       expect(sortedTestResults[3].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor b",
+        "ancestor b"
       );
       expect(sortedTestResults[3].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor a",
+        "ancestor a"
       );
     });
   });
@@ -308,39 +308,39 @@ describe("sorting", () => {
 
       expect(sortedTestResults[0].testFilePath).toEqual("test1-passed.js");
       expect(sortedTestResults[0].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor a",
+        "ancestor a"
       );
       expect(sortedTestResults[0].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor b",
+        "ancestor b"
       );
       expect(sortedTestResults[0].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor c",
+        "ancestor c"
       );
 
       expect(sortedTestResults[1].testFilePath).toEqual(
-        "test2-pending-failed-passed.js",
+        "test2-pending-failed-passed.js"
       );
       expect(sortedTestResults[1].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor a",
+        "ancestor a"
       );
       expect(sortedTestResults[1].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor b",
+        "ancestor b"
       );
       expect(sortedTestResults[1].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor c",
+        "ancestor c"
       );
 
       expect(sortedTestResults[2].testFilePath).toEqual(
-        "test3-pending-failed-passed-todo.js",
+        "test3-pending-failed-passed-todo.js"
       );
       expect(sortedTestResults[2].testResults[0].ancestorTitles[0]).toEqual(
-        "ancestor a",
+        "ancestor a"
       );
       expect(sortedTestResults[2].testResults[1].ancestorTitles[0]).toEqual(
-        "ancestor b",
+        "ancestor b"
       );
       expect(sortedTestResults[2].testResults[2].ancestorTitles[0]).toEqual(
-        "ancestor c",
+        "ancestor c"
       );
     });
   });

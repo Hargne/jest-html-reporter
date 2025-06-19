@@ -41,7 +41,7 @@ describe("utils", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         filePath,
         expectedContent,
-        "utf8",
+        "utf8"
       );
     });
 
@@ -52,7 +52,7 @@ describe("utils", () => {
       mockAccess.mockRejectedValueOnce(new Error("ENOENT"));
 
       await expect(appendToHTML(filePath, contentToAppend)).rejects.toThrow(
-        "ENOENT",
+        "ENOENT"
       );
       expect(mockReadFile).not.toHaveBeenCalled();
       expect(mockWriteFile).not.toHaveBeenCalled();
@@ -73,7 +73,7 @@ describe("utils", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         filePath,
         expectedContent,
-        "utf8",
+        "utf8"
       );
     });
 
@@ -84,7 +84,7 @@ describe("utils", () => {
       mockAccess.mockRejectedValueOnce(new Error("Unknown error"));
 
       await expect(appendToHTML(filePath, contentToAppend)).rejects.toThrow(
-        "Unknown error",
+        "Unknown error"
       );
       expect(mockReadFile).not.toHaveBeenCalled();
       expect(mockWriteFile).not.toHaveBeenCalled();
@@ -106,11 +106,11 @@ describe("utils", () => {
       const result = logMessage("default", "This is a default message");
       expect(result.logColor).toBe("\x1b[37m%s\x1b[0m");
       expect(result.logMsg).toBe(
-        "jest-html-reporter >> This is a default message",
+        "jest-html-reporter >> This is a default message"
       );
       expect(console.log).toHaveBeenCalledWith(
         "\x1b[37m%s\x1b[0m",
-        "jest-html-reporter >> This is a default message",
+        "jest-html-reporter >> This is a default message"
       );
     });
 
@@ -118,11 +118,11 @@ describe("utils", () => {
       const result = logMessage("success", "This is a success message");
       expect(result.logColor).toBe("\x1b[32m%s\x1b[0m");
       expect(result.logMsg).toBe(
-        "jest-html-reporter >> This is a success message",
+        "jest-html-reporter >> This is a success message"
       );
       expect(console.log).toHaveBeenCalledWith(
         "\x1b[32m%s\x1b[0m",
-        "jest-html-reporter >> This is a success message",
+        "jest-html-reporter >> This is a success message"
       );
     });
 
@@ -130,11 +130,11 @@ describe("utils", () => {
       const result = logMessage("error", "This is an error message");
       expect(result.logColor).toBe("\x1b[31m%s\x1b[0m");
       expect(result.logMsg).toBe(
-        "jest-html-reporter >> This is an error message",
+        "jest-html-reporter >> This is an error message"
       );
       expect(console.log).toHaveBeenCalledWith(
         "\x1b[31m%s\x1b[0m",
-        "jest-html-reporter >> This is an error message",
+        "jest-html-reporter >> This is an error message"
       );
     });
 
@@ -164,7 +164,7 @@ describe("utils", () => {
       expect(result.logMsg).toBe("jest-html-reporter >> Something went wrong");
       expect(console.log).toHaveBeenCalledWith(
         "\x1b[31m%s\x1b[0m",
-        "jest-html-reporter >> Something went wrong",
+        "jest-html-reporter >> Something went wrong"
       );
     });
 
@@ -175,7 +175,7 @@ describe("utils", () => {
       expect(result.logMsg).toBe("jest-html-reporter >> An error occurred");
       expect(console.log).toHaveBeenCalledWith(
         "\x1b[31m%s\x1b[0m",
-        "jest-html-reporter >> An error occurred",
+        "jest-html-reporter >> An error occurred"
       );
     });
 
@@ -220,10 +220,10 @@ describe("utils", () => {
 
     it("should throw a TypeError if the input is not a string", () => {
       expect(() => sanitizeOutput(42 as unknown as string)).toThrow(
-        new TypeError("Input must be a string"),
+        new TypeError("Input must be a string")
       );
       expect(() => sanitizeOutput(null as unknown as string)).toThrow(
-        new TypeError("Input must be a string"),
+        new TypeError("Input must be a string")
       );
     });
 
@@ -270,14 +270,14 @@ describe("utils", () => {
     it("should throw an error if rootDir is not a string", () => {
       const filePath = "<rootDir>/src/index.ts";
       expect(() =>
-        replaceRootDirInPath(null as unknown as string, filePath),
+        replaceRootDirInPath(null as unknown as string, filePath)
       ).toThrow("Both rootDir and filePath must be strings.");
     });
 
     it("should throw an error if filePath is not a string", () => {
       const filePath = null as unknown as string;
       expect(() => replaceRootDirInPath(rootDir, filePath)).toThrow(
-        "Both rootDir and filePath must be strings.",
+        "Both rootDir and filePath must be strings."
       );
     });
 

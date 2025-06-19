@@ -6,14 +6,14 @@ const validStatuses: Status[] = ["pending", "failed", "passed"];
 
 export default (
   testResults: AggregatedResult["testResults"],
-  sortTypeInput?: string,
+  sortTypeInput?: string
 ): AggregatedResult["testResults"] => {
   const { sortType, params } = parseSortType(sortTypeInput);
   switch (sortType) {
     case "status": {
       // Attempt to grab an array of statuses out of the params
       const statusOrder = params?.every((status) =>
-        validStatuses.includes(status as Status),
+        validStatuses.includes(status as Status)
       )
         ? (params as Status[])
         : undefined;
@@ -69,7 +69,7 @@ function parseSortType(input?: string): {
  */
 const sortByStatus = (
   testResults: AggregatedResult["testResults"],
-  sortOrder?: Status[],
+  sortOrder?: Status[]
 ) => {
   const suites: Pick<
     Record<Status, AggregatedResult["testResults"]>,
@@ -154,7 +154,7 @@ const sortByExecutionDesc = (testResults: AggregatedResult["testResults"]) => {
       (a, b) =>
         b.perfStats.end -
         b.perfStats.start -
-        (a.perfStats.end - a.perfStats.start),
+        (a.perfStats.end - a.perfStats.start)
     );
   }
   return testResults;
@@ -169,7 +169,7 @@ const sortByExecutionAsc = (testResults: AggregatedResult["testResults"]) => {
       (a, b) =>
         a.perfStats.end -
         a.perfStats.start -
-        (b.perfStats.end - b.perfStats.start),
+        (b.perfStats.end - b.perfStats.start)
     );
   }
   return testResults;
@@ -182,7 +182,7 @@ const sortByTitleDesc = (testResults: AggregatedResult["testResults"]) => {
   if (testResults) {
     // Sort Suites
     const sorted = testResults.sort((a, b) =>
-      sortAlphabetically(a.testFilePath, b.testFilePath, true),
+      sortAlphabetically(a.testFilePath, b.testFilePath, true)
     );
     // Sort Suite testResults
     sorted.forEach((suite) => {
@@ -191,12 +191,12 @@ const sortByTitleDesc = (testResults: AggregatedResult["testResults"]) => {
         sortAlphabetically(
           a.ancestorTitles.join(" "),
           b.ancestorTitles.join(" "),
-          true,
-        ),
+          true
+        )
       );
       // By Test Titles
       suite.testResults.sort((a, b) =>
-        sortAlphabetically(a.title, b.title, true),
+        sortAlphabetically(a.title, b.title, true)
       );
     });
     return sorted;
@@ -211,7 +211,7 @@ const sortByTitleAsc = (testResults: AggregatedResult["testResults"]) => {
   if (testResults) {
     // Sort Suites
     const sorted = testResults.sort((a, b) =>
-      sortAlphabetically(a.testFilePath, b.testFilePath),
+      sortAlphabetically(a.testFilePath, b.testFilePath)
     );
     // Sort Suite testResults
     sorted.forEach((suite) => {
@@ -219,8 +219,8 @@ const sortByTitleAsc = (testResults: AggregatedResult["testResults"]) => {
       suite.testResults.sort((a, b) =>
         sortAlphabetically(
           a.ancestorTitles.join(" "),
-          b.ancestorTitles.join(" "),
-        ),
+          b.ancestorTitles.join(" ")
+        )
       );
       // By Test Titles
       suite.testResults.sort((a, b) => sortAlphabetically(a.title, b.title));

@@ -53,7 +53,7 @@ describe("HTMLReporter", () => {
       await renderReportToDOM();
 
       expect(document.querySelector("img#logo")?.getAttribute("src")).toEqual(
-        "logoFromEnv.png",
+        "logoFromEnv.png"
       );
 
       delete process.env.JEST_HTML_REPORTER_LOGO;
@@ -70,7 +70,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(
-          document.querySelector('link[href="path/to/style.css"]'),
+          document.querySelector('link[href="path/to/style.css"]')
         ).toBeDefined();
       });
     });
@@ -96,7 +96,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(document.querySelectorAll(".suite-consolelog").length).toEqual(
-          1,
+          1
         );
       });
 
@@ -117,7 +117,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(document.querySelectorAll(".suite-consolelog").length).toEqual(
-          0,
+          0
         );
       });
     });
@@ -149,7 +149,7 @@ describe("HTMLReporter", () => {
           .reduce((total, result) => total + result.failureMessages.length, 0);
 
         expect(document.querySelectorAll(".failureMsg").length).toEqual(
-          failuresInTestData,
+          failuresInTestData
         );
       });
     });
@@ -165,7 +165,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(
-          document.querySelector("pre.failureMsg")?.textContent,
+          document.querySelector("pre.failureMsg")?.textContent
         ).not.toContain("at stack trace");
       });
       it("should keep stack trace in failure messages if set to true", async () => {
@@ -178,7 +178,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(document.querySelector("pre.failureMsg")?.textContent).toContain(
-          "at stack trace",
+          "at stack trace"
         );
       });
       it("should keep stack trace in failure messages if undefined", async () => {
@@ -190,7 +190,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(document.querySelector("pre.failureMsg")?.textContent).toContain(
-          "at stack trace",
+          "at stack trace"
         );
       });
     });
@@ -207,11 +207,11 @@ describe("HTMLReporter", () => {
         const suiteFailuresInTestData =
           mockAggregatedResultMultiple.testResults.reduce(
             (prev, curr) => prev + (curr.failureMessage ? 1 : 0),
-            0,
+            0
           );
 
         expect(document.querySelectorAll(".suiteFailure").length).toEqual(
-          suiteFailuresInTestData,
+          suiteFailuresInTestData
         );
       });
     });
@@ -229,11 +229,11 @@ describe("HTMLReporter", () => {
         const obsoleteSnapshotsInTestData =
           mockAggregatedResultMultiple.testResults.reduce(
             (prev, curr) => prev + curr.snapshot.unchecked,
-            0,
+            0
           );
 
         expect(
-          document.querySelector(".summary-obsolete-snapshots")?.textContent,
+          document.querySelector(".summary-obsolete-snapshots")?.textContent
         ).toEqual(`${obsoleteSnapshotsInTestData} obsolete snapshots`);
       });
     });
@@ -247,7 +247,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(document.querySelector("img#logo")?.getAttribute("src")).toEqual(
-          "logo.png",
+          "logo.png"
         );
       });
     });
@@ -261,7 +261,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(
-          document.querySelector('script[src="path/to/script.js"]'),
+          document.querySelector('script[src="path/to/script.js"]')
         ).toBeDefined();
       });
     });
@@ -276,7 +276,7 @@ describe("HTMLReporter", () => {
 
         // Look for a meta tag with the title
         expect(document.querySelector("title")?.textContent).toEqual(
-          "My Report",
+          "My Report"
         );
         // Look for a heading with the title
         expect(document.querySelector("h1")?.textContent).toEqual("My Report");
@@ -293,7 +293,7 @@ describe("HTMLReporter", () => {
 
         // Look for at least one execution time warning
         expect(
-          document.querySelectorAll(".suite-time.warn").length,
+          document.querySelectorAll(".suite-time.warn").length
         ).toBeGreaterThan(-1);
       });
     });
@@ -307,7 +307,7 @@ describe("HTMLReporter", () => {
         });
 
         expect(document.querySelector("#timestamp")?.textContent).toEqual(
-          "Started: 2020",
+          "Started: 2020"
         );
       });
     });
@@ -319,7 +319,7 @@ describe("HTMLReporter", () => {
 
       // Check that each <details> element has the "open" attribute
       const detailsElements = document.querySelectorAll(
-        "details.suite-container",
+        "details.suite-container"
       );
       detailsElements.forEach((el) => {
         expect(el.hasAttribute("open")).toBe(true);
@@ -335,7 +335,7 @@ describe("HTMLReporter", () => {
 
       // Check that each <details> element does not have the "open" attribute
       const detailsElements = document.querySelectorAll(
-        "details.suite-container",
+        "details.suite-container"
       );
       detailsElements.forEach((el) => {
         expect(el.hasAttribute("open")).toBe(false);
@@ -352,12 +352,12 @@ describe("HTMLReporter", () => {
       });
 
       const additionalInfoElements = document.querySelectorAll(
-        ".additional-information",
+        ".additional-information"
       );
       expect(additionalInfoElements.length).toBe(1);
 
       expect(additionalInfoElements[0].textContent).toContain(
-        "Environment: Test",
+        "Environment: Test"
       );
     });
   });
