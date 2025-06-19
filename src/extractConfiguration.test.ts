@@ -14,10 +14,10 @@ describe("Config Utilities", () => {
   describe("toEnvVar", () => {
     it("should convert camelCase to uppercase with underscores and prepend with JEST_HTML_REPORTER_", () => {
       expect(toEnvVar("statusIgnoreFilter")).toBe(
-        "JEST_HTML_REPORTER_STATUS_IGNORE_FILTER"
+        "JEST_HTML_REPORTER_STATUS_IGNORE_FILTER",
       );
       expect(toEnvVar("executionTimeWarningThreshold")).toBe(
-        "JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD"
+        "JEST_HTML_REPORTER_EXECUTION_TIME_WARNING_THRESHOLD",
       );
     });
   });
@@ -27,7 +27,7 @@ describe("Config Utilities", () => {
       const mockConfig = { append: true };
       (fs.existsSync as jest.Mock).mockReturnValue(true);
       (fs.readFileSync as jest.Mock).mockReturnValue(
-        JSON.stringify(mockConfig)
+        JSON.stringify(mockConfig),
       );
 
       const result = extractConfiguration({});
