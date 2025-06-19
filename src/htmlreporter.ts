@@ -96,7 +96,7 @@ class HTMLReporter {
       stylesheetFilePath = this.getConfigValue("styleOverridePath") as string;
     }
     // Decide whether to inline the CSS or not
-    const inlineCSS = !this.getConfigValue("useCssFile")
+    const inlineCSS = !this.getConfigValue("useCssFile");
 
     if (inlineCSS) {
       const stylesheetContent = fs.readFileSync(stylesheetFilePath, "utf8");
@@ -457,11 +457,11 @@ class HTMLReporter {
         const logElement = consoleLogContainer.ele("div", {
           class: "suite-consolelog-item",
         });
-        if(!this.getConfigValue("hideConsoleLogOrigin")) {
+        if (!this.getConfigValue("hideConsoleLogOrigin")) {
           logElement.ele(
-              "pre",
-              {class: "suite-consolelog-item-origin"},
-              utils.sanitizeOutput(log.origin)
+            "pre",
+            { class: "suite-consolelog-item-origin" },
+            utils.sanitizeOutput(log.origin)
           );
         }
         logElement.ele(
