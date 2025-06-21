@@ -66,6 +66,7 @@ describe("HTMLReporter", () => {
         await renderReportToDOM({
           options: {
             styleOverridePath: "path/to/style.css",
+            useCssFile: true,
           },
         });
 
