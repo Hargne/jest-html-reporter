@@ -52,8 +52,8 @@ export const mockJestGlobalConfig: Config.GlobalConfig = {
   testNamePattern: undefined,
   testPathPatterns: {
     patterns: ["/path/to/tests"],
-    isSet: () => true,
-    isValid: () => true,
+    isSet: jest.fn(),
+    isValid: jest.fn(),
     toPretty: jest.fn(),
     toExecutor: jest.fn(),
     toJSON: jest.fn(),
