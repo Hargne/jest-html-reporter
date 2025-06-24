@@ -16,6 +16,12 @@ export const mockAggregatedResultSingle: AggregatedResult = {
         end: 1498476650,
         runtime: 158,
         slow: false,
+        loadTestEnvironmentEnd: 1498476492,
+        loadTestEnvironmentStart: 0,
+        setupAfterEnvEnd: 1498476492,
+        setupAfterEnvStart: 0,
+        setupFilesEnd: 1498476492,
+        setupFilesStart: 0,
       },
       snapshot: {
         added: 0,
