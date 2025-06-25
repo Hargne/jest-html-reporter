@@ -21,6 +21,7 @@ export interface JestHTMLReporterConfiguration {
   dateFormat: string;
   executionTimeWarningThreshold: number;
   includeConsoleLog: boolean;
+  hideConsoleLogOrigin: boolean;
   includeFailureMsg: boolean;
   includeStackTrace: boolean;
   includeSuiteFailure: boolean;
