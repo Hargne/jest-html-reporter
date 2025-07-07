@@ -7,6 +7,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
+  logMessage,
 } from "./utils";
 
 const defaultValues: JestHTMLReporterConfiguration = {
@@ -90,6 +91,17 @@ export function sanitizeConfig(
     return {};
   }
 
+  // Alert regarding unknown configuration keys
+  const unknownKeys = Object.keys(input).filter(
+    (key) => !(key in defaultValues)
+  );
+  for (const key of unknownKeys) {
+    logMessage(
+      "error",
+      `Unknown configuration key "${key}" found. This key will be ignored.`
+    );
+  }
+
   return (
     Object.keys(defaultValues) as (keyof JestHTMLReporterConfiguration)[]
   ).reduce((sanitized, key) => {
@@ -123,7 +135,7 @@ export default function (cliConfig: unknown): JestHTMLReporterConfiguration {
   const packageJsonConfig =
     readJsonFile(path.join(process.cwd(), "package.json"))[
       "jest-html-reporter"
-    ] || {};
+    ] ?? {};
 
   // Merge configurations in priority order (with sanitization)
   return {
