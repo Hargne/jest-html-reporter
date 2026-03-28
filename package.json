@@ -48,8 +48,7 @@
     "xmlbuilder": "15.0.0"
   },
   "peerDependencies": {
-    "jest": "19.x - 30.x",
-    "typescript": "^3.7.x || ^4.3.x || ^5.x || ^6.x"
+    "jest": "19.x - 30.x"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
