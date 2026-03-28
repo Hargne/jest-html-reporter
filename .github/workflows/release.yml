@@ -26,10 +26,10 @@ jobs:
       packages: write
 
     steps:
-      - name: Ensure running on main
+      - name: Ensure running on master
         run: |
-          if [ "${GITHUB_REF}" != "refs/heads/main" ]; then
-            echo "❌ Releases are only allowed from main"
+          if [ "${GITHUB_REF}" != "refs/heads/master" ]; then
+            echo "❌ Releases are only allowed from master"
             exit 1
           fi
 
