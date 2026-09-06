@@ -12,7 +12,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "preserveSymlinks": true,
-    "strict": true
+    "strict": true,
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules/**"]
