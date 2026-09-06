@@ -1,7 +1,7 @@
 ARG NODE_VERSION=14
 ARG JEST_VERSIONS=19
 
-FROM node:20.10.0 AS build
+FROM node:22.13.0 AS build
 
 # Pass arguments as environment variables so they persists when we switch Node version
 ENV JEST_VERSIONS=$JEST_VERSIONS
