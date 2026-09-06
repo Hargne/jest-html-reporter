@@ -6,6 +6,7 @@ export const mockJestGlobalConfig: Config.GlobalConfig = {
   snapshotFormat: {},
   changedFilesWithAncestor: false,
   changedSince: undefined,
+  collectTests: false,
   coverageProvider: "v8",
   collectCoverage: true,
   collectCoverageFrom: [],
