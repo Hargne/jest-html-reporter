@@ -13,9 +13,16 @@ describe("buildHeader", () => {
       title: "Test Report",
     });
 
-    expect(header.toString()).toBe(
-      '<header><h1 id="title">Test Report</h1></header>',
+    const document = new DOMParser().parseFromString(
+      header.toString(),
+      "text/xml",
     );
+    const headerEl = document.querySelector("header");
+
+    expect(headerEl?.querySelector("h1#title")?.textContent).toBe(
+      "Test Report",
+    );
+    expect(headerEl?.querySelector("img#logo")).toBeNull();
   });
 
   it("builds a header with a title and logo", () => {
@@ -24,8 +31,17 @@ describe("buildHeader", () => {
       logoSrc: "logo.png",
     });
 
-    expect(header.toString()).toBe(
-      '<header><h1 id="title">Test Report</h1><img id="logo" src="logo.png"/></header>',
+    const document = new DOMParser().parseFromString(
+      header.toString(),
+      "text/xml",
+    );
+    const headerEl = document.querySelector("header");
+
+    expect(headerEl?.querySelector("h1#title")?.textContent).toBe(
+      "Test Report",
+    );
+    expect(headerEl?.querySelector("img#logo")?.getAttribute("src")).toBe(
+      "logo.png",
     );
   });
 
@@ -34,9 +50,15 @@ describe("buildHeader", () => {
       title: "<script>alert('hello')</script>",
     });
 
-    expect(header.toString()).toContain(
-      "&lt;script&gt;alert('hello')&lt;/script&gt;",
+    const document = new DOMParser().parseFromString(
+      header.toString(),
+      "text/xml",
     );
+
+    expect(document.querySelector("h1#title")?.textContent).toBe(
+      "<script>alert('hello')</script>",
+    );
+    expect(document.querySelector("script")).toBeNull();
   });
 });
 
@@ -44,9 +66,15 @@ describe("buildMetadataSection", () => {
   it("builds a metadata section with test data", () => {
     const metadataSection = buildMetadataSection(mockAggregatedResultBase);
 
-    expect(metadataSection.toString()).toBe(
-      '<section id="metadata-container"><div id="timestamp">Started: 2020-03-22 16:56:41</div></section>',
+    const document = new DOMParser().parseFromString(
+      metadataSection.toString(),
+      "text/xml",
     );
+
+    expect(
+      document.querySelector("section#metadata-container #timestamp")
+        ?.textContent,
+    ).toBe("Started: 2020-03-22 16:56:41");
   });
 
   it("builds a metadata section with test data and custom date format", () => {
@@ -55,8 +83,13 @@ describe("buildMetadataSection", () => {
       "dd/mm/yyyy HH:MM:ss",
     );
 
-    expect(metadataSection.toString()).toBe(
-      '<section id="metadata-container"><div id="timestamp">Started: 22/03/2020 16:56:41</div></section>',
+    const document = new DOMParser().parseFromString(
+      metadataSection.toString(),
+      "text/xml",
+    );
+
+    expect(document.querySelector("#timestamp")?.textContent).toBe(
+      "Started: 22/03/2020 16:56:41",
     );
   });
 });
@@ -71,30 +104,55 @@ describe("buildAdditionalInformationSection", () => {
     const additionalInfoSection = buildAdditionalInformationSection(
       additionalInformation,
     );
-    expect(additionalInfoSection.toString()).toBe(
-      '<section id="additional-information"><div>Environment: Production</div><div>Version: 1.0.0</div></section>',
+
+    const document = new DOMParser().parseFromString(
+      additionalInfoSection.toString(),
+      "text/xml",
     );
+    const entries = Array.from(
+      document.querySelectorAll("#additional-information > div"),
+    ).map((entry) => entry.textContent);
+
+    expect(entries).toEqual(["Environment: Production", "Version: 1.0.0"]);
   });
 
   it("builds an empty additional information section when no entries are provided", () => {
     const additionalInfoSection = buildAdditionalInformationSection([]);
-    expect(additionalInfoSection.toString()).toBe(
-      '<section id="additional-information"/>',
+
+    const document = new DOMParser().parseFromString(
+      additionalInfoSection.toString(),
+      "text/xml",
     );
+
+    expect(document.querySelector("section#additional-information")).not.toBeNull();
+    expect(
+      document.querySelectorAll("#additional-information > div"),
+    ).toHaveLength(0);
   });
 });
 
 describe("buildSummarySection", () => {
   it("builds a summary section with test data", () => {
     const summarySection = buildSummarySection(mockAggregatedResultBase);
-    const xml = summarySection.toString();
 
-    expect(xml).toContain('<section id="summary">');
-    expect(xml).toContain('<div id="suite-summary">');
-    expect(xml).toContain("Suites (1)");
-    expect(xml).toContain("0 passed");
-    expect(xml).toContain("1 failed");
-    expect(xml).toContain("0 pending");
+    const document = new DOMParser().parseFromString(
+      summarySection.toString(),
+      "text/xml",
+    );
+    const suiteSummary = document.querySelector("section#summary #suite-summary");
+
+    expect(suiteSummary?.querySelector(".summary-total")?.textContent).toBe(
+      "Suites (1)",
+    );
+    expect(suiteSummary?.querySelector(".summary-passed")?.textContent).toBe(
+      "0 passed",
+    );
+    expect(suiteSummary?.querySelector(".summary-failed")?.textContent).toBe(
+      "1 failed",
+    );
+    expect(suiteSummary?.querySelector(".summary-pending")?.textContent).toBe(
+      "0 pending",
+    );
   });
 
   it("renders all test counts in the test summary", () => {
@@ -181,10 +239,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       numPassedTestSuites: 5,
     };
-    const summarySection = buildSummarySection(testData);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-passed"');
+    expect(
+      document.querySelector("#suite-summary .summary-passed")?.getAttribute("class"),
+    ).toBe("summary-passed");
   });
 
   it("displays empty class when no passed suites", () => {
@@ -192,10 +254,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       numPassedTestSuites: 0,
     };
-    const summarySection = buildSummarySection(testData);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-passed summary-empty"');
+    expect(
+      document.querySelector("#suite-summary .summary-passed.summary-empty"),
+    ).not.toBeNull();
   });
 
   it("displays correct CSS classes for failed suites", () => {
@@ -203,10 +269,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       numFailedTestSuites: 3,
     };
-    const summarySection = buildSummarySection(testData);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-failed"');
+    expect(
+      document.querySelector("#suite-summary .summary-failed")?.getAttribute("class"),
+    ).toBe("summary-failed");
   });
 
   it("displays empty class when no failed suites", () => {
@@ -214,10 +284,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       numFailedTestSuites: 0,
     };
-    const summarySection = buildSummarySection(testData);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-failed summary-empty"');
+    expect(
+      document.querySelector("#suite-summary .summary-failed.summary-empty"),
+    ).not.toBeNull();
   });
 
   it("displays correct CSS classes for pending suites", () => {
@@ -225,10 +299,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       numPendingTestSuites: 2,
     };
-    const summarySection = buildSummarySection(testData);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-pending"');
+    expect(
+      document.querySelector("#suite-summary .summary-pending")?.getAttribute("class"),
+    ).toBe("summary-pending");
   });
 
   it("displays empty class when no pending suites", () => {
@@ -236,10 +314,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       numPendingTestSuites: 0,
     };
-    const summarySection = buildSummarySection(testData);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-pending summary-empty"');
+    expect(
+      document.querySelector("#suite-summary .summary-pending.summary-empty"),
+    ).not.toBeNull();
   });
 
   it("includes obsolete snapshots when flag is true and unchecked > 0", () => {
@@ -247,11 +329,14 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       snapshot: { ...mockAggregatedResultBase.snapshot, unchecked: 5 },
     };
-    const summarySection = buildSummarySection(testData, true);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData, true).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('class="summary-obsolete-snapshots"');
-    expect(xml).toContain("5 obsolete snapshots");
+    expect(
+      document.querySelector(".summary-obsolete-snapshots")?.textContent,
+    ).toBe("5 obsolete snapshots");
   });
 
   it("does not include obsolete snapshots when flag is false", () => {
@@ -259,11 +344,12 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       snapshot: { ...mockAggregatedResultBase.snapshot, unchecked: 5 },
     };
-    const summarySection = buildSummarySection(testData, false);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData, false).toString(),
+      "text/xml",
+    );
 
-    expect(xml).not.toContain("summary-obsolete-snapshots");
-    expect(xml).not.toContain("obsolete snapshots");
+    expect(document.querySelector(".summary-obsolete-snapshots")).toBeNull();
   });
 
   it("does not include obsolete snapshots when unchecked is 0", () => {
@@ -271,11 +357,12 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       snapshot: { ...mockAggregatedResultBase.snapshot, unchecked: 0 },
     };
-    const summarySection = buildSummarySection(testData, true);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData, true).toString(),
+      "text/xml",
+    );
 
-    expect(xml).not.toContain("summary-obsolete-snapshots");
-    expect(xml).not.toContain("obsolete snapshots");
+    expect(document.querySelector(".summary-obsolete-snapshots")).toBeNull();
   });
 
   it("handles snapshot with no unchecked items", () => {
@@ -283,32 +370,42 @@ describe("buildSummarySection", () => {
       ...mockAggregatedResultBase,
       snapshot: { ...mockAggregatedResultBase.snapshot, unchecked: 0 },
     };
-    const summarySection = buildSummarySection(testData, true);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(testData, true).toString(),
+      "text/xml",
+    );
 
     // Should not throw and should contain basic structure
-    expect(xml).toContain('<section id="summary">');
-    expect(xml).not.toContain("obsolete snapshots");
+    expect(document.querySelector("section#summary")).not.toBeNull();
+    expect(document.querySelector(".summary-obsolete-snapshots")).toBeNull();
   });
 
   it("renders all suite counts correctly with single result", () => {
-    const summarySection = buildSummarySection(mockAggregatedResultSingle);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(mockAggregatedResultSingle).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain("Suites (1)");
+    expect(
+      document.querySelector("#suite-summary .summary-total")?.textContent,
+    ).toBe("Suites (1)");
   });
 
   it("renders section with id attribute", () => {
-    const summarySection = buildSummarySection(mockAggregatedResultBase);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(mockAggregatedResultBase).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('<section id="summary">');
+    expect(document.querySelector("section#summary")).not.toBeNull();
   });
 
   it("renders suite-summary div with correct id", () => {
-    const summarySection = buildSummarySection(mockAggregatedResultBase);
-    const xml = summarySection.toString();
+    const document = new DOMParser().parseFromString(
+      buildSummarySection(mockAggregatedResultBase).toString(),
+      "text/xml",
+    );
 
-    expect(xml).toContain('<div id="suite-summary">');
+    expect(document.querySelector("div#suite-summary")).not.toBeNull();
   });
 });
