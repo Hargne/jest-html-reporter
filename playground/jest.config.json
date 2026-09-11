@@ -1,0 +1,6 @@
+{
+  "rootDir": "fixtures",
+  "testEnvironment": "node",
+  "collectCoverage": false,
+  "verbose": false
+}

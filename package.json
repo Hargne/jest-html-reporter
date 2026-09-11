@@ -14,6 +14,7 @@
     "jest": "jest --no-cache --config=jest.config.json",
     "test": "yarn lint && yarn jest",
     "test:watch": "yarn jest --watch --no-coverage",
+    "preview": "tsx playground/render.ts",
     "bundle": "rollup -c",
     "build": "yarn test && yarn bundle",
     "prepublishOnly": "yarn build"
@@ -70,6 +71,7 @@
     "ts-jest": "^29.4.0",
     "tslib": "^2.8.1",
     "tslint-config-prettier": "^1.18.0",
+    "tsx": "^4.23.13",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0"
   },
