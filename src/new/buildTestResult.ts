@@ -14,7 +14,7 @@ export default function buildTestResult(
 
   infoContainer.ele(
     "div",
-    { class: "test-suitename" },
+    { class: "test-ancestors" },
     testResult.ancestorTitles?.length > 0
       ? testResult.ancestorTitles.join(" > ")
       : "",

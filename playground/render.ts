@@ -58,6 +58,29 @@ async function main() {
   }
 }
 
+/**
+ * defaultTheme.css was written for the legacy reporter's <details>/<summary>
+ * suite markup, so it has no rules for src/new's .suite-result output — suites
+ * render with no visual boundary at all. This block is a preview-only stand-in
+ * so suites are distinguishable while src/new doesn't have its own theme yet;
+ * it's not meant to reflect the eventual design.
+ */
+const PREVIEW_ONLY_STYLES = `
+.suite-result {
+  display: block;
+  margin-block-end: 1.5rem;
+  border: 1px solid #949494;
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+.suite-result > .suite-path {
+  font-weight: bold;
+  margin-block-end: 0.5rem;
+  word-break: break-all;
+  cursor: pointer;
+}
+`;
+
 function wrapAsDocument(bodyFragment: string, title: string): string {
   return `<!doctype html>
 <html lang="en">
@@ -66,6 +89,7 @@ function wrapAsDocument(bodyFragment: string, title: string): string {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${title}</title>
 <link rel="stylesheet" href="../style/defaultTheme.css" />
+<style>${PREVIEW_ONLY_STYLES}</style>
 </head>
 <body>
 ${bodyFragment}

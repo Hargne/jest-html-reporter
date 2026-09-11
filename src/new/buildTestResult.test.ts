@@ -10,7 +10,7 @@ describe("buildTestResult", () => {
     const testResult = buildTestResult(mockPassedTestResult).toString();
 
     expect(testResult).toContain('<div class="test-result passed">');
-    expect(testResult).toContain('<div class="test-suitename">ancestor</div>');
+    expect(testResult).toContain('<div class="test-ancestors">ancestor</div>');
     expect(testResult).toContain('<div class="test-title">title</div>');
     expect(testResult).toContain('<div class="test-status">passed</div>');
     expect(testResult).toContain('<div class="test-duration">0.001s</div>');
@@ -21,7 +21,7 @@ describe("buildTestResult", () => {
 
     expect(testResult).toContain('<div class="test-result failed">');
     expect(testResult).toContain(
-      '<div class="test-suitename">ancestor1 &gt; ancestor2</div>',
+      '<div class="test-ancestors">ancestor1 &gt; ancestor2</div>',
     );
     expect(testResult).toContain('<div class="test-title">title</div>');
     expect(testResult).toContain('<div class="test-status">failed</div>');
@@ -32,7 +32,7 @@ describe("buildTestResult", () => {
     const testResult = buildTestResult(mockPendingTestResult).toString();
 
     expect(testResult).toContain('<div class="test-result pending">');
-    expect(testResult).toContain('<div class="test-suitename">ancestor</div>');
+    expect(testResult).toContain('<div class="test-ancestors">ancestor</div>');
     expect(testResult).toContain('<div class="test-title">title</div>');
     expect(testResult).toContain('<div class="test-status">pending</div>');
     expect(testResult).toContain('<div class="test-duration">0.003s</div>');

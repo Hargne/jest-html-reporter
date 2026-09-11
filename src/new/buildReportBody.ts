@@ -6,6 +6,7 @@ import {
   ConsoleLogEntry,
   JestHTMLReporterConfiguration,
 } from "./types";
+import buildSuiteResult from "./buildSuiteResult";
 
 export default function buildReportBody(
   testData: AggregatedResult,
@@ -37,7 +38,22 @@ export default function buildReportBody(
   );
   body.importDocument(summary);
 
-  return body.toString();
+  for (const suiteResult of testData.testResults) {
+    const suite = buildSuiteResult(
+      suiteResult,
+      options.includeFailureMsg,
+      options.collapseSuitesByDefault,
+    );
+    body.importDocument(suite);
+  }
+
+  // xmlbuilder self-closes empty elements (e.g. `<div/>`) by default, which
+  // is valid XML but not valid HTML5: `<div>` isn't a void element, so an
+  // HTML5 parser ignores the trailing `/` and treats it as an unclosed start
+  // tag, corrupting the nesting of everything that follows until the next
+  // stray `</div>` closes it instead. `allowEmpty` forces explicit open/close
+  // tags for empty elements so the output parses correctly as HTML.
+  return body.toString({ allowEmpty: true });
 }
 
 export function buildHeader({

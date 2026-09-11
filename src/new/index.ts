@@ -17,7 +17,7 @@ export default function JestHTMLReporter(
    * If the reporter is run as a 'testResultsProcessor', we must return the test results as they were received from Jest
    * https://facebook.github.io/jest/docs/en/configuration.html#testresultsprocessor-string
    */
-  if (isRunAsTestResultsProcessor(globalConfig)) {
+  if (isBeingRunAsTestResultsProcessor(globalConfig)) {
     generateReport({
       testData: globalConfig,
       options,
@@ -47,7 +47,7 @@ export default function JestHTMLReporter(
   };
 }
 
-function isRunAsTestResultsProcessor(
+function isBeingRunAsTestResultsProcessor(
   value: JestGlobalConfig,
 ): value is AggregatedResult {
   return "testResults" in value && Array.isArray(value.testResults);
