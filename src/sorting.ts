@@ -82,6 +82,11 @@ const sortByStatus = (
   const restSuites: AggregatedResult["testResults"] = [];
 
   testResults.forEach((result) => {
+    if (result.testResults.length === 0 && result.failureMessage) {
+      suites.failed.push(result);
+      return;
+    }
+
     const pending: AssertionResult[] = [];
     const failed: AssertionResult[] = [];
     const passed: AssertionResult[] = [];
