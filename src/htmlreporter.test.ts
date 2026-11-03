@@ -197,6 +197,30 @@ describe("HTMLReporter", () => {
     });
 
     describe("includeSuiteFailure", () => {
+      it("should include suite failure details when sorting by status", async () => {
+        await renderReportToDOM({
+          testData: mockAggregatedResultMultiple,
+          options: {
+            sort: "status",
+            includeSuiteFailure: true,
+          },
+        });
+
+        const failedSuite = document
+          .querySelector(".suiteFailure")
+          ?.closest(".suite-container");
+
+        expect(failedSuite?.querySelector(".suite-path")?.textContent).toEqual(
+          "test4-empty.js"
+        );
+        expect(failedSuite?.querySelector(".failureMsg")?.textContent).toContain(
+          "Test suite failed to run"
+        );
+        expect(failedSuite?.querySelector(".failureMsg")?.textContent).toContain(
+          "SyntaxError"
+        );
+      });
+
       it("should include suite failure message", async () => {
         await renderReportToDOM({
           testData: mockAggregatedResultMultiple,

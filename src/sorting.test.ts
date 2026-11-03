@@ -29,6 +29,20 @@ describe("sorting", () => {
   });
 
   describe("status", () => {
+    it("should preserve suites that fail before running any tests", () => {
+      const failedSuite = mockAggregatedResultMultiple.testResults[3];
+      const testResults = [
+        failedSuite,
+        {
+          ...failedSuite,
+          testFilePath: "test5-load-error.js",
+          failureMessage: "Error: Failed to load test module",
+        },
+      ];
+
+      expect(sorting(testResults, "status")).toEqual(testResults);
+    });
+
     /**
      * The pending and failed sections' sorting should match the passed section's sorting to make tests easier to find.
      * --
@@ -37,6 +51,7 @@ describe("sorting", () => {
      * 	pending from test3-pending-failed-passed-todo
      * 	failed from test2-pending-failed-passed
      * 	failed from test3-pending-failed-passed-todo
+     * 	failed suite from test4-empty
      * 	passed from test1-passed
      * 	passed from test2-pending-failed-passed
      * 	passed from test3-pending-failed-passed-todo
@@ -74,6 +89,12 @@ describe("sorting", () => {
           numTestsKey: "numFailingTests",
           file: "test3-pending-failed-passed-todo.js",
           count: 1,
+        },
+        {
+          status: "failed",
+          numTestsKey: "numFailingTests",
+          file: "test4-empty.js",
+          count: 0,
         },
         {
           status: "passed",
@@ -122,6 +143,12 @@ describe("sorting", () => {
           numTestsKey: "numFailingTests",
           file: "test3-pending-failed-passed-todo.js",
           count: 1,
+        },
+        {
+          status: "failed",
+          numTestsKey: "numFailingTests",
+          file: "test4-empty.js",
+          count: 0,
         },
         {
           status: "passed",
@@ -209,6 +236,12 @@ describe("sorting", () => {
           numTestsKey: "numFailingTests",
           file: "test3-pending-failed-passed-todo.js",
           count: 1,
+        },
+        {
+          status: "failed",
+          numTestsKey: "numFailingTests",
+          file: "test4-empty.js",
+          count: 0,
         },
       ];
 
